@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0b0d10;
-  --surface: #14171c;
-  --surface-hover: #1b1f26;
-  --border: #242830;
+  --background: #090b0e;
+  --surface: #1c2029;
+  --surface-hover: #272c37;
+  --border: #333a46;
   --foreground: #f4f6f8;
   --muted: #9aa3af;
   --accent: #22d3ee;
@@ -25,7 +25,14 @@
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    radial-gradient(1100px 650px at 85% -10%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 60%),
+    radial-gradient(900px 600px at -10% 105%, color-mix(in srgb, #6366f1 28%, transparent), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-attachment: fixed, fixed, fixed;
+  background-blend-mode: normal, normal, overlay;
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
