@@ -23,7 +23,7 @@ export function CvDownload({ options }: { options: CvOption[] }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="rounded-full border border-border px-4 py-2 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
+        className="rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:text-foreground"
         aria-expanded={open}
       >
         Resume
@@ -41,7 +41,8 @@ export function CvDownload({ options }: { options: CvOption[] }) {
               <a
                 key={option.file}
                 href={option.file}
-                download
+                target="_blank"
+                rel="noreferrer"
                 className="block rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface-hover hover:text-accent"
                 onClick={() => setOpen(false)}
               >
