@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="px-4 pb-6 pt-10">
       <div className="mx-auto flex max-w-2xl items-center justify-between text-xs text-muted">
-        <p>&copy; {new Date().getFullYear()} Eren Tekin</p>
+        <p>&copy; {new Date().getFullYear()} Eren Tolga Tekin</p>
         <div className="flex items-center gap-4">
           {socialLinks.map((link) => {
             const Icon = ICONS[link.label as keyof typeof ICONS];

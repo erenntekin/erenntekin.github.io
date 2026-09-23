@@ -7,8 +7,15 @@
   --border: #333a46;
   --foreground: #f4f6f8;
   --muted: #9aa3af;
-  --accent: #22d3ee;
-  --accent-foreground: #04151a;
+  --accent: #f0d999;
+  --accent-foreground: #1c1408;
+
+  --museum-stone: #1a1611;
+  --museum-marble: #faf5e8;
+  --museum-bronze: #8a6a3f;
+  --museum-brass: #d4af6a;
+  --museum-brass-bright: #f0d999;
+  --museum-burgundy: #17130c;
 }
 
 @theme inline {
@@ -22,17 +29,137 @@
   --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-playfair);
+}
+
+@keyframes ambient-drift {
+  0%,
+  100% {
+    background-position:
+      85% -10%,
+      -10% 105%,
+      0 0;
+  }
+  50% {
+    background-position:
+      79% -4%,
+      -4% 99%,
+      0 0;
+  }
 }
 
 body {
   background-color: var(--background);
   background-image:
-    radial-gradient(1100px 650px at 85% -10%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 60%),
-    radial-gradient(900px 600px at -10% 105%, color-mix(in srgb, #6366f1 28%, transparent), transparent 60%),
+    radial-gradient(1100px 650px at 85% -10%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 60%),
+    radial-gradient(900px 600px at -10% 105%, color-mix(in srgb, var(--museum-bronze) 24%, transparent), transparent 60%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: no-repeat, no-repeat, repeat;
   background-attachment: fixed, fixed, fixed;
   background-blend-mode: normal, normal, overlay;
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  animation: ambient-drift 26s ease-in-out infinite;
+}
+
+@keyframes walk-across {
+  0% {
+    left: -8%;
+  }
+  100% {
+    left: 105%;
+  }
+}
+
+@keyframes leg-swing {
+  0%,
+  100% {
+    transform: rotate(18deg);
+  }
+  50% {
+    transform: rotate(-18deg);
+  }
+}
+
+@keyframes leg-swing-alt {
+  0%,
+  100% {
+    transform: rotate(-18deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+
+.museum-theme {
+  --museum-gold: var(--museum-brass);
+  --museum-gold-bright: var(--museum-brass-bright);
+  --museum-burgundy-light: #b32836;
+}
+
+.marquee-track {
+  animation: projects-marquee 40s linear infinite;
+}
+
+.marquee-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(212, 175, 106, 0);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(212, 175, 106, 0.35);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes projects-marquee {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
+
+  .walker {
+    animation: none !important;
+    left: 40% !important;
+  }
+
+  .walker-leg {
+    animation: none !important;
+  }
+
+  .marquee-track {
+    animation: none !important;
+  }
 }

@@ -8,28 +8,53 @@ import { navLinks } from "@/data/nav";
 import { cvOptions } from "@/data/cv";
 import { CvDownload } from "@/components/layout/CvDownload";
 
+function normalizePath(path: string) {
+  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+}
+
 export function Navbar() {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = normalizePath(rawPathname);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
+    let lastY = window.scrollY;
     function onScroll() {
-      setScrolled(window.scrollY > 8);
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      const scrollingDown = y > lastY;
+      if (mobileOpen) {
+        lastY = y;
+        return;
+      }
+      if (y < 80) {
+        setHidden(false);
+      } else if (scrollingDown) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      lastY = y;
     }
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-4">
+    <motion.header
+      animate={{ y: hidden ? "-130%" : "0%" }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="sticky top-0 z-50 px-4 pt-4"
+    >
       <div
         className={`mx-auto flex max-w-2xl items-center justify-between rounded-full border border-border bg-surface/90 shadow-lg shadow-black/40 backdrop-blur-md transition-[padding] duration-300 ${scrolled ? "px-3 py-2" : "px-4 py-2.5"}`}
       >
         <Link
           href="/"
-          aria-label="Eren Tekin — home"
+          aria-label="Eren Tekin home"
           className="flex h-9 w-9 items-center justify-center rounded-full border border-border font-mono text-xs font-semibold text-accent transition-colors hover:border-accent"
         >
           ET
@@ -106,6 +131,6 @@ export function Navbar() {
           </motion.nav>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }
