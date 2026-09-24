@@ -21,7 +21,7 @@ export function getProject(slug: string): Project | undefined {
 }
 
 export function hasDetailContent(project: Project): boolean {
-  return project.status !== "ongoing" && project.description.length > 0;
+  return project.description.length > 0;
 }
 
 export function getProjectStaticParams() {

@@ -12,6 +12,12 @@ export function SectionNav({ sections }: { sections: Section[] }) {
 
   useEffect(() => {
     function onScroll() {
+      const nearBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (nearBottom) {
+        setActive(sections[sections.length - 1].id);
+        return;
+      }
       let current = sections[0]?.id ?? "";
       for (const s of sections) {
         const el = document.getElementById(s.id);

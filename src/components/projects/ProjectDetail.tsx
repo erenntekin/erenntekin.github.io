@@ -146,20 +146,44 @@ export function ProjectDetail({ project }: { project: Project }) {
           </h2>
           {illustrated.length > 0 && <Walkthrough project={project} notes={illustrated} />}
 
-          {quietNotes.length > 0 && (
-            <div
-              className={`grid grid-cols-1 gap-x-10 gap-y-5 sm:grid-cols-2 ${illustrated.length > 0 ? "mt-12 border-t border-border pt-8" : "mt-6"}`}
-            >
-              {quietNotes.map((note) => (
-                <div key={note.title} className="group">
+          {quietNotes.length > 0 && illustrated.length === 0 && (
+            <StaggerList
+              items={quietNotes}
+              keyFn={(note) => note.title}
+              as="div"
+              itemAs="div"
+              className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+              itemClassName="group rounded-xl border border-border bg-surface/30 p-5 transition-colors hover:border-accent/40"
+              renderItem={(note) => (
+                <>
+                  <p className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent transition-transform group-hover:scale-150" />
+                    {note.title}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground/70">{note.body}</p>
+                </>
+              )}
+            />
+          )}
+
+          {quietNotes.length > 0 && illustrated.length > 0 && (
+            <StaggerList
+              items={quietNotes}
+              keyFn={(note) => note.title}
+              as="div"
+              itemAs="div"
+              className="mt-12 grid grid-cols-1 gap-x-10 gap-y-5 border-t border-border pt-8 sm:grid-cols-2"
+              itemClassName="group"
+              renderItem={(note) => (
+                <>
                   <p className="flex items-center gap-2 text-sm font-medium text-foreground/90">
                     <span className="h-1 w-1 shrink-0 rounded-full bg-accent transition-transform group-hover:scale-150" />
                     {note.title}
                   </p>
                   <p className="mt-1.5 pl-3 text-xs leading-relaxed text-muted">{note.body}</p>
-                </div>
-              ))}
-            </div>
+                </>
+              )}
+            />
           )}
         </div>
       )}
@@ -171,19 +195,22 @@ export function ProjectDetail({ project }: { project: Project }) {
             Where it falls short
           </h2>
           <p className="mt-2 text-sm text-foreground/70">Open items, acknowledged rather than hidden.</p>
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {project.limitations!.map((item, i) => (
-              <div
-                key={item}
-                className="group flex items-start gap-4 rounded-xl border border-dashed border-border p-5 transition-colors hover:border-accent/50"
-              >
+          <StaggerList
+            items={project.limitations!.map((item, i) => ({ item, i }))}
+            keyFn={({ item }) => item}
+            as="div"
+            itemAs="div"
+            className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+            itemClassName="group flex items-start gap-4 rounded-xl border border-dashed border-border p-5 transition-colors hover:border-accent/50"
+            renderItem={({ item, i }) => (
+              <>
                 <span className="shrink-0 font-serif text-3xl font-semibold text-border transition-colors group-hover:text-accent/50">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <p className="mt-1 text-base text-foreground/80">{item}</p>
-              </div>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </div>
       )}
 
@@ -194,19 +221,22 @@ export function ProjectDetail({ project }: { project: Project }) {
             Where this goes next
           </h2>
           <p className="mt-2 text-sm text-foreground/70">The path from here, in order.</p>
-          <div className="mt-6 space-y-4">
-            {project.roadmap!.map((item, i) => (
-              <div
-                key={item}
-                className="group flex items-center gap-5 rounded-xl border border-border bg-surface/30 p-5 transition-all hover:border-accent hover:bg-surface/50"
-              >
+          <StaggerList
+            items={project.roadmap!.map((item, i) => ({ item, i }))}
+            keyFn={({ item }) => item}
+            as="div"
+            itemAs="div"
+            className="mt-6 space-y-4"
+            itemClassName="group flex items-center gap-5 rounded-xl border border-border bg-surface/30 p-5 transition-all hover:border-accent hover:bg-surface/50"
+            renderItem={({ item, i }) => (
+              <>
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-accent/70 font-serif text-lg font-semibold text-accent transition-colors group-hover:border-accent">
                   {i + 1}
                 </span>
                 <p className="text-base text-foreground/80 transition-colors group-hover:text-foreground">{item}</p>
-              </div>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </div>
       )}
     </div>

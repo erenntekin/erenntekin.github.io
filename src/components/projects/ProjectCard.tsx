@@ -16,17 +16,21 @@ export function ProjectCard({ project }: { project: Project }) {
         <h3 className="font-serif text-xl font-bold text-foreground transition-colors group-hover:text-accent">
           {project.title}
         </h3>
-        {project.status === "ongoing" ? (
-          <span className="shrink-0 rounded-full border border-border px-2 py-0.5 text-[10px] tracking-wide text-muted uppercase">
-            Coming soon
-          </span>
-        ) : (
+        {project.status === "shipped" ? (
           <StatusBadge tone="success">
             <span className="text-[10px]">Shipped</span>
           </StatusBadge>
+        ) : clickable ? (
+          <StatusBadge>
+            <span className="text-[10px]">Ongoing</span>
+          </StatusBadge>
+        ) : (
+          <span className="shrink-0 rounded-full border border-border px-2 py-0.5 text-[10px] tracking-wide text-muted uppercase">
+            Coming soon
+          </span>
         )}
       </div>
-      {project.status !== "ongoing" && project.tagline && (
+      {clickable && project.tagline && (
         <p className="mt-1.5 line-clamp-2 text-sm text-foreground/70">{project.tagline}</p>
       )}
       <div className="mt-3 flex flex-wrap gap-1.5">
