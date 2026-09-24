@@ -292,7 +292,7 @@ export const projects: Project[] = [
       },
     ],
     links: {
-      repo: "https://github.com/erenntekin/PFE-GenAI-Document-Analysis",
+      repoPrivate: true,
     },
     media: {
       screenshots: [],
