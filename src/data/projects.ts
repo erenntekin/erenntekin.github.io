@@ -1,4 +1,4 @@
-export type ProjectStatus = "shipped" | "ongoing";
+export type ProjectStatus = "shipped" | "ongoing" | "planned";
 
 export interface ProjectStat {
   label: string;
@@ -37,6 +37,7 @@ export interface Project {
   roadmap?: string[];
   links: {
     repo?: string;
+    repoPrivate?: boolean;
     demo?: string;
   };
   media: {
@@ -224,7 +225,7 @@ export const projects: Project[] = [
       "Production Android signing, and an iOS build once there's a Mac to test on",
     ],
     links: {
-      repo: "https://github.com/erenntekin/MyBelly",
+      repoPrivate: true,
     },
     media: {
       cover: "/projects/mybelly/demo.gif",
@@ -358,7 +359,7 @@ export const projects: Project[] = [
       "An AI agent with function calling, like the ones in LifeOS and MyBelly, can be talked into calling a function it shouldn't, or with dangerous parameters. The model alone can't reliably stop that. LUCID adds a deterministic check between what the AI decides and what actually runs.",
       "It's built as a reusable Python package, not code buried in one app. It protects LifeOS and MyBelly today, and drops into any future project built on the same agent pattern.",
     ],
-    status: "shipped",
+    status: "planned",
     platform: "web",
     domainTags: ["Cybersecurity", "AI/ML"],
     stack: ["Python", "Garak"],
@@ -405,7 +406,7 @@ export const projects: Project[] = [
       "In a real environment, infrastructure that needs a human every time something breaks doesn't scale. The name comes from that idea directly: a system that comes back on its own after an incident, with nobody paged at 3am.",
       "It's personal infrastructure, built to host my own projects. GhostNet runs on it today, and it's built to take on LifeOS and MyBelly's AI workloads next, instead of spinning up separate infrastructure for each one.",
     ],
-    status: "shipped",
+    status: "planned",
     platform: "web",
     domainTags: ["Cloud"],
     stack: ["Terraform", "Kubernetes", "GitHub Actions", "Prometheus", "Grafana", "Oracle Cloud"],
@@ -455,7 +456,7 @@ export const projects: Project[] = [
       "Running AI agents in production without ever testing them against manipulation is like shipping a web app with no pentest. The vulnerability exists whether you look for it or not. MIRAGE makes that search systematic.",
       "Built as a reusable tool, not one-off tests for a single app. It attacks LifeOS and MyBelly today and points at any future agent built on the same pattern.",
     ],
-    status: "shipped",
+    status: "planned",
     platform: "web",
     domainTags: ["Cybersecurity", "AI/ML"],
     stack: ["Python", "Garak"],
@@ -502,7 +503,7 @@ export const projects: Project[] = [
       "LifeOS closes that loop. Goals, habits, tasks and real time spent, all in one system. It's built for someone who already tried the separate apps and felt the friction of never seeing the whole picture.",
       "The same agent pattern as MyBelly runs underneath. A light model classifies the request, a stronger one extracts the details, and what you say can turn into a real task, habit or goal update.",
     ],
-    status: "shipped",
+    status: "planned",
     platform: "mobile",
     domainTags: ["AI/ML", "Mobile Development"],
     stack: ["React Native", "TypeScript", "Supabase", "WatermelonDB", "Zustand", "TanStack Query", "Claude API"],
@@ -538,9 +539,7 @@ export const projects: Project[] = [
       "Setup takes real effort: goals, habits, planning categories. Unlike MyBelly, there's no shortcut past that upfront structuring",
       "Classification and the weekly review both depend on the Claude API. A pricing change or outage hits the core of the experience directly",
     ],
-    links: {
-      repo: "https://github.com/erenntekin/LifeOS",
-    },
+    links: {},
     media: {
       screenshots: [],
     },
@@ -555,7 +554,7 @@ export const projects: Project[] = [
       "Reading about SQL injection or XSS is one thing. Actually exploiting them end to end, with real tools, until you get a real result, is a different skill. BLACKBOX turns the theory into something demonstrable, and gives SIEM, its defensive counterpart, a safe legal target to watch.",
       "Five real, documented vulnerabilities live in the target app: SQL injection, XSS, broken authentication, IDOR, and no rate limiting. Together they cover the actual causes behind most real breaches, not just one narrow case.",
     ],
-    status: "shipped",
+    status: "planned",
     platform: "web",
     domainTags: ["Cybersecurity"],
     stack: ["Docker", "Kali Linux", "Nmap", "OWASP ZAP", "Burp Suite", "Metasploit", "Hashcat", "Python", "React"],
@@ -606,7 +605,7 @@ export const projects: Project[] = [
       "Without active monitoring, an attack can sail through completely unnoticed. The logs exist, nobody's watching them continuously. SIEM automates that watching, spotting attack patterns the moment they happen instead of after the fact.",
       "It watches BLACKBOX today, but the detection mechanics aren't tied to one lab. Point it at a different log source with new rules, and it works there too.",
     ],
-    status: "shipped",
+    status: "planned",
     platform: "web",
     domainTags: ["Cybersecurity"],
     stack: ["Wazuh", "Python"],
@@ -653,7 +652,7 @@ export const projects: Project[] = [
       "Most students who build technical projects never think about what they actually cost once deployed. FinOps, the skill of understanding and controlling infrastructure cost, is rare in a junior profile despite mattering a lot in a real company.",
       "It's personal, not a product. The market already has CloudHealth and AWS Cost Explorer. The point here is demonstrating the skill on a real portfolio, not competing with mature tools.",
     ],
-    status: "shipped",
+    status: "planned",
     platform: "web",
     domainTags: ["Cloud"],
     stack: ["Python", "AWS Cost APIs", "Azure Cost APIs"],

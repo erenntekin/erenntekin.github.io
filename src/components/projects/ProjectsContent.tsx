@@ -3,13 +3,14 @@
 import { useRef } from "react";
 import { RevealOnMount } from "@/components/motion/RevealOnMount";
 import { ScrollHint } from "@/components/home/ScrollHint";
-import { getAllProjects, getFeaturedProjects, getProjectCategories } from "@/lib/projectData";
+import { getAllProjects, getFeaturedProjects, getPlannedProjects, getProjectCategories } from "@/lib/projectData";
 import { FeaturedShowcase } from "./FeaturedShowcase";
 import { ProjectGallery } from "./ProjectGallery";
 
 export function ProjectsContent() {
   const featured = getFeaturedProjects();
   const all = getAllProjects();
+  const planned = getPlannedProjects();
   const categories = getProjectCategories();
   const galleryRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +43,7 @@ export function ProjectsContent() {
 
       <section ref={galleryRef} className="snap-start px-6 pt-4 pb-20">
         <div className="mx-auto w-full max-w-6xl">
-          <ProjectGallery projects={all} categories={categories} />
+          <ProjectGallery projects={all} planned={planned} categories={categories} />
         </div>
       </section>
     </div>

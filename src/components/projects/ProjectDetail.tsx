@@ -84,6 +84,12 @@ export function ProjectDetail({ project }: { project: Project }) {
               GitHub
             </a>
           )}
+          {project.links.repoPrivate && (
+            <span className="flex items-center gap-1.5 rounded-full border border-accent/50 px-4 py-2 text-sm text-accent">
+              <GitHubIcon className="h-4 w-4" />
+              Private repo · code on request
+            </span>
+          )}
           {project.links.demo && (
             <a
               href={project.links.demo}

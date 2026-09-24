@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Hero } from "@/components/home/Hero";
 import { ProjectShowcase } from "@/components/home/ProjectShowcase";
-import { projects } from "@/data/projects";
+import { getAllProjects } from "@/lib/projectData";
+
+const projects = getAllProjects();
 
 const WHEEL_THRESHOLD = 12;
 const TOUCH_THRESHOLD = 40;

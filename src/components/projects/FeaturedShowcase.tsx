@@ -12,6 +12,9 @@ import { ProjectMedia } from "./ProjectMedia";
 import { ZoomableImage } from "./ZoomableImage";
 
 const MEDIA_INTERVAL_MS = 4200;
+// Each half of the marquee track must be wider than the strip itself, or a gap shows before it loops.
+const MARQUEE_MIN_TILES = 10;
+const MARQUEE_SECONDS_PER_TILE = 4.5;
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
 function galleryFor(project: Project): string[] {
@@ -37,6 +40,10 @@ export function FeaturedShowcase({
   const overview = project.description[0] ?? project.summary;
   const mediaGallery = useMemo(() => galleryFor(project), [project]);
   const currentSrc = mediaGallery[mediaIndex];
+  const marqueeHalf = useMemo(() => {
+    const repeats = Math.max(1, Math.ceil(MARQUEE_MIN_TILES / allProjects.length));
+    return Array.from({ length: repeats }, () => allProjects).flat();
+  }, [allProjects]);
 
   useEffect(() => {
     setMediaIndex(0);
@@ -151,6 +158,12 @@ export function FeaturedShowcase({
                   GitHub
                 </a>
               )}
+              {project.links.repoPrivate && (
+                <span className="flex items-center gap-1.5 rounded-full border border-accent/50 px-4 py-2 text-sm text-accent">
+                  <GitHubIcon className="h-4 w-4" />
+                  Private repo · code on request
+                </span>
+              )}
               {project.links.demo && (
                 <a
                   href={project.links.demo}
@@ -180,13 +193,16 @@ export function FeaturedShowcase({
           </button>
 
           <div className="marquee-fade flex-1 overflow-hidden">
-            <div className="marquee-track flex w-max gap-4">
-              {[...allProjects, ...allProjects].map((p, i) => (
+            <div
+              className="marquee-track flex w-max"
+              style={{ animationDuration: `${marqueeHalf.length * MARQUEE_SECONDS_PER_TILE}s` }}
+            >
+              {[...marqueeHalf, ...marqueeHalf].map((p, i) => (
                 <button
                   key={`${p.slug}-${i}`}
                   type="button"
                   onClick={() => setActiveSlug(p.slug)}
-                  className={`relative h-[clamp(64px,9vw,96px)] w-[clamp(112px,14vw,144px)] min-w-0 shrink-0 overflow-hidden rounded-lg border-2 bg-surface text-left transition-colors ${
+                  className={`relative mr-4 h-[clamp(64px,9vw,96px)] w-[clamp(112px,14vw,144px)] min-w-0 shrink-0 overflow-hidden rounded-lg border-2 bg-surface text-left transition-colors ${
                     p.slug === project.slug ? "border-accent" : "border-border hover:border-accent/50"
                   }`}
                 >
@@ -197,9 +213,7 @@ export function FeaturedShowcase({
                       className={`absolute inset-0 h-full w-full ${p.platform === "mobile" ? "object-contain" : "object-cover"}`}
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-surface text-xs text-muted">
-                      Coming soon
-                    </div>
+                    <div className="h-full w-full bg-surface" />
                   )}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-2.5 pt-8 pb-2">
                     <p
