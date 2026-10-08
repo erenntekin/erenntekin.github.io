@@ -7,6 +7,7 @@ import type { Project } from "@/data/projects";
 import { domainTagColor, shortTagLabel } from "@/lib/domainTagColors";
 import { GitHubIcon } from "@/components/icons/GitHubIcon";
 import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
+import { GlobeIcon } from "@/components/icons/GlobeIcon";
 import { hasDetailContent } from "@/lib/projectData";
 import { ProjectMedia } from "./ProjectMedia";
 import { ZoomableImage } from "./ZoomableImage";
@@ -162,6 +163,12 @@ export function FeaturedShowcase({
                 <span className="flex items-center gap-1.5 rounded-full border border-accent/50 px-4 py-2 text-sm text-accent">
                   <GitHubIcon className="h-4 w-4" />
                   Private repo · code on request
+                </span>
+              )}
+              {project.links.demoPrivate && (
+                <span className="flex items-center gap-1.5 rounded-full border border-accent/50 px-4 py-2 text-sm text-accent">
+                  <GlobeIcon className="h-4 w-4" />
+                  Web app · access on request
                 </span>
               )}
               {project.links.demo && (

@@ -39,6 +39,7 @@ export interface Project {
     repo?: string;
     repoPrivate?: boolean;
     demo?: string;
+    demoPrivate?: boolean;
   };
   media: {
     cover?: string;
@@ -129,7 +130,7 @@ export const projects: Project[] = [
       "Webhook-based alerts for multi-source confirmations",
     ],
     links: {
-      repo: "https://github.com/erenntekin/GhostNet",
+      repoPrivate: true,
     },
     media: {
       cover: "/projects/ghostnet/live.gif",
@@ -150,6 +151,7 @@ export const projects: Project[] = [
     description: [
       "MyBelly is a nutrition tracker built around a chat agent. Instead of searching a food database and tapping a portion size, you describe what you ate and it logs it, updating your food inventory in the same step.",
       "It's offline-first. Every write hits local SQLite before it ever touches the network, then syncs to Supabase in the background, so logging a meal doesn't fall over just because there's no signal in the supermarket basement.",
+      "An interactive web companion is also available on request, allowing evaluators to test the meal logging and nutrition workflows directly in the browser.",
     ],
     status: "shipped",
     platform: "mobile",
@@ -226,6 +228,7 @@ export const projects: Project[] = [
     ],
     links: {
       repoPrivate: true,
+      demoPrivate: true,
     },
     media: {
       cover: "/projects/mybelly/demo.gif",
@@ -344,7 +347,9 @@ export const projects: Project[] = [
       "Cross-camera re-identification is probabilistic. A big change in appearance can break the match",
       "Runs on a personal webcam or test footage only, never a real surveillance network. That's a deliberate limit, not a technical one",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },
@@ -391,7 +396,9 @@ export const projects: Project[] = [
       "Even with Garak and manual testing, no tool proves every attack angle is covered",
       "Each check adds latency before the real function runs. A real tradeoff, not a free win",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },
@@ -441,7 +448,9 @@ export const projects: Project[] = [
       "Kubernetes has a steep learning curve. A bad initial setup can look resilient without actually being resilient",
       "Chaos tests cover the failure scenarios actually simulated, like service crashes. Degraded network latency or data corruption aren't automatically covered by the same tests",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },
@@ -488,7 +497,9 @@ export const projects: Project[] = [
       "A fix that holds today can break again if the agent changes later without a re-run",
       "Only attacks its own agents, LifeOS and MyBelly, never a third-party system without explicit permission. That line doesn't move",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },
@@ -539,7 +550,9 @@ export const projects: Project[] = [
       "Setup takes real effort: goals, habits, planning categories. Unlike MyBelly, there's no shortcut past that upfront structuring",
       "Classification and the weekly review both depend on the Claude API. A pricing change or outage hits the core of the experience directly",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },
@@ -590,7 +603,9 @@ export const projects: Project[] = [
       "The dashboard has to stay in sync with what the real tools actually do underneath. A real integration effort, not just a UI",
       "Some protections, like a weaker hash at level one, are a deliberate teaching choice, not an oversight. It's a learning lab, not a professional audit",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },
@@ -637,7 +652,9 @@ export const projects: Project[] = [
       "Rules are calibrated on what BLACKBOX simulates. Generalizing to a bigger, real production environment would take real extra work",
       "Built for a personal lab's log volume. A real production system's traffic would need a different scale of setup",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },
@@ -679,7 +696,9 @@ export const projects: Project[] = [
       "A recommendation can miss practical constraints, like migration complexity, that don't show up in the raw billing data. It's a decision aid, not an autopilot",
       "Only covers the existing personal projects, Phoenix and GhostNet. Not built for a company account with complex team and org structures",
     ],
-    links: {},
+    links: {
+      repoPrivate: true,
+    },
     media: {
       screenshots: [],
     },

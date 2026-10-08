@@ -5,6 +5,7 @@ import type { Project } from "@/data/projects";
 import { RevealOnMount } from "@/components/motion/RevealOnMount";
 import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 import { GitHubIcon } from "@/components/icons/GitHubIcon";
+import { GlobeIcon } from "@/components/icons/GlobeIcon";
 import { domainTagColor, shortTagLabel } from "@/lib/domainTagColors";
 import { AnimatedStat } from "@/components/ui/AnimatedStat";
 import { ZoomableImage } from "./ZoomableImage";
@@ -88,6 +89,12 @@ export function ProjectDetail({ project }: { project: Project }) {
             <span className="flex items-center gap-1.5 rounded-full border border-accent/50 px-4 py-2 text-sm text-accent">
               <GitHubIcon className="h-4 w-4" />
               Private repo · code on request
+            </span>
+          )}
+          {project.links.demoPrivate && (
+            <span className="flex items-center gap-1.5 rounded-full border border-accent/50 px-4 py-2 text-sm text-accent">
+              <GlobeIcon className="h-4 w-4" />
+              Web app · access on request
             </span>
           )}
           {project.links.demo && (

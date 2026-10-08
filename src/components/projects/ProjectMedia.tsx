@@ -31,11 +31,15 @@ export function ProjectMedia({
             <span className="font-serif text-2xl font-semibold text-foreground/90 sm:text-3xl">
               {project.title}
             </span>
-            {repoPath && (
+            {repoPath ? (
               <span className="rounded-full border border-border bg-surface/60 px-3 py-1 font-mono text-[11px] text-muted">
                 {repoPath}
               </span>
-            )}
+            ) : project.links.repoPrivate ? (
+              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[11px] text-accent">
+                Private repo · code on request
+              </span>
+            ) : null}
           </div>
         </div>
       );
