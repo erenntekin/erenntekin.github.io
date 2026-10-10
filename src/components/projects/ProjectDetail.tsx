@@ -18,7 +18,7 @@ import { SectionNav } from "./SectionNav";
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
 export function ProjectDetail({ project }: { project: Project }) {
-  const heroSrc = project.media.video ?? project.media.cover;
+  const heroSrc = project.media.cover ?? project.media.video;
   const heroIsVideo = Boolean(heroSrc && VIDEO_EXTENSIONS.test(heroSrc));
 
   const allNotes = project.designNotes ?? [];
@@ -29,6 +29,7 @@ export function ProjectDetail({ project }: { project: Project }) {
 
   const navSections = [
     project.description.length > 0 && { id: "overview", label: "Overview" },
+    project.media.video && { id: "demo", label: "Demo" },
     (illustrated.length > 0 || quietNotes.length > 0) && { id: "how-it-works", label: "How it works" },
     hasLimitations && { id: "limitations", label: "Limitations" },
     hasRoadmap && { id: "whats-next", label: "What's next" },
@@ -74,6 +75,17 @@ export function ProjectDetail({ project }: { project: Project }) {
         <p className="mt-2 text-base text-foreground/80">{project.tagline}</p>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
+          {project.media.video && (
+            <a
+              href="#demo"
+              className="flex items-center gap-2 rounded-full border border-accent bg-accent/15 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/25"
+            >
+              <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              Watch demo
+            </a>
+          )}
           {project.links.repo && (
             <a
               href={project.links.repo}
@@ -149,6 +161,30 @@ export function ProjectDetail({ project }: { project: Project }) {
           itemClassName="rounded-lg border border-border bg-surface/30 px-3 py-3 transition-colors hover:border-accent/40 sm:px-4"
           renderItem={(stat) => <AnimatedStat label={stat.label} value={stat.value} />}
         />
+      )}
+
+      {project.media.video && (
+        <div id="demo" className="mt-14 scroll-mt-28 border-t border-border pt-8">
+          <p className="font-mono text-[10px] tracking-widest text-accent uppercase">Demo</p>
+          <h2 className="mt-1.5 font-serif text-2xl font-semibold text-foreground sm:text-3xl">
+            Watch the product in action
+          </h2>
+          <p className="mt-2 text-sm text-foreground/70">
+            Full walkthrough with architecture narration and live interface.
+          </p>
+          <div className="relative mt-6 overflow-hidden rounded-2xl border border-border bg-black/80 shadow-2xl">
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              poster={project.media.cover}
+              className="aspect-video w-full object-contain bg-black"
+              src={project.media.video}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
       )}
 
       {(illustrated.length > 0 || quietNotes.length > 0) && (
