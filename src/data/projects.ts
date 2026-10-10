@@ -140,7 +140,8 @@ export const projects: Project[] = [
         { src: "/projects/ghostnet/model-detail.png", caption: "Reoffense model detail: confusion matrix and feature importance" },
         { src: "/projects/ghostnet/intelligence.png", caption: "Intelligence briefing, ranked and regenerated on load" },
       ],
-      video: "/projects/ghostnet/live.gif",
+      video: "/projects/ghostnet/film.mp4",
+      videoRate: 1.0,
     },
   },
   {
@@ -246,8 +247,8 @@ export const projects: Project[] = [
         { src: "/projects/mybelly/screenshot-profile.png", caption: "Profile: measurements, goal and activity level", group: "Trends & settings" },
         { src: "/projects/mybelly/screenshot-weight.png", caption: "Weight tracker sheet", group: "Trends & settings" },
       ],
-      video: "/projects/mybelly/demo.mp4",
-      videoRate: 1.5,
+      video: "/projects/mybelly/film.mp4",
+      videoRate: 1.0,
     },
   },
   {

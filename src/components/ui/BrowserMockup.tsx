@@ -9,7 +9,10 @@ interface BrowserMockupProps {
   className?: string;
 }
 
+const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
+
 export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
+  const isVideo = VIDEO_EXTENSIONS.test(src);
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -47,13 +50,24 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
       </div>
-      <img
-        src={src}
-        alt={alt}
-        draggable={false}
-        onDragStart={(e) => e.preventDefault()}
-        className="aspect-[16/10] w-auto flex-1 select-none object-cover object-top"
-      />
+      {isVideo ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          src={src}
+          className="aspect-[16/10] w-auto flex-1 select-none object-cover object-top"
+        />
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          onDragStart={(e) => e.preventDefault()}
+          className="aspect-[16/10] w-auto flex-1 select-none object-cover object-top"
+        />
+      )}
     </motion.div>
   );
 }

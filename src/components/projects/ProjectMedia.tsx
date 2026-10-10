@@ -55,12 +55,14 @@ export function ProjectMedia({
 
   const playbackRate = resolvedSrc === project.media.video ? project.media.videoRate : undefined;
 
+  const isWidescreen = resolvedSrc?.includes("film.mp4");
+
   return (
     <div className={`flex items-center justify-center overflow-hidden ${heightClass} ${className ?? ""}`}>
-      {project.platform === "mobile" ? (
+      {project.platform === "mobile" && !isWidescreen ? (
         <PhoneMockup src={resolvedSrc} alt={`${project.title} app`} playbackRate={playbackRate} />
       ) : (
-        <BrowserMockup src={resolvedSrc} alt={`${project.title} dashboard`} />
+        <BrowserMockup src={resolvedSrc} alt={`${project.title} preview`} />
       )}
     </div>
   );
