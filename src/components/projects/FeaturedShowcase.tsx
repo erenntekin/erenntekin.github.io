@@ -93,7 +93,7 @@ export function FeaturedShowcase({
           clickable ? "cursor-pointer hover:shadow-[0_0_32px_-4px_var(--accent)]" : ""
         }`}
       >
-        <div onClick={(e) => e.stopPropagation()}>
+        <div>
           <AnimatePresence mode="wait">
             <motion.div
               key={`${project.slug}-${mediaIndex}`}
@@ -102,13 +102,7 @@ export function FeaturedShowcase({
               exit={{ opacity: 0, scale: 0.97 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             >
-              {!currentSrc || VIDEO_EXTENSIONS.test(currentSrc) ? (
-                <ProjectMedia project={project} heightClass="h-[clamp(140px,22vw,256px)]" src={currentSrc} />
-              ) : (
-                <ZoomableImage src={currentSrc} alt={project.title} className="block w-full">
-                  <ProjectMedia project={project} heightClass="h-[clamp(140px,22vw,256px)]" src={currentSrc} />
-                </ZoomableImage>
-              )}
+              <ProjectMedia project={project} heightClass="h-[clamp(140px,22vw,256px)]" src={currentSrc} />
             </motion.div>
           </AnimatePresence>
         </div>

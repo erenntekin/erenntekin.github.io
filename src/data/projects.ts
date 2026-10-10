@@ -134,7 +134,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/ghostnet/live.gif",
+      cover: "/projects/ghostnet/live.mp4",
       screenshots: [
         { src: "/projects/ghostnet/data-overview.png", caption: "Data overview: aggregate pipeline stats and model performance" },
         { src: "/projects/ghostnet/attack-patterns-detail.png", caption: "Attack patterns exhibit, mapped to MITRE ATT&CK techniques" },
