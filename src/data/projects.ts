@@ -234,7 +234,7 @@ export const projects: Project[] = [
       demoPrivate: true,
     },
     media: {
-      cover: "/projects/mybelly/demo.gif",
+      cover: "/projects/mybelly/demo.mp4",
       screenshots: [
         { src: "/projects/mybelly/screenshot-home.png", caption: "Home screen: daily journal", group: "Journal & the agent" },
         { src: "/projects/mybelly/screenshot-agent-chat.png", caption: "AI agent: natural language logging", group: "Journal & the agent" },

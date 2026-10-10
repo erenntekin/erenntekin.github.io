@@ -57,7 +57,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
           muted
           playsInline
           src={src}
-          className="aspect-[16/10] w-auto flex-1 select-none object-cover object-top"
+          className="aspect-video w-full flex-1 select-none object-contain object-top"
         />
       ) : (
         <img
@@ -65,7 +65,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
           alt={alt}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
-          className="aspect-[16/10] w-auto flex-1 select-none object-cover object-top"
+          className="aspect-video w-full flex-1 select-none object-contain object-top"
         />
       )}
     </motion.div>

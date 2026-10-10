@@ -198,33 +198,40 @@ export function FeaturedShowcase({
               className="marquee-track flex w-max"
               style={{ animationDuration: `${marqueeHalf.length * MARQUEE_SECONDS_PER_TILE}s` }}
             >
-              {[...marqueeHalf, ...marqueeHalf].map((p, i) => (
-                <button
-                  key={`${p.slug}-${i}`}
-                  type="button"
-                  onClick={() => setActiveSlug(p.slug)}
-                  className={`relative mr-4 h-[clamp(64px,9vw,96px)] w-[clamp(112px,14vw,144px)] min-w-0 shrink-0 overflow-hidden rounded-lg border-2 bg-surface text-left transition-colors ${
-                    p.slug === project.slug ? "border-accent" : "border-border hover:border-accent/50"
-                  }`}
-                >
-                  {p.media.cover ? (
-                    <img
-                      src={p.media.cover}
-                      alt=""
-                      className={`absolute inset-0 h-full w-full ${p.platform === "mobile" ? "object-contain" : "object-cover"}`}
-                    />
-                  ) : (
-                    <div className="h-full w-full bg-surface" />
-                  )}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-2.5 pt-8 pb-2">
-                    <p
-                      className={`truncate font-serif text-sm font-semibold ${p.slug === project.slug ? "text-accent" : "text-white"}`}
-                    >
-                      {p.title}
-                    </p>
-                  </div>
-                </button>
-              ))}
+              {[...marqueeHalf, ...marqueeHalf].map((p, i) => {
+                const isVideoCover = Boolean(p.media.cover && VIDEO_EXTENSIONS.test(p.media.cover));
+                const tileSrc = isVideoCover
+                  ? (p.media.screenshots[0]?.src ?? p.media.videoPoster ?? p.media.cover)
+                  : p.media.cover;
+
+                return (
+                  <button
+                    key={`${p.slug}-${i}`}
+                    type="button"
+                    onClick={() => setActiveSlug(p.slug)}
+                    className={`relative mr-4 h-[clamp(64px,9vw,96px)] w-[clamp(112px,14vw,144px)] min-w-0 shrink-0 overflow-hidden rounded-lg border-2 bg-surface text-left transition-colors ${
+                      p.slug === project.slug ? "border-accent" : "border-border hover:border-accent/50"
+                    }`}
+                  >
+                    {tileSrc ? (
+                      <img
+                        src={tileSrc}
+                        alt=""
+                        className={`absolute inset-0 h-full w-full ${p.platform === "mobile" ? "object-contain" : "object-cover"}`}
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-surface" />
+                    )}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-2.5 pt-8 pb-2">
+                      <p
+                        className={`truncate font-serif text-sm font-semibold ${p.slug === project.slug ? "text-accent" : "text-white"}`}
+                      >
+                        {p.title}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
