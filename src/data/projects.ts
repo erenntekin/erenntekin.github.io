@@ -46,6 +46,7 @@ export interface Project {
     screenshots: Screenshot[];
     video?: string;
     videoRate?: number;
+    videoPoster?: string;
   };
 }
 
@@ -142,6 +143,7 @@ export const projects: Project[] = [
       ],
       video: "/projects/ghostnet/film.mp4",
       videoRate: 1.0,
+      videoPoster: "/projects/ghostnet/demo-poster.jpg",
     },
   },
   {
@@ -249,6 +251,7 @@ export const projects: Project[] = [
       ],
       video: "/projects/mybelly/film.mp4",
       videoRate: 1.0,
+      videoPoster: "/projects/mybelly/demo-poster.jpg",
     },
   },
   {

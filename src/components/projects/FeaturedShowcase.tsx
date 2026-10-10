@@ -19,7 +19,7 @@ const MARQUEE_SECONDS_PER_TILE = 4.5;
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
 function galleryFor(project: Project): string[] {
-  const raw = [project.media.video, project.media.cover, ...project.media.screenshots.map((s) => s.src)];
+  const raw = [project.media.cover, ...project.media.screenshots.map((s) => s.src)];
   return Array.from(new Set(raw.filter((src): src is string => Boolean(src))));
 }
 

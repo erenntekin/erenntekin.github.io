@@ -177,7 +177,7 @@ export function ProjectDetail({ project }: { project: Project }) {
               controls
               playsInline
               preload="metadata"
-              poster={project.media.cover}
+              poster={project.media.videoPoster}
               className="aspect-video w-full object-contain bg-black"
               src={project.media.video}
             >
