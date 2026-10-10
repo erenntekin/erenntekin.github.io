@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type MouseEvent } from "react";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import type { Project } from "@/data/projects";
@@ -114,13 +115,11 @@ function CardText({ project, large }: { project: Project; large: boolean }) {
         </div>
       )}
       {hasDetailContent(project) && (
-        <Link
-          href={`/projects/${project.slug}`}
-          onClick={(e) => e.stopPropagation()}
-          className={`relative z-10 mt-2 inline-flex w-fit items-center gap-1 rounded-full border border-accent/40 font-medium text-accent transition-colors hover:bg-accent/10 ${large ? "px-3 py-1.5 text-sm" : "px-2.5 py-1 text-xs"}`}
+        <span
+          className={`relative z-10 mt-2 inline-flex w-fit items-center gap-1 rounded-full border border-accent/40 font-medium text-accent transition-colors group-hover:bg-accent/10 ${large ? "px-3 py-1.5 text-sm" : "px-2.5 py-1 text-xs"}`}
         >
           View project →
-        </Link>
+        </span>
       )}
       <DomainTags project={project} />
     </div>
@@ -136,6 +135,7 @@ export function ProjectCarouselCard({
   size?: "mobile" | "desktop" | "large";
   onSelect?: () => void;
 }) {
+  const router = useRouter();
   const [hovered, setHovered] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -145,6 +145,14 @@ export function ProjectCarouselCard({
     const rect = e.currentTarget.getBoundingClientRect();
     x.set(e.clientX - rect.left);
     y.set(e.clientY - rect.top);
+  }
+
+  function handleClick() {
+    if (hasDetailContent(project)) {
+      router.push(`/projects/${project.slug}`);
+    } else if (onSelect) {
+      onSelect();
+    }
   }
 
   const compact = size === "mobile";
@@ -158,7 +166,7 @@ export function ProjectCarouselCard({
 
   return (
     <div
-      onClick={onSelect}
+      onClick={handleClick}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
