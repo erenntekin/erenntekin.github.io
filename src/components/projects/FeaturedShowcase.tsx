@@ -9,6 +9,7 @@ import { GitHubIcon } from "@/components/icons/GitHubIcon";
 import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 import { GlobeIcon } from "@/components/icons/GlobeIcon";
 import { hasDetailContent } from "@/lib/projectData";
+import { getProjectTheme } from "@/lib/projectThemes";
 import { ProjectMedia } from "./ProjectMedia";
 import { ZoomableImage } from "./ZoomableImage";
 
@@ -105,7 +106,7 @@ export function FeaturedShowcase({
               exit={{ opacity: 0, scale: 0.97 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             >
-              <ProjectMedia project={project} heightClass="h-[clamp(140px,22vw,256px)]" src={currentSrc} />
+              <ProjectMedia project={project} heightClass="h-[clamp(260px,32vw,380px)]" src={currentSrc} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -202,38 +203,60 @@ export function FeaturedShowcase({
               style={{ animationDuration: `${marqueeHalf.length * MARQUEE_SECONDS_PER_TILE}s` }}
             >
               {[...marqueeHalf, ...marqueeHalf].map((p, i) => {
-                const isVideoCover = Boolean(p.media.cover && VIDEO_EXTENSIONS.test(p.media.cover));
-                const tileSrc = isVideoCover
-                  ? (p.media.screenshots[0]?.src ?? p.media.videoPoster ?? p.media.cover)
-                  : p.media.cover;
+                const pTheme = getProjectTheme(p.slug, p.title);
+                const isSelected = p.slug === project.slug;
 
                 return (
                   <button
                     key={`${p.slug}-${i}`}
                     type="button"
                     onClick={() => setActiveSlug(p.slug)}
-                    className={`relative mr-4 h-[clamp(64px,9vw,96px)] w-[clamp(112px,14vw,144px)] min-w-0 shrink-0 overflow-hidden rounded-lg border-2 bg-surface text-left transition-colors ${
-                      p.slug === project.slug ? "border-accent" : "border-border hover:border-accent/50"
+                    style={{
+                      background: `radial-gradient(circle at 50% 30%, ${pTheme.glowColor}, rgba(8, 11, 16, 0.98) 85%)`,
+                    }}
+                    className={`group/tile relative mr-4 flex h-[clamp(68px,9vw,96px)] w-[clamp(120px,15vw,156px)] min-w-0 shrink-0 flex-col justify-between overflow-hidden rounded-xl border-2 p-2 text-left transition-all sm:p-2.5 ${
+                      isSelected
+                        ? `${pTheme.accentBorder} shadow-[0_0_16px_-2px_var(--accent)] ring-1.5 ring-accent`
+                        : "border-border/80 opacity-75 hover:border-accent/60 hover:opacity-100"
                     }`}
                   >
-                    {tileSrc ? (
-                      <img
-                        src={tileSrc}
-                        alt=""
-                        className={`absolute inset-0 h-full w-full ${p.platform === "mobile" ? "object-contain p-1" : "object-cover object-top"}`}
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-surface to-surface/50 p-2 text-center">
-                        <span className="font-mono text-[9px] tracking-wider text-muted/70 uppercase">
-                          In progress
-                        </span>
-                      </div>
-                    )}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent px-2.5 pt-8 pb-1.5">
+                    {/* Micro top header */}
+                    <div className="flex items-center justify-between font-mono text-[8px] text-muted/70">
+                      <span className="truncate tracking-wider uppercase">{pTheme.category}</span>
+                      <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? pTheme.textAccent : "bg-white/20"}`} />
+                    </div>
+
+                    {/* Center device icon / silhouette */}
+                    <div className="flex flex-1 items-center justify-center py-0.5">
+                      {pTheme.deviceType === "mobile" ? (
+                        <div className="flex h-6 w-4 flex-col justify-between rounded-[3px] border border-white/25 bg-white/5 p-0.5 shadow-xs">
+                          <div className="mx-auto h-0.5 w-1.5 rounded-full bg-white/30" />
+                          <div className="mx-auto h-1 w-1 rounded-full bg-amber-400/80" />
+                        </div>
+                      ) : pTheme.deviceType === "browser" ? (
+                        <div className="flex h-5.5 w-9 flex-col rounded-[3px] border border-white/25 bg-white/5 p-0.5 shadow-xs">
+                          <div className="flex items-center gap-0.5 border-b border-white/10 pb-0.5">
+                            <span className="h-1 w-1 rounded-full bg-red-400/80" />
+                            <span className="h-1 w-1 rounded-full bg-amber-400/80" />
+                            <span className="h-1 w-1 rounded-full bg-emerald-400/80" />
+                          </div>
+                          <div className="mt-0.5 flex-1 rounded-[1px] bg-white/5" />
+                        </div>
+                      ) : (
+                        <div className="flex h-5.5 w-9 items-center justify-center rounded-[3px] border border-dashed border-rose-400/40 bg-rose-500/5">
+                          <span className="font-mono text-[7px] text-rose-400">CV · LAB</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Bottom title */}
+                    <div className="truncate">
                       <p
-                        className={`truncate font-serif text-xs font-semibold sm:text-sm ${p.slug === project.slug ? "text-accent" : "text-white"}`}
+                        className={`truncate font-serif text-xs font-semibold sm:text-sm ${
+                          isSelected ? "text-accent" : "text-foreground"
+                        }`}
                       >
-                        {p.title}
+                        {pTheme.shortTitle}
                       </p>
                     </div>
                   </button>

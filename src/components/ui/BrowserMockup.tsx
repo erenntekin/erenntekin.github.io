@@ -51,7 +51,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, transformPerspective: 800 }}
-      className={`flex h-full w-full max-w-full flex-col overflow-hidden rounded-xl border border-border/80 bg-surface shadow-2xl shadow-black/60 transition-all ${className ?? ""}`}
+      className={`flex flex-col overflow-hidden rounded-xl border border-border/80 bg-surface shadow-2xl shadow-black/60 transition-all ${className ?? "h-full w-full max-w-full"}`}
     >
       <div className="flex shrink-0 items-center justify-between border-b border-border/70 bg-surface/90 px-3 py-1.5">
         <div className="flex items-center gap-1.5">

@@ -7,7 +7,7 @@ import { ProjectMedia } from "./ProjectMedia";
 
 export function ProjectCard({ project }: { project: Project }) {
   const clickable = hasDetailContent(project);
-  const heightClass = "h-48";
+  const heightClass = "h-52";
 
   const inner = (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border-2 border-border bg-surface/60 p-4 transition-colors group-hover:border-accent">

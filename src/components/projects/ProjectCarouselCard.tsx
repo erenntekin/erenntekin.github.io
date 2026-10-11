@@ -5,68 +5,10 @@ import { useRouter } from "next/navigation";
 import { useState, type MouseEvent } from "react";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import type { Project } from "@/data/projects";
-import { BrowserMockup } from "@/components/ui/BrowserMockup";
-import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { domainTagColor, shortTagLabel } from "@/lib/domainTagColors";
 import { hasDetailContent } from "@/lib/projectData";
-
-function Mockup({
-  project,
-  heightClass,
-  className,
-}: {
-  project: Project;
-  heightClass: string;
-  className?: string;
-}) {
-  if (!project.media.cover) {
-    if (project.status === "shipped") {
-      const repoPath = project.links.repo?.replace(/^https?:\/\/github\.com\//, "");
-      return (
-        <div
-          className={`flex w-full flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl shadow-black/50 ${heightClass} ${className ?? ""}`}
-        >
-          <div className="flex shrink-0 items-center gap-1.5 border-b border-border px-3 py-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-            <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-            <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          </div>
-          <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
-            <span className="font-serif text-2xl font-semibold text-foreground/90 sm:text-3xl">
-              {project.title}
-            </span>
-            {repoPath ? (
-              <span className="rounded-full border border-border bg-surface/60 px-3 py-1 font-mono text-[11px] text-muted">
-                {repoPath}
-              </span>
-            ) : project.links.repoPrivate ? (
-              <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-[11px] text-accent">
-                Private repo · code on request
-              </span>
-            ) : null}
-          </div>
-        </div>
-      );
-    }
-    return (
-      <div
-        className={`flex w-full items-center justify-center rounded-xl border border-dashed border-border text-xs text-muted ${heightClass} ${className ?? ""}`}
-      >
-        Preview coming soon
-      </div>
-    );
-  }
-  return (
-    <div className={`flex items-center justify-center ${heightClass} ${className ?? ""}`}>
-      {project.platform === "mobile" ? (
-        <PhoneMockup src={project.media.cover} alt={`${project.title} app`} />
-      ) : (
-        <BrowserMockup src={project.media.cover} alt={`${project.title} dashboard`} />
-      )}
-    </div>
-  );
-}
+import { ProjectMedia } from "./ProjectMedia";
 
 function DomainTags({ project }: { project: Project }) {
   const themeTags = project.themeTags ?? [];
@@ -180,7 +122,7 @@ export function ProjectCarouselCard({
       />
       {compact ? (
         <>
-          <Mockup project={project} heightClass="h-[210px]" />
+          <ProjectMedia project={project} heightClass="h-[210px]" />
           <div className="relative mt-3 flex-1">
             <CardText project={project} large={false} />
           </div>
@@ -190,7 +132,7 @@ export function ProjectCarouselCard({
           <div className="relative">
             <CardText project={project} large={large} />
           </div>
-          <Mockup
+          <ProjectMedia
             project={project}
             heightClass={large ? "h-[220px]" : "h-[190px]"}
             className="relative self-center"
