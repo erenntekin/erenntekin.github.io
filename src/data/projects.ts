@@ -19,6 +19,19 @@ export interface Screenshot {
   group?: string;
 }
 
+export type ProgressState = "done" | "in-progress" | "planned";
+
+export interface ProgressItem {
+  title: string;
+  state: ProgressState;
+  note: string;
+}
+
+export interface ProjectProgress {
+  updated: string;
+  items: ProgressItem[];
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -33,6 +46,7 @@ export interface Project {
   stack: string[];
   designNotes?: DesignNote[];
   stats?: ProjectStat[];
+  progress?: ProjectProgress;
   limitations?: string[];
   roadmap?: string[];
   links: {
@@ -260,43 +274,111 @@ export const projects: Project[] = [
     tagline: "A document platform that turns files into searchable knowledge.",
     summary: "Search and ask questions across a whole set of documents, not just one file at a time.",
     description: [
-      "This is my final-year capstone at ISEP, supervised by Thales Services Numérique. I'm building it with two other students.",
-      "The idea: pull documents in, index them, and let people search and ask questions across the whole set. No more opening files one by one.",
-      "RAG and a knowledge graph sit on top of search, so answers connect facts across documents instead of just matching keywords.",
+      "This is my final-year capstone at ISEP, supervised by Thales Services Numérique. I'm building it with two other students, and it's still in progress: two of six work packages are done.",
+      "The goal: pull documents in, index them, and let people search and ask questions across the whole set. No more opening files one by one. RAG, a knowledge graph and agents are meant to sit on top of search.",
+      "This page shows what works today and what doesn't yet. The sections below mark what is built, what is in review and what hasn't started.",
     ],
     status: "ongoing",
     platform: "web",
     domainTags: ["AI/ML", "Data Engineering"],
     stack: ["Java", "Spring Boot", "Spring AI", "React", "PostgreSQL", "OpenSearch"],
+    progress: {
+      updated: "October 2026",
+      items: [
+        {
+          title: "Documents",
+          state: "done",
+          note: "Upload, edit, trash and fuzzy search. My package.",
+        },
+        {
+          title: "Ontologies",
+          state: "done",
+          note: "Node types, relation types, business rules and JSON import/export. My package.",
+        },
+        {
+          title: "RAG",
+          state: "in-progress",
+          note: "Natural-language questions over an ingested document. Built by a teammate, pull request open and not merged yet.",
+        },
+        {
+          title: "GraphRAG",
+          state: "planned",
+          note: "A knowledge graph built on the ontology. My package, not started.",
+        },
+        {
+          title: "Configuration manager",
+          state: "planned",
+          note: "A teammate's package, not started.",
+        },
+        {
+          title: "Agents",
+          state: "planned",
+          note: "A teammate's package, not started.",
+        },
+      ],
+    },
+    stats: [
+      { label: "Packages done (of 6)", value: "2" },
+      { label: "Use-case tests", value: "52" },
+      { label: "Students on the team", value: "3" },
+    ],
     designNotes: [
       {
         title: "Hexagonal architecture from day one",
-        body: "The backend splits into domain, application and adapter modules. Maven enforces the boundary between them. Document logic never touches OpenSearch or Postgres directly. That stays in the adapters.",
+        body: "Each domain splits into domain, application, input-adapter and output-adapter modules, following the supervisor's starter kit. The domain is plain Java with no framework annotation, and Maven makes it impossible for it to import an adapter.",
       },
       {
-        title: "Documents indexed on creation",
-        body: "Every new document gets pushed into OpenSearch right away. The search index never falls behind.",
+        title: "Search that forgives typos",
+        body: "Documents are indexed in OpenSearch when they're created and again when their title or description changes. Searching \"previsionel\" finds \"prévisionnel\", and the creator's name works too.",
       },
       {
-        title: "Retrieval-augmented answers",
-        body: "Search results feed straight into an LLM through Spring AI. You get a direct answer with citations, not a list of links to dig through yourself.",
+        title: "The server refuses what the site would let through",
+        body: "File type, size and file-name length are checked on the server, not only in the browser, since the site can always be bypassed with a direct API call. An executable gets a clear refusal message.",
       },
       {
-        title: "A knowledge graph, not just an index",
-        body: "Documents link to each other through a graph of entities and relationships. Ask about a topic and the graph pulls in everything connected to it, not just documents that happen to use the same words.",
+        title: "A trash, not a delete button",
+        body: "Deleting archives the document and takes it out of search. Restoring brings it back. Permanent deletion is a separate action behind a confirmation.",
       },
       {
-        title: "Agents that split up the work",
-        body: "Instead of one big prompt, the system runs smaller agents that each handle a step: pull sources, cross-check facts, and write the final answer.",
+        title: "Renaming a type breaks nothing",
+        body: "Ontology types have a stable identifier and relations point to that identifier, not to the name. Deleting a type that a relation still uses is refused as a business rule.",
       },
       {
-        title: "Built on a domain ontology",
-        body: "An ontology defines what counts as a document, a topic or an entity. That structure is what makes the knowledge graph queryable instead of just a pile of links.",
+        title: "JSON in, JSON out",
+        body: "Ontologies import and export as JSON, using names rather than identifiers so the file stays readable. The three example ontologies from the brief (family, location, movements) round-trip without loss.",
+      },
+      {
+        title: "One test per use case",
+        body: "Every application use case has a Given/When/Then test that runs against fake ports, with no database and no server. 52 tests so far.",
+      },
+      {
+        title: "Defects found by running it for real",
+        body: "Trashed documents still showed up in search, file names could carry a path, the index wasn't updated after an edit and field sizes were unbounded. The unit tests missed all four. They were found in manual runs and fixed.",
+      },
+      {
+        title: "Tool choices are written down",
+        body: "File storage has a written comparison: SeaweedFS retained, RustFS as the alternative, MinIO excluded by the supervisor. Going without Docker is its own decision file, since it runs badly on our machines. SeaweedFS is chosen on paper only: it isn't wired up or measured yet.",
       },
       {
         title: "Building on Java 25",
         body: "We moved off Java 21 onto the newer LTS release early, at our supervising engineer's request. Small detail, but it shows this runs like a real engineering team.",
       },
+    ],
+    limitations: [
+      "Search covers title, description and creator, not the content of the files. Text extraction for PDF, Word and PowerPoint is the first step toward RAG and GraphRAG",
+      "File type is checked by extension only, so an executable renamed to .pdf gets through",
+      "Files sit in a local folder. SeaweedFS is the planned storage, but it isn't connected and nothing has been measured",
+      "No authentication yet: the creator of a document is a free text field",
+      "Ontologies describe types only. A relation can't carry a start and end date, which the brief needs for locations over a period",
+      "No integration tests, performance tests or CI. The suite covers use cases against fake ports, not the real database or OpenSearch",
+    ],
+    roadmap: [
+      "Extract the text of uploaded files and index it once, shared by RAG and GraphRAG",
+      "Continuous integration: build and run the tests on every pull request",
+      "Complete permanent deletion, then plug in SeaweedFS with real measurements",
+      "Detect the real file type from the content, not the extension",
+      "Integration tests, then volume tests",
+      "Settle with the supervisor whether ontologies need properties and type hierarchy, before GraphRAG fixes the model",
     ],
     links: {
       repoPrivate: true,

@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import type { Project } from "@/data/projects";
+import type { Project, ProgressState } from "@/data/projects";
 import { RevealOnMount } from "@/components/motion/RevealOnMount";
 import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 import { GitHubIcon } from "@/components/icons/GitHubIcon";
 import { GlobeIcon } from "@/components/icons/GlobeIcon";
 import { domainTagColor, shortTagLabel } from "@/lib/domainTagColors";
 import { AnimatedStat } from "@/components/ui/AnimatedStat";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ZoomableImage } from "./ZoomableImage";
 import { ProjectMedia } from "./ProjectMedia";
 import { StaggerList } from "./StaggerList";
@@ -16,6 +17,27 @@ import { Walkthrough } from "./Walkthrough";
 import { SectionNav } from "./SectionNav";
 
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
+
+const PROGRESS_STYLES: Record<ProgressState, { label: string; pill: string; card: string; bar: string }> = {
+  done: {
+    label: "Done",
+    pill: "border-green-500/30 bg-green-500/10 text-green-300",
+    card: "border-border bg-surface/30",
+    bar: "bg-green-400",
+  },
+  "in-progress": {
+    label: "In progress",
+    pill: "border-accent/50 bg-accent/10 text-accent",
+    card: "border-accent/40 bg-surface/30",
+    bar: "bg-accent",
+  },
+  planned: {
+    label: "Not started",
+    pill: "border-border text-muted",
+    card: "border-dashed border-border",
+    bar: "bg-border",
+  },
+};
 
 export function ProjectDetail({ project }: { project: Project }) {
   const heroSrc = project.media.cover ?? project.media.video;
@@ -26,9 +48,12 @@ export function ProjectDetail({ project }: { project: Project }) {
   const quietNotes = allNotes.filter((n) => !n.screenshot);
   const hasLimitations = Boolean(project.limitations && project.limitations.length > 0);
   const hasRoadmap = Boolean(project.roadmap && project.roadmap.length > 0);
+  const progressItems = project.progress?.items ?? [];
+  const doneCount = progressItems.filter((p) => p.state === "done").length;
 
   const navSections = [
     project.description.length > 0 && { id: "overview", label: "Overview" },
+    progressItems.length > 0 && { id: "progress", label: "Progress" },
     project.media.video && { id: "demo", label: "Demo" },
     (illustrated.length > 0 || quietNotes.length > 0) && { id: "how-it-works", label: "How it works" },
     hasLimitations && { id: "limitations", label: "Limitations" },
@@ -70,6 +95,13 @@ export function ProjectDetail({ project }: { project: Project }) {
               {shortTagLabel(tag)}
             </span>
           ))}
+          {project.status === "ongoing" && (
+            <StatusBadge>
+              <span className="text-[10px]">
+                Work in progress{project.progress ? ` · updated ${project.progress.updated}` : ""}
+              </span>
+            </StatusBadge>
+          )}
         </div>
         <h1 className="mt-3 font-serif text-3xl font-semibold text-foreground sm:text-4xl">{project.title}</h1>
         <p className="mt-2 text-base text-foreground/80">{project.tagline}</p>
@@ -161,6 +193,46 @@ export function ProjectDetail({ project }: { project: Project }) {
           itemClassName="rounded-lg border border-border bg-surface/30 px-3 py-3 transition-colors hover:border-accent/40 sm:px-4"
           renderItem={(stat) => <AnimatedStat label={stat.label} value={stat.value} />}
         />
+      )}
+
+      {progressItems.length > 0 && (
+        <div id="progress" className="mt-14 scroll-mt-28 border-t border-border pt-8">
+          <p className="font-mono text-[10px] tracking-widest text-accent uppercase">Progress</p>
+          <h2 className="mt-1.5 font-serif text-2xl font-semibold text-foreground sm:text-3xl">
+            Where it stands today
+          </h2>
+          <p className="mt-2 text-sm text-foreground/70">
+            {doneCount} of {progressItems.length} work packages done. This project is still being built.
+          </p>
+          <div className="mt-5 flex gap-1.5" aria-hidden="true">
+            {progressItems.map((p) => (
+              <span key={p.title} className={`h-1.5 flex-1 rounded-full ${PROGRESS_STYLES[p.state].bar}`} />
+            ))}
+          </div>
+          <StaggerList
+            items={progressItems}
+            keyFn={(p) => p.title}
+            as="div"
+            itemAs="div"
+            className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
+            itemClassName="h-full"
+            renderItem={(p) => (
+              <div
+                className={`h-full rounded-xl border p-5 transition-colors hover:border-accent/50 ${PROGRESS_STYLES[p.state].card}`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm font-semibold text-foreground">{p.title}</p>
+                  <span
+                    className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] ${PROGRESS_STYLES[p.state].pill}`}
+                  >
+                    {PROGRESS_STYLES[p.state].label}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/70">{p.note}</p>
+              </div>
+            )}
+          />
+        </div>
       )}
 
       {project.media.video && (
