@@ -212,48 +212,54 @@ export function FeaturedShowcase({
                     type="button"
                     onClick={() => setActiveSlug(p.slug)}
                     style={{
-                      background: `radial-gradient(circle at 50% 30%, ${pTheme.glowColor}, rgba(8, 11, 16, 0.98) 85%)`,
+                      background: `radial-gradient(circle at 50% 25%, ${pTheme.glowColor}, rgba(8, 10, 15, 0.98) 85%)`,
                     }}
-                    className={`group/tile relative mr-4 flex h-[clamp(68px,9vw,96px)] w-[clamp(120px,15vw,156px)] min-w-0 shrink-0 flex-col justify-between overflow-hidden rounded-xl border-2 p-2 text-left transition-all sm:p-2.5 ${
+                    className={`group/tile relative mr-4 flex h-[clamp(70px,9.2vw,96px)] w-[clamp(124px,15vw,160px)] min-w-0 shrink-0 flex-col justify-between overflow-hidden rounded-xl border-2 p-2.5 text-left transition-all ${
                       isSelected
-                        ? `${pTheme.accentBorder} shadow-[0_0_16px_-2px_var(--accent)] ring-1.5 ring-accent`
-                        : "border-border/80 opacity-75 hover:border-accent/60 hover:opacity-100"
+                        ? `${pTheme.activeRing} ${pTheme.activeShadow} opacity-100`
+                        : "border-border/70 opacity-80 hover:border-white/20 hover:opacity-100"
                     }`}
                   >
                     {/* Micro top header */}
-                    <div className="flex items-center justify-between font-mono text-[8px] text-muted/70">
-                      <span className="truncate tracking-wider uppercase">{pTheme.category}</span>
-                      <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? pTheme.textAccent : "bg-white/20"}`} />
+                    <div className="flex items-center justify-between font-mono text-[8.5px]">
+                      <span className={`truncate font-semibold tracking-wider uppercase ${isSelected ? pTheme.textAccent : "text-muted/80"}`}>
+                        {pTheme.category}
+                      </span>
+                      <span className={`h-1.5 w-1.5 rounded-full ${isSelected ? `${pTheme.textAccent} shadow-[0_0_6px_currentColor]` : "bg-white/20"}`} />
                     </div>
 
-                    {/* Center device icon / silhouette */}
+                    {/* Center device icon / silhouette with project accent */}
                     <div className="flex flex-1 items-center justify-center py-0.5">
                       {pTheme.deviceType === "mobile" ? (
-                        <div className="flex h-6 w-4 flex-col justify-between rounded-[3px] border border-white/25 bg-white/5 p-0.5 shadow-xs">
-                          <div className="mx-auto h-0.5 w-1.5 rounded-full bg-white/30" />
-                          <div className="mx-auto h-1 w-1 rounded-full bg-amber-400/80" />
+                        <div className={`flex h-6 w-4 flex-col justify-between rounded-[3px] border p-0.5 shadow-xs transition-colors ${isSelected ? "border-amber-400/80 bg-amber-500/20" : "border-amber-500/30 bg-amber-500/10"}`}>
+                          <div className="mx-auto h-0.5 w-1.5 rounded-full bg-white/40" />
+                          <div className="mx-auto h-1 w-1 rounded-full bg-amber-400" />
                         </div>
                       ) : pTheme.deviceType === "browser" ? (
-                        <div className="flex h-5.5 w-9 flex-col rounded-[3px] border border-white/25 bg-white/5 p-0.5 shadow-xs">
+                        <div className={`flex h-5.5 w-9 flex-col rounded-[3px] border p-0.5 shadow-xs transition-colors ${
+                          p.slug === "ghostnet"
+                            ? isSelected ? "border-cyan-400/80 bg-cyan-500/20" : "border-cyan-500/30 bg-cyan-500/10"
+                            : isSelected ? "border-emerald-400/80 bg-emerald-500/20" : "border-emerald-500/30 bg-emerald-500/10"
+                        }`}>
                           <div className="flex items-center gap-0.5 border-b border-white/10 pb-0.5">
-                            <span className="h-1 w-1 rounded-full bg-red-400/80" />
-                            <span className="h-1 w-1 rounded-full bg-amber-400/80" />
-                            <span className="h-1 w-1 rounded-full bg-emerald-400/80" />
+                            <span className="h-1 w-1 rounded-full bg-red-400/90" />
+                            <span className="h-1 w-1 rounded-full bg-amber-400/90" />
+                            <span className="h-1 w-1 rounded-full bg-emerald-400/90" />
                           </div>
-                          <div className="mt-0.5 flex-1 rounded-[1px] bg-white/5" />
+                          <div className={`mt-0.5 flex-1 rounded-[1px] ${isSelected ? "bg-white/15" : "bg-white/5"}`} />
                         </div>
                       ) : (
-                        <div className="flex h-5.5 w-9 items-center justify-center rounded-[3px] border border-dashed border-rose-400/40 bg-rose-500/5">
-                          <span className="font-mono text-[7px] text-rose-400">CV · LAB</span>
+                        <div className={`flex h-5.5 w-9 items-center justify-center rounded-[3px] border border-dashed transition-colors ${isSelected ? "border-rose-400 bg-rose-500/20" : "border-rose-500/40 bg-rose-500/10"}`}>
+                          <span className="font-mono text-[7px] font-bold text-rose-400">CV · LAB</span>
                         </div>
                       )}
                     </div>
 
-                    {/* Bottom title */}
+                    {/* Bottom title with matching theme accent */}
                     <div className="truncate">
                       <p
-                        className={`truncate font-serif text-xs font-semibold sm:text-sm ${
-                          isSelected ? "text-accent" : "text-foreground"
+                        className={`truncate font-serif text-xs font-semibold sm:text-sm transition-colors ${
+                          isSelected ? `${pTheme.textAccent} font-bold` : "text-foreground/90"
                         }`}
                       >
                         {pTheme.shortTitle}

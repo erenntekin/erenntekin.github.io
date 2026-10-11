@@ -100,27 +100,13 @@ export function ProjectMedia({
 
   return (
     <div
-      className={`group/stage relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-border/80 bg-[#07090e] p-3 sm:p-4 select-none ${heightClass} ${className ?? ""}`}
+      className={`group/stage relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-border/70 bg-[#07090e] p-3 sm:p-5 select-none ${heightClass} ${className ?? ""}`}
       style={{
         background: `radial-gradient(circle at 50% 50%, ${theme.glowColor}, rgba(7, 9, 14, 0.98) 75%)`,
       }}
     >
-      {/* Subtle dotted matrix background */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:radial-gradient(rgba(255,255,255,0.7)_1px,transparent_1px)] [background-size:14px_14px]"
-      />
-
-      {/* Stage Watermark header */}
-      <div className="pointer-events-none absolute top-2 inset-x-3 z-10 flex items-center justify-between font-mono text-[8px] sm:text-[9px] tracking-wider text-muted/60">
-        <span className="truncate uppercase font-medium">{theme.tagline}</span>
-        <span className="ml-2 shrink-0 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 font-mono uppercase text-[8px] text-muted/80">
-          {project.platform}
-        </span>
-      </div>
-
       {/* Stage Canvas / Device Display */}
-      <div className="relative flex h-full w-full items-center justify-center pt-4 pb-0.5">
+      <div className="relative flex h-full w-full items-center justify-center">
         {project.platform === "mobile" && !isWidescreen ? (
           <PhoneMockup src={resolvedSrc ?? ""} alt={`${project.title} app`} playbackRate={playbackRate} />
         ) : resolvedSrc ? (

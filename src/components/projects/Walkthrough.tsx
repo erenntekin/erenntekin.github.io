@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import type { DesignNote, Project } from "@/data/projects";
 import { ZoomableImage } from "./ZoomableImage";
-import { ProjectMedia } from "./ProjectMedia";
+import { BrowserMockup } from "@/components/ui/BrowserMockup";
+import { PhoneMockup } from "@/components/ui/PhoneMockup";
 
 function renderTitle(title: string) {
   return title.split(/(&)/).map((part, i) =>
@@ -31,7 +32,13 @@ export function Walkthrough({ project, notes }: { project: Project; notes: Desig
         >
           <div className={i % 2 === 1 ? "sm:order-2" : ""}>
             <ZoomableImage src={note.screenshot!} alt={note.title} className="block w-full">
-              <ProjectMedia project={project} heightClass="h-[clamp(170px,24vw,256px)]" src={note.screenshot} />
+              <div className="flex items-center justify-center">
+                {project.platform === "mobile" ? (
+                  <PhoneMockup src={note.screenshot!} alt={note.title} className="h-64 sm:h-72 w-auto" />
+                ) : (
+                  <BrowserMockup src={note.screenshot!} alt={note.title} className="w-full aspect-[16/10] shadow-xl" />
+                )}
+              </div>
             </ZoomableImage>
           </div>
           <div className={i % 2 === 1 ? "sm:order-1" : ""}>

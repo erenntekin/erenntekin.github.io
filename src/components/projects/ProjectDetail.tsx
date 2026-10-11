@@ -9,6 +9,8 @@ import { GlobeIcon } from "@/components/icons/GlobeIcon";
 import { domainTagColor, shortTagLabel } from "@/lib/domainTagColors";
 import { AnimatedStat } from "@/components/ui/AnimatedStat";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { BrowserMockup } from "@/components/ui/BrowserMockup";
+import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { ZoomableImage } from "./ZoomableImage";
 import { ProjectMedia } from "./ProjectMedia";
 import { StaggerList } from "./StaggerList";
@@ -74,12 +76,20 @@ export function ProjectDetail({ project }: { project: Project }) {
         <div className="relative mt-5">
           <AmbientGlow />
           {!heroSrc ? (
-            <ProjectMedia project={project} heightClass="h-[clamp(180px,26vw,256px)]" />
+            <ProjectMedia project={project} heightClass="h-[clamp(220px,30vw,320px)]" />
+          ) : project.platform === "mobile" && !heroSrc.includes("film.mp4") ? (
+            <div className="flex justify-center h-[380px] sm:h-[460px]">
+              <PhoneMockup src={heroSrc} alt={project.title} playbackRate={project.media.videoRate} />
+            </div>
           ) : heroIsVideo ? (
-            <ProjectMedia project={project} heightClass="h-[clamp(200px,32vw,420px)]" src={heroSrc} />
+            <div className="flex justify-center">
+              <BrowserMockup src={heroSrc} alt={project.title} className="w-full max-w-4xl aspect-[16/10] shadow-2xl" />
+            </div>
           ) : (
             <ZoomableImage src={heroSrc} alt={project.title} className="block w-full">
-              <ProjectMedia project={project} heightClass="h-[clamp(200px,32vw,420px)]" src={heroSrc} />
+              <div className="flex justify-center">
+                <BrowserMockup src={heroSrc} alt={project.title} className="w-full max-w-4xl aspect-[16/10] shadow-2xl" />
+              </div>
             </ZoomableImage>
           )}
         </div>
