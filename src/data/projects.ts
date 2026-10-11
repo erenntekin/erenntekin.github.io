@@ -316,11 +316,6 @@ export const projects: Project[] = [
         },
       ],
     },
-    stats: [
-      { label: "Packages done (of 6)", value: "2" },
-      { label: "Use-case tests", value: "52" },
-      { label: "Students", value: "3" },
-    ],
     designNotes: [
       {
         title: "Hexagonal architecture",
@@ -342,34 +337,14 @@ export const projects: Project[] = [
         title: "Safe ontology edits",
         body: "Types have a stable identifier, so renaming a type breaks no relation. A type used by a relation cannot be deleted. Ontologies import and export as JSON.",
       },
-      {
-        title: "One test per use case",
-        body: "Each use case has a Given/When/Then test. No database or server is needed. 52 tests so far.",
-      },
-      {
-        title: "Bugs found by real use",
-        body: "Manual runs found four bugs the tests missed. Trashed documents appeared in search. File names could contain a path. The index was not updated after an edit. Field sizes had no limit. All four are fixed.",
-      },
-      {
-        title: "Written tool choices",
-        body: "Each tool choice is documented with its reasons. File storage was compared and SeaweedFS was picked. It is not connected yet.",
-      },
-    ],
-    limitations: [
-      "Search does not read file contents yet. It covers title, description and creator",
-      "File type is checked by extension only",
-      "Files are stored in a local folder. The planned storage is not connected",
-      "No login yet",
-      "An ontology holds types only. A relation cannot carry dates",
-      "No integration tests, performance tests or automated CI yet",
     ],
     roadmap: [
-      "Read the text inside files and index it",
-      "Run the tests automatically on every pull request",
-      "Connect the planned file storage and measure it",
-      "Detect the real file type from the content",
+      "Index the text inside files",
+      "Connect the planned file storage",
+      "Check the real file type, not only the extension",
+      "Add login",
+      "Let ontology relations carry dates",
       "Add integration and performance tests",
-      "Agree with the supervisor on dates and type hierarchy in ontologies",
     ],
     links: {
       repoPrivate: true,
