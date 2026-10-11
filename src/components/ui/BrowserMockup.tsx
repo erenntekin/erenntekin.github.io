@@ -51,37 +51,39 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, transformPerspective: 800 }}
-      className={`flex flex-col overflow-hidden rounded-xl border border-border/80 bg-surface shadow-2xl shadow-black/60 transition-all ${className ?? "h-full w-full max-w-full"}`}
+      className={`flex flex-col overflow-hidden rounded-xl border border-white/15 bg-[#10141d] shadow-[0_24px_50px_-12px_rgba(0,0,0,0.9)] transition-all ${className ?? "h-full w-full max-w-full"}`}
     >
-      <div className="flex shrink-0 items-center justify-between border-b border-border/70 bg-surface/90 px-3 py-1.5">
+      <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#151a26] px-3.5 py-2">
         <div className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-red-500/70" />
-          <span className="h-2 w-2 rounded-full bg-amber-500/70" />
-          <span className="h-2 w-2 rounded-full bg-emerald-500/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
         </div>
-        <div className="flex items-center rounded-md border border-white/5 bg-white/5 px-2.5 py-0.5 font-mono text-[9px] text-muted/80">
-          <span className="max-w-[130px] truncate sm:max-w-[180px]">{cleanUrl}</span>
+        <div className="flex items-center rounded-md border border-white/10 bg-black/40 px-3 py-0.5 font-mono text-[10px] text-zinc-300">
+          <span className="max-w-[140px] truncate sm:max-w-[200px]">{cleanUrl}</span>
         </div>
         <div className="w-6" />
       </div>
-      {isVideo ? (
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          src={src}
-          className="w-full flex-1 select-none object-cover object-top"
-        />
-      ) : (
-        <img
-          src={src}
-          alt={alt}
-          draggable={false}
-          onDragStart={(e) => e.preventDefault()}
-          className="w-full flex-1 select-none object-cover object-top"
-        />
-      )}
+      <div className="relative flex flex-1 items-center justify-center overflow-hidden bg-[#0a0d14] p-1 sm:p-1.5">
+        {isVideo ? (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            src={src}
+            className="h-full w-full select-none object-contain object-top"
+          />
+        ) : (
+          <img
+            src={src}
+            alt={alt}
+            draggable={false}
+            onDragStart={(e) => e.preventDefault()}
+            className="h-full w-full select-none object-contain object-top"
+          />
+        )}
+      </div>
     </motion.div>
   );
 }
