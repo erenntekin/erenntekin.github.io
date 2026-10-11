@@ -323,19 +323,28 @@ export const projects: Project[] = [
       },
       {
         title: "Search that forgives typos",
-        body: "Documents are indexed in OpenSearch. Searching \"previsionel\" finds \"prévisionnel\". You can also search by creator.",
+        body: "Documents are indexed in OpenSearch. Searching \"qqq report\" still finds \"Q3 report\". You can also search by creator.",
+        screenshot: "/projects/genai-document-analysis/search-typo.png",
       },
       {
         title: "Checks on the server",
         body: "File type, size and name are checked on the server. The website alone can always be bypassed.",
+        screenshot: "/projects/genai-document-analysis/upload-refused.png",
       },
       {
         title: "Trash before delete",
         body: "Deleting moves a document to the trash and removes it from search. It can be restored. Permanent deletion asks for a confirmation.",
+        screenshot: "/projects/genai-document-analysis/trash.png",
+      },
+      {
+        title: "Ontologies",
+        body: "An ontology lists node types and the relations allowed between them. This one describes locations. It imports and exports as JSON.",
+        screenshot: "/projects/genai-document-analysis/ontology-detail.png",
       },
       {
         title: "Safe ontology edits",
-        body: "Types have a stable identifier, so renaming a type breaks no relation. A type used by a relation cannot be deleted. Ontologies import and export as JSON.",
+        body: "Types have a stable identifier, so renaming a type breaks no relation. A type used by a relation cannot be deleted.",
+        screenshot: "/projects/genai-document-analysis/ontology-delete-refused.png",
       },
     ],
     roadmap: [
@@ -350,6 +359,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
+      cover: "/projects/genai-document-analysis/documents-list.png",
       screenshots: [],
     },
   },
