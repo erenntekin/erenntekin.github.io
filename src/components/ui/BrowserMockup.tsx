@@ -37,18 +37,32 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
     y.set(0);
   }
 
+  const cleanUrl = alt.toLowerCase().includes("ghostnet")
+    ? "ghostnet.live"
+    : alt.toLowerCase().includes("genai")
+    ? "genai-docs.app"
+    : alt.toLowerCase().includes("coldeye")
+    ? "coldeye.local"
+    : "app.internal";
+
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, transformPerspective: 800 }}
-      className={`flex h-full w-fit flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl shadow-black/50 ${className ?? ""}`}
+      className={`flex h-full w-full max-w-full flex-col overflow-hidden rounded-xl border border-border/80 bg-surface shadow-2xl shadow-black/60 transition-all ${className ?? ""}`}
     >
-      <div className="flex shrink-0 items-center gap-1.5 border-b border-border px-3 py-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+      <div className="flex shrink-0 items-center justify-between border-b border-border/70 bg-surface/90 px-3 py-1.5">
+        <div className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-red-500/70" />
+          <span className="h-2 w-2 rounded-full bg-amber-500/70" />
+          <span className="h-2 w-2 rounded-full bg-emerald-500/70" />
+        </div>
+        <div className="flex items-center rounded-md border border-white/5 bg-white/5 px-2.5 py-0.5 font-mono text-[9px] text-muted/80">
+          <span className="max-w-[130px] truncate sm:max-w-[180px]">{cleanUrl}</span>
+        </div>
+        <div className="w-6" />
       </div>
       {isVideo ? (
         <video
@@ -57,7 +71,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
           muted
           playsInline
           src={src}
-          className="aspect-video w-full flex-1 select-none object-contain object-top"
+          className="w-full flex-1 select-none object-cover object-top"
         />
       ) : (
         <img
@@ -65,7 +79,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
           alt={alt}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
-          className="aspect-video w-full flex-1 select-none object-contain object-top"
+          className="w-full flex-1 select-none object-cover object-top"
         />
       )}
     </motion.div>

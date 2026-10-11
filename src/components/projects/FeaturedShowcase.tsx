@@ -220,14 +220,18 @@ export function FeaturedShowcase({
                       <img
                         src={tileSrc}
                         alt=""
-                        className={`absolute inset-0 h-full w-full ${p.platform === "mobile" ? "object-contain" : "object-cover"}`}
+                        className={`absolute inset-0 h-full w-full ${p.platform === "mobile" ? "object-contain p-1" : "object-cover object-top"}`}
                       />
                     ) : (
-                      <div className="h-full w-full bg-surface" />
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-surface to-surface/50 p-2 text-center">
+                        <span className="font-mono text-[9px] tracking-wider text-muted/70 uppercase">
+                          In progress
+                        </span>
+                      </div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-2.5 pt-8 pb-2">
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent px-2.5 pt-8 pb-1.5">
                       <p
-                        className={`truncate font-serif text-sm font-semibold ${p.slug === project.slug ? "text-accent" : "text-white"}`}
+                        className={`truncate font-serif text-xs font-semibold sm:text-sm ${p.slug === project.slug ? "text-accent" : "text-white"}`}
                       >
                         {p.title}
                       </p>
