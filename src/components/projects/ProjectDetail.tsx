@@ -202,7 +202,7 @@ export function ProjectDetail({ project }: { project: Project }) {
             Where it stands today
           </h2>
           <p className="mt-2 text-sm text-foreground/70">
-            {doneCount} of {progressItems.length} work packages done. This project is still being built.
+            {doneCount} of {progressItems.length} work packages done. Still in progress.
           </p>
           <div className="mt-5 flex gap-1.5" aria-hidden="true">
             {progressItems.map((p) => (
