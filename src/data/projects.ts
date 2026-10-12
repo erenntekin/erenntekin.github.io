@@ -267,7 +267,7 @@ export const projects: Project[] = [
     slug: "genai-document-analysis",
     title: "GenAI Document Analysis",
     tagline: "A document platform with typo-tolerant search and ontology models.",
-    summary: "Search and ask questions across a whole set of documents, not just one file at a time.",
+    summary: "Search and ask questions across a collection of documents using knowledge models.",
     description: [
       "A document management system built to organize, validate, and search multi-format file collections.",
       "Engineered with Spring Boot using hexagonal architecture. Combines relational storage in PostgreSQL with fuzzy indexing in OpenSearch.",
