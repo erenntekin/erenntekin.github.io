@@ -83,6 +83,8 @@ export interface Project {
     video?: string;
     videoRate?: number;
     videoPoster?: string;
+    // replaces the demo section's default subtitle
+    videoNote?: string;
   };
 }
 
@@ -529,6 +531,10 @@ export const projects: Project[] = [
     },
     media: {
       cover: "/projects/coldeye/cover.mp4",
+      video: "/projects/coldeye/film.mp4",
+      videoRate: 1.0,
+      videoPoster: "/projects/coldeye/demo-poster.jpg",
+      videoNote: "A 34-second launch film with voiceover: detection, interactions, posture, the event log.",
       screenshots: [
         { src: "/projects/coldeye/desk-pickup.png", caption: "Live desk view: bottle picked up", group: "Live monitor" },
         { src: "/projects/coldeye/desk-put-down.png", caption: "Live desk view: bottle put down", group: "Live monitor" },

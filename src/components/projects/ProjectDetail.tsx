@@ -288,7 +288,7 @@ export function ProjectDetail({ project }: { project: Project }) {
             Watch the product in action
           </h2>
           <p className="mt-2 text-sm text-foreground/70">
-            Full walkthrough with architecture narration and live interface.
+            {project.media.videoNote ?? "Full walkthrough with architecture narration and live interface."}
           </p>
           <div className="relative mt-6 overflow-hidden rounded-2xl border border-border bg-black/80 shadow-2xl">
             <video
