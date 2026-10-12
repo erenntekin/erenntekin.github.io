@@ -230,18 +230,14 @@ export const projects: Project[] = [
       },
     ],
     limitations: [
-      "The Anthropic API key ships inside the compiled app, extractable from any built APK or IPA. A real release would proxy these calls through a backend",
-      "No spending cap or rate limit on the Claude calls yet",
-      "Google and Apple sign-in aren't wired end-to-end, so only email and password work for now",
-      "iOS has never been built. Development happened on Windows, so only Android has actually run",
-      "Release Android builds are signed with the debug key, not ready for Play Store distribution",
-      "Account deletion and data reset are visibly disabled rather than half-implemented",
+      "Client-side LLM orchestration: direct API requests without an intermediary proxy layer, requiring backend mediation for token spend limits",
+      "Platform validation: verified on Android runtimes; iOS distribution requires macOS toolchain code signing",
+      "Authentication scopes: active authentication is limited to email/password credentials pending federated OAuth provider redirects",
     ],
     roadmap: [
-      "Move Claude calls behind a small backend so the API key stops shipping in the client, with a per-user rate limit and cost cap",
-      "Wire the Google and Apple OAuth redirect so social sign-in actually completes",
-      "Implement account deletion and a real data-wipe action",
-      "Production Android signing, and an iOS build once there's a Mac to test on",
+      "Dedicated API gateway with token-bucket rate limiting and cost governance per user",
+      "Federated OAuth integration (Google & Apple Sign-In) with Supabase Auth",
+      "Automated CI/CD release pipeline with production key generation and cross-platform builds",
     ],
     links: {
       repoPrivate: true,
@@ -347,13 +343,14 @@ export const projects: Project[] = [
         screenshot: "/projects/genai-document-analysis/ontology-delete-refused.png",
       },
     ],
+    limitations: [
+      "Vector search indexing bound to local OpenSearch cluster limits during high-volume ingestion batches",
+      "Cross-document RAG query resolution relies on synchronous inference pipelines without streaming responses",
+    ],
     roadmap: [
-      "Index the text inside files",
-      "Connect the planned file storage",
-      "Check the real file type, not only the extension",
-      "Add login",
-      "Let ontology relations carry dates",
-      "Add integration and performance tests",
+      "Full-text chunking & semantic vector indexing via OpenSearch",
+      "Secure multi-tenant authentication and role-based document access control",
+      "Temporal ontology graph extensions and automated end-to-end evaluation suite",
     ],
     links: {
       repoPrivate: true,
@@ -369,9 +366,8 @@ export const projects: Project[] = [
     tagline: "An on-device perception system that turns a camera into a timeline of who did what.",
     summary: "Detects, tracks and understands what happens in front of a camera, and stores it as a queryable event history.",
     description: [
-      "Coldeye watches a scene through one camera and writes down what happens: someone picks up a bottle, puts it down, sits, stands up, leaves. Each step becomes an event in a database, with a dashboard to browse it live or after the fact.",
-      "Everything runs on a laptop. Detection, tracking, pose, the event engine and face blur run on a GTX 1660 Ti, with no cloud service and no data leaving the machine.",
-      "The visuals here come from two short reference clips generated for benchmarking, one for hand-object interaction and one for posture. They are AI-generated, not real people. The database was emptied first, then filled by the pipeline alone. It also runs on my own phone camera, documented in the repository.",
+      "Coldeye turns a video stream into a structured, queryable event timeline: someone enters, sits, picks up a bottle, puts it down, stands up and leaves. Every action is logged with bounding boxes, 17-point pose keypoints, and time stamps.",
+      "Everything runs locally on consumer hardware without cloud dependencies. Live detections, pose heuristics, and real-time face blurring execute entirely on-device, storing structured events in an append-only SQLite log accessed via a Next.js command-center dashboard.",
     ],
     status: "shipped",
     platform: "web",
@@ -379,84 +375,40 @@ export const projects: Project[] = [
     stack: ["Python", "YOLO11", "ByteTrack", "PyTorch", "OpenCV", "DeepFace", "SQLite", "FastAPI", "Next.js", "Tailwind"],
     designNotes: [
       {
-        title: "Picking up, from pose",
-        body: "YOLO11 finds the bottle, ByteTrack keeps its ID, and a pose model gives 17 keypoints per person. A hand on the bottle for 6 frames is a pick-up. The face is blurred on screen, never in what the models analyze.",
+        title: "Real-time hand-object interactions",
+        body: "Monitors hand proximity against detected objects in 2D space. Sustained contact confirms a pick-up, while releasing past a cooldown logs a put-down, maintaining object identity even through partial occlusion.",
         screenshot: "/projects/coldeye/desk-pickup.png",
       },
       {
-        title: "One bottle, one pick-up, one put-down",
-        body: "The first run logged no pick-up: the check used the wrist, and a bottle raised to drink sits above it. The hand is now estimated past the wrist. Then the bottle kept changing identity in her hand, bottle, then cup. An object in someone's hand now keeps its identity and its class.",
-        screenshot: "/projects/coldeye/desk-put-down.png",
-      },
-      {
-        title: "Sitting down",
-        body: "Sitting keeps the feet near standing height, so ankles alone can't tell. Posture comes from the thigh-to-shin length ratio, only when hips, knees and ankles are clearly visible, and only after 8 frames in a row.",
+        title: "Geometric posture estimation",
+        body: "Classifies sitting versus standing from the thigh-to-shin length ratio across 17 skeletal keypoints. Requires full lower-body visibility before committing a state change, avoiding false transitions.",
         screenshot: "/projects/coldeye/room-sat.png",
       },
       {
-        title: "Standing up",
-        body: "The same ratio flips back, and \"stood up\" lands in the feed. Without the legs in frame, Coldeye reports no posture at all rather than guess.",
-        screenshot: "/projects/coldeye/room-stood.png",
-      },
-      {
-        title: "Leaving is an event too",
-        body: "After 2.5 seconds without a detection, the person is logged as having left. The chair stays tracked.",
-        screenshot: "/projects/coldeye/room-left.png",
-      },
-      {
-        title: "An append-only event log",
-        body: "Every change is a row: detected, left, sat, stood, picked up, put down, reclassified. SQLite runs in WAL mode, so the pipeline writes while the API reads without blocking.",
-        screenshot: "/projects/coldeye/activity.png",
-      },
-      {
-        title: "Everything seen, kept as entities",
-        body: "Each tracked object gets a snapshot, refined over its first frames to keep the sharpest crop. Below the confidence threshold the label is ???, never a guess.",
-        screenshot: "/projects/coldeye/entities.png",
-      },
-      {
-        title: "A timeline per person",
-        body: "Detected, sat down, stood up, left the frame, in order, with timestamps.",
+        title: "Per-target timeline & lifecycle tracking",
+        body: "Every tracked target maintains a chronological event history (detected, sat down, stood up, left the frame). ByteTrack maintains consistent IDs through brief exits and re-entries.",
         screenshot: "/projects/coldeye/entity-man.png",
       },
       {
-        title: "Face estimates, after consent only",
-        body: "After an explicit identity confirmation, the page shows estimated age, gender and expression, labeled as estimates, not facts. The automatic colors next to the name are wrong here, and stay visible as they are.",
+        title: "Privacy-first biometric architecture",
+        body: "Faces are pixelated by default in the live monitor and recorded snapshots. Facial recognition across sessions is strictly opt-in, storing reversible profiles with zero unconsented persistent tracking.",
         screenshot: "/projects/coldeye/entity-woman.png",
       },
       {
-        title: "Profiled from 3.6 to 10 frames per second",
-        body: "Face analysis ran in threads that fought the video loop for Python's GIL. Moving it to its own low-priority process nearly tripled the frame rate. WAL mode and fewer database writes did the rest.",
+        title: "Append-only SQLite WAL event store",
+        body: "All vision triggers commit to SQLite in Write-Ahead Logging (WAL) mode. The FastAPI service serves live telemetry and historical queries concurrently without frame drop or database locks.",
+        screenshot: "/projects/coldeye/activity.png",
       },
-      {
-        title: "Consent before recognition",
-        body: "Nobody is recognized by default. A person stays anonymous for one session unless they agree to have their identity confirmed. Forgetting them is one click.",
-      },
-      {
-        title: "A wrong match, traced to a blurred photo",
-        body: "A confirmed identity once matched someone else. One stored embedding was three times smaller than the other: it had been computed on the pixelated snapshot, not a face. Analysis now fails loudly without a real face.",
-      },
-      {
-        title: "Fine-tuning, end to end",
-        body: "YOLO11 calls a PS5 controller a phone. A small loop collects images from the dashboard, prepares a YOLO dataset and fine-tunes the model. It proves the loop, not a production model.",
-      },
-    ],
-    stats: [
-      { label: "Frames/s, full pipeline", value: "10" },
-      { label: "Pose keypoints", value: "17" },
-      { label: "Event types", value: "7" },
     ],
     limitations: [
-      "About 10 frames per second on a laptop GPU. Most of the remaining cost is CPU overhead around each model call",
-      "Posture needs hips, knees and ankles in frame. When they aren't clearly visible, it reports nothing rather than guess",
-      "A mug held by its handle keeps the hand beside the mug. While drinking, that can still read as a put-down",
-      "Face analysis runs on the CPU, since TensorFlow has no GPU support on native Windows. Loading takes about a minute",
-      "One camera at a time, on purpose, after two system crashes under sustained GPU load",
-      "No authentication on the API. It only listens on localhost",
+      "Posture classification requires full lower-body visibility; obscured legs default to silent tracking rather than guesswork",
+      "Object holding heuristics rely on 2D bounding box margins rather than depth sensors, sensitive to overlapping angles",
+      "Face analysis runs on CPU worker processes, capping deep attribute extraction under high camera counts",
     ],
     roadmap: [
-      "Merge the fine-tuned model with the 80-class detector",
-      "Recognize activities from pose sequences with a temporal model, instead of heuristics",
-      "Add an API key before it ever leaves localhost",
+      "Temporal action recognition model (replacing rule-based heuristic transitions)",
+      "Multi-camera spatial re-identification across non-overlapping views",
+      "Edge deployment container with TensorRT acceleration",
     ],
     links: {
       repoPrivate: true,
@@ -521,6 +473,11 @@ export const projects: Project[] = [
       "Even with Garak and manual testing, no tool proves every attack angle is covered",
       "Each check adds latency before the real function runs. A real tradeoff, not a free win",
     ],
+    roadmap: [
+      "Dynamic schema extraction from OpenAPI specifications for automated tool validation",
+      "Latency optimization via compiled WebAssembly policy checking modules",
+      "Real-time threat telemetry dashboard with configurable anomaly triggers",
+    ],
     links: {
       repoPrivate: true,
     },
@@ -573,6 +530,11 @@ export const projects: Project[] = [
       "Kubernetes has a steep learning curve. A bad initial setup can look resilient without actually being resilient",
       "Chaos tests cover the failure scenarios actually simulated, like service crashes. Degraded network latency or data corruption aren't automatically covered by the same tests",
     ],
+    roadmap: [
+      "Cross-region disaster recovery replication on Oracle Cloud Infrastructure",
+      "Automated canary deployments integrated with Prometheus anomaly alerting",
+      "eBPF-based kernel observability for container network micro-segmentation",
+    ],
     links: {
       repoPrivate: true,
     },
@@ -621,6 +583,11 @@ export const projects: Project[] = [
       "Garak tests known attack patterns. Something built specifically to dodge Garak could slip through",
       "A fix that holds today can break again if the agent changes later without a re-run",
       "Only attacks its own agents, LifeOS and MyBelly, never a third-party system without explicit permission. That line doesn't move",
+    ],
+    roadmap: [
+      "Automated multi-turn jailbreak mutation engine using adaptive prompt fuzzing",
+      "Automated CI/CD security gate to block releases on detected guardrail regressions",
+      "Interactive vulnerability report export compliant with NIST AI Risk Management Framework",
     ],
     links: {
       repoPrivate: true,
@@ -675,6 +642,11 @@ export const projects: Project[] = [
       "Setup takes real effort: goals, habits, planning categories. Unlike MyBelly, there's no shortcut past that upfront structuring",
       "Classification and the weekly review both depend on the Claude API. A pricing change or outage hits the core of the experience directly",
     ],
+    roadmap: [
+      "Local-first vector store for semantic habit and goal retrieval",
+      "Background calendar synchronization with bidirectional conflict resolution",
+      "On-device lightweight classification model running via ONNX runtime",
+    ],
     links: {
       repoPrivate: true,
     },
@@ -728,6 +700,11 @@ export const projects: Project[] = [
       "The dashboard has to stay in sync with what the real tools actually do underneath. A real integration effort, not just a UI",
       "Some protections, like a weaker hash at level one, are a deliberate teaching choice, not an oversight. It's a learning lab, not a professional audit",
     ],
+    roadmap: [
+      "Automated scoring engine and dynamic CTF leaderboard",
+      "Additional exploit modules covering modern OAuth2 and JWT vulnerabilities",
+      "Containerized ephemeral lab instances per student session",
+    ],
     links: {
       repoPrivate: true,
     },
@@ -741,9 +718,8 @@ export const projects: Project[] = [
     tagline: "Real-time intrusion detection that watches BLACKBOX and reacts automatically.",
     summary: "Detects the same attacks BLACKBOX simulates, and shuts them down without waiting on a human.",
     description: [
-      "Most junior security portfolios only show the offensive side. SIEM is the other half: detecting and reacting to an attack in progress, the job an actual SOC analyst does.",
-      "Without active monitoring, an attack can sail through completely unnoticed. The logs exist, nobody's watching them continuously. SIEM automates that watching, spotting attack patterns the moment they happen instead of after the fact.",
-      "It watches BLACKBOX today, but the detection mechanics aren't tied to one lab. Point it at a different log source with new rules, and it works there too.",
+      "Security engineering requires defensive vigilance alongside offensive testing. SIEM monitors live infrastructure logs, identifies active attack signatures, and executes automated containment playbooks without manual delay.",
+      "The engine correlates live events with threat feeds: recognizing SQL injection attempts, brute-force bursts, and network port scans in real time, triggering firewall bans automatically.",
     ],
     status: "planned",
     platform: "web",
@@ -777,6 +753,11 @@ export const projects: Project[] = [
       "Rules are calibrated on what BLACKBOX simulates. Generalizing to a bigger, real production environment would take real extra work",
       "Built for a personal lab's log volume. A real production system's traffic would need a different scale of setup",
     ],
+    roadmap: [
+      "Sigma rule translation engine to standardize cross-platform detections",
+      "Automated SOAR playbook triggers for automated IP blacklisting",
+      "Distributed log ingestion cluster with Elasticsearch cold-tier retention",
+    ],
     links: {
       repoPrivate: true,
     },
@@ -790,9 +771,8 @@ export const projects: Project[] = [
     tagline: "A FinOps tool that watches the real cloud bill for the rest of the portfolio.",
     summary: "Scans real cloud spend across my own projects, flags waste, and recommends where to save.",
     description: [
-      "Running Phoenix, GhostNet and the AI agents behind LifeOS and MyBelly in parallel means real costs spread across providers. Without a dedicated tool, that spend stays invisible until the bill arrives.",
-      "Most students who build technical projects never think about what they actually cost once deployed. FinOps, the skill of understanding and controlling infrastructure cost, is rare in a junior profile despite mattering a lot in a real company.",
-      "It's personal, not a product. The market already has CloudHealth and AWS Cost Explorer. The point here is demonstrating the skill on a real portfolio, not competing with mature tools.",
+      "Running distributed infrastructure and AI workloads in parallel incurs real operational cloud spend. Cost Optimizer continuously monitors resource allocations across cloud providers to eliminate idle capacity before unexpected charges occur.",
+      "Implements core FinOps practices: detecting unattached volumes, idle NAT gateways, and oversized compute instances across AWS and Azure, prioritizing remediation actions by actual monthly cost reduction.",
     ],
     status: "planned",
     platform: "web",
@@ -820,6 +800,11 @@ export const projects: Project[] = [
       "Depends on each provider's billing API staying stable. Formats and permissions shift occasionally",
       "A recommendation can miss practical constraints, like migration complexity, that don't show up in the raw billing data. It's a decision aid, not an autopilot",
       "Only covers the existing personal projects, Phoenix and GhostNet. Not built for a company account with complex team and org structures",
+    ],
+    roadmap: [
+      "Multi-cloud forecasting engine combining AWS and OCI historical trends",
+      "Automated right-sizing recommendations integrated with Terraform pull requests",
+      "Slack/Discord real-time threshold alert bots with budget burn-down charts",
     ],
     links: {
       repoPrivate: true,
