@@ -32,38 +32,22 @@ export interface ProjectProgress {
   items: ProgressItem[];
 }
 
-// Which part of the pipeline schematic a boundary scenario highlights
-export type BoundaryFocus = "lower-body" | "hands" | "worker";
-
-export interface BoundaryScenario {
+export interface TradeOff {
   label: string;
-  focus: BoundaryFocus;
-  input: string;
-  action: string;
-  tradeoff: string;
+  choice: string;
+  boundary: string;
 }
 
-export type BlueprintNodeKind = "default" | "frames" | "mesh" | "container";
-
-export interface BlueprintNode {
-  id: string;
-  label: string;
-  detail?: string;
-  kind?: BlueprintNodeKind;
-  contains?: string[];
-}
-
-export interface BlueprintImpact {
+export interface RoadmapImpact {
   label: string;
   value: string;
   from?: string;
 }
 
-export interface BlueprintPhase {
-  label: string;
-  summary: string;
-  nodes: BlueprintNode[];
-  impact: BlueprintImpact[];
+// architectural goal of one roadmap step, the first one being the current version
+export interface RoadmapDetail {
+  goal: string;
+  impact?: RoadmapImpact[];
 }
 
 export interface Project {
@@ -82,11 +66,11 @@ export interface Project {
   stats?: ProjectStat[];
   progress?: ProjectProgress;
   limitations?: string[];
-  // optional detail for the boundary inspector, one entry per limitation
-  boundaries?: BoundaryScenario[];
+  // each limitation as the choice that causes it and the boundary it sets
+  tradeoffs?: TradeOff[];
   roadmap?: string[];
-  // optional architecture per phase, the first one being the current system
-  blueprint?: BlueprintPhase[];
+  // optional detail per roadmap step: current version first, then one per roadmap item
+  roadmapDetail?: RoadmapDetail[];
   links: {
     repo?: string;
     repoPrivate?: boolean;
@@ -111,6 +95,23 @@ export const projects: Project[] = [
     description: [
       "GhostNet ingests live threat data from four public blocklists to help security teams prioritize firewall blocks.",
       "A streaming pipeline cleans raw reports, runs anomaly detection, and predicts reoffense risk. The web dashboard updates in real time over WebSockets.",
+    ],
+    tradeoffs: [
+      {
+        label: "API rate limit",
+        choice: "Live IP lookups through the AbuseIPDB API.",
+        boundary: "Capped at 1,000 requests per day. Past that, lookups fall back to local history.",
+      },
+      {
+        label: "Unmapped bulk events",
+        choice: "Bulk feeds ingested for volume.",
+        boundary: "They omit attack categories, so part of the events stay unmapped to MITRE techniques.",
+      },
+      {
+        label: "Micro-batch lag",
+        choice: "Spark writes in five-minute micro-batches.",
+        boundary: "Aggregate charts lag a few minutes behind raw ingestion.",
+      },
     ],
     status: "shipped",
     platform: "web",
@@ -205,6 +206,23 @@ export const projects: Project[] = [
     description: [
       "MyBelly logs meals, calculates daily macronutrients, and manages pantry inventory through conversational natural language.",
       "Built with Flutter and SQLite on an offline-first architecture. All database writes commit locally before syncing to Supabase in the background.",
+    ],
+    tradeoffs: [
+      {
+        label: "Client-side LLM calls",
+        choice: "LLM calls go straight from the client.",
+        boundary: "The API key is handled on the device. There is no server-side token control yet.",
+      },
+      {
+        label: "Android only",
+        choice: "Built and validated on Android.",
+        boundary: "iOS distribution waits for macOS code signing.",
+      },
+      {
+        label: "Email sign-in",
+        choice: "Email and password authentication.",
+        boundary: "Google and Apple sign-in wait for their OAuth redirects.",
+      },
     ],
     status: "shipped",
     platform: "mobile",
@@ -309,6 +327,18 @@ export const projects: Project[] = [
       "A document management system built to organize, validate, and search multi-format file collections.",
       "Engineered with Spring Boot using hexagonal architecture. Combines relational storage in PostgreSQL with fuzzy indexing in OpenSearch.",
     ],
+    tradeoffs: [
+      {
+        label: "Metadata-only search",
+        choice: "Titles and metadata are indexed first.",
+        boundary: "Search does not reach the full text inside files yet.",
+      },
+      {
+        label: "Static ontology",
+        choice: "Ontology relations are static.",
+        boundary: "Relations carry no validity dates or weights.",
+      },
+    ],
     status: "ongoing",
     platform: "web",
     domainTags: ["AI/ML", "Data Engineering"],
@@ -402,8 +432,8 @@ export const projects: Project[] = [
     tagline: "An on-device computer vision system that logs real-world actions into a queryable timeline.",
     summary: "An on-device perception system tracking postures and hand-object interactions in real time.",
     description: [
-      "Coldeye turns a video stream into a structured event log. It tracks people, identifies sitting or standing postures, and detects when objects are picked up or put down.",
-      "The entire pipeline runs locally on consumer hardware. Detections, pose heuristics, and real-time face blurring write directly to an append-only SQLite WAL database viewed through a Next.js dashboard.",
+      "Coldeye watches a camera and keeps a log of what people do. It notices when someone sits down, stands up, picks up an object, puts it down, or leaves.",
+      "Everything runs on the local machine. Detection and pose models read each frame, simple rules turn what they see into events, and a dashboard shows them live. Faces are blurred by default.",
     ],
     status: "shipped",
     platform: "web",
@@ -442,27 +472,21 @@ export const projects: Project[] = [
       "Hand-object checks compare 2D positions. A mug held by its handle keeps the hand beside its box, which can read as a put-down while drinking.",
       "Face analysis runs on CPU in a detached worker process, bounding throughput under multi-face loads.",
     ],
-    boundaries: [
+    tradeoffs: [
       {
         label: "Lower body occluded",
-        focus: "lower-body",
-        input: "Hip, knee or ankle confidence below 0.75.",
-        action: "Posture is not reported. The person stays tracked.",
-        tradeoff: "A missing posture event costs less than a false one.",
+        choice: "Posture comes from hip, knee and ankle keypoints.",
+        boundary: "Below 0.75 confidence, posture is not reported. The person stays tracked.",
       },
       {
-        label: "In-hand object overlap",
-        focus: "hands",
-        input: "The hand covers the object. The detector loses it or reads another class.",
-        action: "The held object keeps its identity and class. A put-down needs the object seen away from the hand.",
-        tradeoff: "An object hidden by the hand never triggers a put-down.",
+        label: "In-hand overlap",
+        choice: "Hands are checked against object boxes in 2D.",
+        boundary: "A mug held by its handle keeps the hand beside its box, which can read as a put-down.",
       },
       {
-        label: "CPU worker saturation",
-        focus: "worker",
-        input: "Face jobs arrive faster than one CPU worker clears them.",
-        action: "Jobs queue in a separate low-priority process. The video loop never waits.",
-        tradeoff: "Face results arrive late so frames arrive on time.",
+        label: "CPU face worker",
+        choice: "Face analysis runs in one CPU worker process.",
+        boundary: "Under many faces, results arrive late. The video loop never waits.",
       },
     ],
     roadmap: [
@@ -470,73 +494,33 @@ export const projects: Project[] = [
       "Multi-camera spatial tracking across non-overlapping viewpoints.",
       "Edge container deployment with TensorRT acceleration.",
     ],
-    blueprint: [
+    roadmapDetail: [
       {
-        label: "Current V1",
-        summary: "Rule-based events from single-frame pose. One camera, one local process.",
-        nodes: [
-          { id: "camera", label: "Camera source", detail: "Webcam, phone, file" },
-          { id: "detect", label: "YOLO11 + ByteTrack", detail: "Detection, tracking" },
-          { id: "rules", label: "2D heuristic engine", detail: "Posture, hands, exits" },
-          { id: "store", label: "SQLite WAL", detail: "Append-only events" },
-          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
-        ],
+        goal: "Rule-based events from single-frame pose. One camera, one local process.",
         impact: [
           { label: "Throughput", value: "~10 fps" },
           { label: "Cameras", value: "1" },
-          { label: "Event logic", value: "Hand-written rules" },
         ],
       },
       {
-        label: "Phase 01",
-        summary: "Temporal. A model reads pose sequences instead of single frames.",
-        nodes: [
-          { id: "camera", label: "Camera source", detail: "Webcam, phone, file" },
-          { id: "detect", label: "YOLO11 + ByteTrack", detail: "Detection, tracking" },
-          { id: "temporal", label: "Temporal action model", detail: "ST-GCN on pose sequences", kind: "frames" },
-          { id: "store", label: "SQLite WAL", detail: "Append-only events" },
-          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
-        ],
+        goal: "A temporal model such as ST-GCN reads pose sequences instead of single frames.",
         impact: [
           { label: "Decision input", from: "1 frame", value: "Pose sequence" },
           { label: "Event logic", from: "Rules", value: "Learned" },
-          { label: "Cameras", value: "1" },
         ],
       },
       {
-        label: "Phase 02",
-        summary: "Distributed. Several cameras share one identity space.",
-        nodes: [
-          { id: "mesh", label: "Multi-camera Re-ID mesh", detail: "Non-overlapping views", kind: "mesh" },
-          { id: "detect", label: "YOLO11 + ByteTrack", detail: "Per camera" },
-          { id: "temporal", label: "Temporal action model", detail: "ST-GCN on pose sequences", kind: "frames" },
-          { id: "store", label: "SQLite WAL", detail: "Append-only events" },
-          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
-        ],
+        goal: "Several cameras share one identity space through a Re-ID mesh.",
         impact: [
           { label: "Cameras", from: "1", value: "N" },
           { label: "Identity scope", from: "One view", value: "Across views" },
-          { label: "Decision input", value: "Pose sequence" },
         ],
       },
       {
-        label: "Phase 03",
-        summary: "Edge. The processing chain ships as one accelerated container.",
-        nodes: [
-          { id: "mesh", label: "Multi-camera Re-ID mesh", detail: "Non-overlapping views", kind: "mesh" },
-          {
-            id: "edge",
-            label: "Edge container",
-            detail: "TensorRT",
-            kind: "container",
-            contains: ["YOLO11", "Temporal model", "SQLite WAL"],
-          },
-          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
-        ],
+        goal: "Detection, the temporal model and storage ship as one accelerated container.",
         impact: [
           { label: "Runtime", from: "PyTorch", value: "TensorRT" },
           { label: "Deployment", from: "Dev machine", value: "One container" },
-          { label: "Cameras", value: "N" },
         ],
       },
     ],

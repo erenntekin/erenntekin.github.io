@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Section {
   id: string;
@@ -9,9 +9,19 @@ interface Section {
 
 export function SectionNav({ sections }: { sections: Section[] }) {
   const [active, setActive] = useState(sections[0]?.id ?? "");
+  // section picked in the menu: it stays highlighted while the page scrolls to it, even when
+  // it sits too close to the bottom to reach the top of the screen
+  const picked = useRef<string | null>(null);
 
   useEffect(() => {
+    function release() {
+      picked.current = null;
+    }
     function onScroll() {
+      if (picked.current) {
+        setActive(picked.current);
+        return;
+      }
       const nearBottom =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
       if (nearBottom) {
@@ -29,12 +39,22 @@ export function SectionNav({ sections }: { sections: Section[] }) {
     }
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("wheel", release, { passive: true });
+    window.addEventListener("touchstart", release, { passive: true });
+    window.addEventListener("keydown", release);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", release);
+      window.removeEventListener("touchstart", release);
+      window.removeEventListener("keydown", release);
+    };
   }, [sections]);
 
   function handleClick(id: string) {
     const el = document.getElementById(id);
     if (!el) return;
+    picked.current = id;
+    setActive(id);
     const top = el.getBoundingClientRect().top + window.scrollY - 100;
     window.scrollTo({ top, behavior: "smooth" });
   }
