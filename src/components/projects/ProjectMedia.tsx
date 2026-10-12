@@ -5,50 +5,6 @@ import { BrowserMockup } from "@/components/ui/BrowserMockup";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { getProjectTheme, type ProjectTheme } from "@/lib/projectThemes";
 
-function ColdeyeConcept({ theme }: { theme: ProjectTheme }) {
-  return (
-    <div className="relative flex h-full w-full max-w-[360px] flex-col justify-between rounded-lg border border-rose-500/30 bg-[#0d070b]/90 p-3.5 shadow-2xl shadow-rose-950/40 backdrop-blur font-mono select-none">
-      {/* Top HUD bar */}
-      <div className="flex items-center justify-between border-b border-rose-500/20 pb-2 text-[9px] text-rose-400/80">
-        <div className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose-500" />
-          <span>CAM_FEED // 01 [LIVE]</span>
-        </div>
-        <span className="text-rose-400/60">30 FPS · 1080p</span>
-      </div>
-
-      {/* Center Viewfinder / Detection Bounding Box */}
-      <div className="relative my-2 flex flex-1 flex-col items-center justify-center overflow-hidden rounded border border-dashed border-rose-500/30 bg-rose-950/10 p-3">
-        {/* Radar concentric ring */}
-        <div className="pointer-events-none absolute h-24 w-24 rounded-full border border-rose-500/15" />
-        <div className="pointer-events-none absolute h-36 w-36 rounded-full border border-rose-500/10" />
-
-        {/* Target Bounding Box */}
-        <div className="relative rounded border border-rose-400/70 bg-rose-500/10 px-3 py-2 text-center shadow-[0_0_12px_rgba(244,63,94,0.25)]">
-          <div className="text-[10px] font-bold tracking-wider text-rose-300">
-            [ TARGET #042 // RE-ID ]
-          </div>
-          <div className="mt-0.5 text-[8px] text-rose-300/80">
-            CONFIDENCE: 98.4% · MATCH CAM_02
-          </div>
-        </div>
-
-        {/* Crosshair accents */}
-        <span className="absolute top-1 left-1 text-[8px] text-rose-500/50">+</span>
-        <span className="absolute top-1 right-1 text-[8px] text-rose-500/50">+</span>
-        <span className="absolute bottom-1 left-1 text-[8px] text-rose-500/50">+</span>
-        <span className="absolute bottom-1 right-1 text-[8px] text-rose-500/50">+</span>
-      </div>
-
-      {/* Bottom Pipeline Stack */}
-      <div className="flex items-center justify-between border-t border-rose-500/20 pt-2 text-[8px] text-rose-300/80">
-        <span className="text-rose-400 font-semibold">YOLO · ByteTrack · DeepLabV3</span>
-        <span className="rounded bg-rose-500/20 px-1.5 py-0.5 text-rose-300">EDGE AI</span>
-      </div>
-    </div>
-  );
-}
-
 function BlueprintConcept({ project, theme }: { project: Project; theme: ProjectTheme }) {
   const repoPath = project.links.repo?.replace(/^https?:\/\/github\.com\//, "");
   return (
@@ -115,8 +71,6 @@ export function ProjectMedia({
             alt={`${project.title} preview`}
             className="h-full w-auto max-h-full max-w-full aspect-[16/10] shadow-2xl"
           />
-        ) : project.slug === "coldeye" ? (
-          <ColdeyeConcept theme={theme} />
         ) : (
           <BlueprintConcept project={project} theme={theme} />
         )}

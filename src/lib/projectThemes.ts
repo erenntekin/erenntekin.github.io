@@ -55,7 +55,7 @@ const THEMES: Record<string, ProjectTheme> = {
   coldeye: {
     shortTitle: "Coldeye",
     category: "COMPUTER VISION",
-    tagline: "MULTI-CAMERA RE-ID · YOLO + BYTETRACK",
+    tagline: "ON-DEVICE PERCEPTION · YOLO11 + BYTETRACK",
     glowColor: "rgba(244, 63, 94, 0.28)",
     accentBorder: "border-rose-500/50",
     accentBg: "bg-rose-500/15",
@@ -63,7 +63,7 @@ const THEMES: Record<string, ProjectTheme> = {
     activeRing: "border-rose-400 ring-2 ring-rose-400/80",
     activeShadow: "shadow-[0_0_24px_-2px_rgba(244,63,94,0.5)]",
     iconTint: "border-rose-400/50 bg-rose-500/15 text-rose-300",
-    deviceType: "concept",
+    deviceType: "browser",
   },
   lucid: {
     shortTitle: "LUCID",
