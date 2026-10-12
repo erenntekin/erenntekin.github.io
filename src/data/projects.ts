@@ -68,11 +68,11 @@ export const projects: Project[] = [
   {
     slug: "ghostnet",
     title: "GhostNet",
-    tagline: "A cybersecurity dashboard that scores 24K+ live attacker IPs.",
+    tagline: "A cybersecurity threat intelligence platform that scores and ranks live malicious IP addresses.",
     summary: "A cybersecurity dashboard that scores attacker IPs and flags what to block first.",
     description: [
-      "Security teams often pull threat data from several blocklists with no way to prioritize it. GhostNet is a cybersecurity dashboard that fixes that. It scores IPs from four public blocklists with trained models and shows what to block first.",
-      "A reoffense classifier and an anomaly detector run on the live data. The dashboard updates over WebSockets as new threats come in.",
+      "GhostNet ingests live threat data from four public blocklists to help security teams prioritize firewall blocks.",
+      "A streaming pipeline cleans raw reports, runs anomaly detection, and predicts reoffense risk. The web dashboard updates in real time over WebSockets.",
     ],
     status: "shipped",
     platform: "web",
@@ -92,40 +92,40 @@ export const projects: Project[] = [
     ],
     designNotes: [
       {
-        title: "Pipeline at a glance",
-        body: "One page rolls up ingestion health, model performance, and an IP/CIDR dossier for individual lookups. No digging through logs to see whether the pipeline is actually working.",
+        title: "Unified threat overview",
+        body: "Combines pipeline health, model metrics, and individual IP dossiers on a single dashboard page.",
         screenshot: "/projects/ghostnet/data-overview.png",
       },
       {
-        title: "Recall over precision, on purpose",
-        body: "The reoffense model hits 93% recall and 45% precision. Missing a real threat costs more than chasing a false alarm. That's why the higher-recall model is the one deployed.",
+        title: "Recall-focused reoffense model",
+        body: "Trained to favor high recall over precision. Catches malicious actors reliably because missing a real attack carries a higher cost than a false alarm.",
         screenshot: "/projects/ghostnet/model-detail.png",
       },
       {
-        title: "MITRE ATT&CK mapping, hand-built",
-        body: "Categories are mapped to MITRE ATT&CK techniques through rules built by hand from AbuseIPDB's 23 report categories. Only about a third of events carry that categorization, since the bulk feed that makes up most of the volume doesn't include it.",
+        title: "MITRE ATT&CK technique mapping",
+        body: "Maps incoming incident categories directly to standardized MITRE ATT&CK techniques.",
         screenshot: "/projects/ghostnet/attack-patterns-detail.png",
       },
       {
-        title: "A briefing that rewrites itself",
-        body: "The intelligence briefing re-ranks its recommendations every time it loads. It always reflects the live pipeline state, not a summary someone wrote once and forgot.",
+        title: "Self-updating intelligence briefings",
+        body: "Re-ranks mitigation recommendations dynamically on every reload based on current database threat scores.",
         screenshot: "/projects/ghostnet/intelligence.png",
       },
       {
-        title: "Kafka to decouple ingestion from scoring",
-        body: "Kafka sits between four threat feeds, AbuseIPDB, blocklist.de, CINS Army and Emerging Threats, and the scoring pipeline. A slow or temporarily down source never blocks the others from being ingested.",
+        title: "Kafka ingestion decoupling",
+        body: "Kafka decouples external blocklist ingestion from downstream data processing, preventing backpressure during traffic spikes.",
       },
       {
-        title: "Migrated off Snowflake",
-        body: "GhostNet originally ran on Snowflake. A distributed data warehouse turned out to be overkill for tens of thousands of rows and a single dashboard, so it moved to PostgreSQL. The old Snowflake scripts are still in the repo as a record of that call.",
+        title: "Spark streaming micro-batches",
+        body: "Processes raw telemetry in five-minute Spark micro-batches to compute threat scores before writing to PostgreSQL.",
       },
       {
-        title: "One language across the pipeline",
-        body: "Ingestion, scoring and the API all run in Python. That avoids context-switching between components that constantly hand data to each other.",
+        title: "Isolation Forest anomaly detection",
+        body: "Detects unusual attack frequencies and unexpected CIDR ranges without requiring labeled training sets.",
       },
       {
-        title: "Tested and easy to run",
-        body: "25 automated tests cover the scoring logic and live API endpoints. The whole stack starts with one Docker Compose command, and the API is auto-documented through FastAPI's OpenAPI docs.",
+        title: "Live WebSocket feed",
+        body: "Broadcasts newly flagged malicious IPs directly to connected browser clients as they clear the pipeline.",
       },
     ],
     stats: [
@@ -134,15 +134,14 @@ export const projects: Project[] = [
       { label: "API endpoints", value: "16" },
     ],
     limitations: [
-      "AbuseIPDB's free tier caps live lookups at 1,000/day. Past that, the dossier falls back to pipeline history and geolocation",
-      "Only about a third of events carry specific attack categories. AbuseIPDB's bulk feed omits that field",
-      "Spark writes to PostgreSQL in 5-minute micro-batches. Historical aggregates lag behind the instant Live view",
-      "Local-only for now: built for cloning and running, not public deployment or auth",
+      "External API rate limits restrict live threat queries to 1,000 requests per day before falling back to local history.",
+      "Bulk data feeds omit specific attack categories, leaving a portion of events unmapped to MITRE techniques.",
+      "Spark writes data in five-minute micro-batches, creating a short lag between raw ingestion and aggregate charts.",
     ],
     roadmap: [
-      "Continuous public deployment on a VPS",
-      "Add a honeypot as a fifth data source",
-      "Webhook-based alerts for multi-source confirmations",
+      "Dedicated honeypot ingestion node to capture proprietary threat telemetry.",
+      "Automated webhook alerts for multi-source corroborated attacks.",
+      "Distributed Kafka partition scaling for higher ingestion throughput.",
     ],
     links: {
       repoPrivate: true,
