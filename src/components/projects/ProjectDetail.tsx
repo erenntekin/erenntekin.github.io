@@ -17,6 +17,8 @@ import { StaggerList } from "./StaggerList";
 import { AmbientGlow } from "./AmbientGlow";
 import { Walkthrough } from "./Walkthrough";
 import { SectionNav } from "./SectionNav";
+import { SystemBoundaryViewer } from "./SystemBoundaryViewer";
+import { ArchitectureBlueprint } from "./ArchitectureBlueprint";
 
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
@@ -58,8 +60,8 @@ export function ProjectDetail({ project }: { project: Project }) {
     progressItems.length > 0 && { id: "progress", label: "Progress" },
     project.media.video && { id: "demo", label: "Demo" },
     (illustrated.length > 0 || quietNotes.length > 0) && { id: "how-it-works", label: "How it works" },
-    hasLimitations && { id: "limitations", label: "Limitations" },
-    hasRoadmap && { id: "whats-next", label: "What's next" },
+    hasLimitations && { id: "limitations", label: "Boundaries" },
+    hasRoadmap && { id: "whats-next", label: "Roadmap" },
   ].filter((s): s is { id: string; label: string } => Boolean(s));
 
   return (
@@ -323,31 +325,11 @@ export function ProjectDetail({ project }: { project: Project }) {
         <div id="limitations" className="mt-14 scroll-mt-28 border-t border-border pt-8">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
-            <p className="font-mono text-[10px] tracking-widest text-amber-400 uppercase">Limitations & Trade-offs</p>
+            <p className="font-mono text-[10px] tracking-widest text-amber-400 uppercase">System boundaries</p>
           </div>
-          <h2 className="mt-1.5 font-serif text-2xl font-semibold text-foreground sm:text-3xl">
-            Where it falls short
-          </h2>
-          <p className="mt-2 text-sm text-foreground/70">Known architectural constraints and engineering boundaries.</p>
-          <StaggerList
-            items={project.limitations!.map((item, i) => ({ item, i }))}
-            keyFn={({ item }) => item}
-            as="div"
-            itemAs="div"
-            className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
-            itemClassName="group relative rounded-xl border border-border/80 bg-surface/30 p-5 backdrop-blur-sm transition-all duration-300 hover:border-amber-400/40 hover:bg-surface/50 hover:shadow-lg hover:shadow-black/30"
-            renderItem={({ item, i }) => (
-              <div className="flex flex-col justify-between h-full">
-                <div className="flex items-center justify-between gap-2 mb-2.5">
-                  <span className="font-mono text-[10px] tracking-wider text-muted group-hover:text-amber-400/90 transition-colors uppercase">
-                    Constraint #{String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="h-1 w-6 rounded-full bg-border transition-colors group-hover:bg-amber-400/40" />
-                </div>
-                <p className="text-sm leading-relaxed text-foreground/80 transition-colors group-hover:text-foreground">{item}</p>
-              </div>
-            )}
-          />
+          <h2 className="mt-1.5 font-serif text-2xl font-semibold text-foreground sm:text-3xl">Where the limits are</h2>
+          <p className="mt-2 text-sm text-foreground/70">Pick a boundary. See what the system senses and what it does.</p>
+          <SystemBoundaryViewer project={project} />
         </div>
       )}
 
@@ -355,40 +337,11 @@ export function ProjectDetail({ project }: { project: Project }) {
         <div id="whats-next" className="mt-14 scroll-mt-28 border-t border-border pt-8">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_var(--accent)]" />
-            <p className="font-mono text-[10px] tracking-widest text-accent uppercase">Roadmap & Vision</p>
+            <p className="font-mono text-[10px] tracking-widest text-accent uppercase">Architecture roadmap</p>
           </div>
-          <h2 className="mt-1.5 font-serif text-2xl font-semibold text-foreground sm:text-3xl">
-            Where this goes next
-          </h2>
-          <p className="mt-2 text-sm text-foreground/70">The planned evolution, architectural next steps.</p>
-          <div className="relative mt-8 pl-8 before:absolute before:left-3.5 before:top-3 before:bottom-3 before:w-px before:bg-gradient-to-b before:from-accent before:via-border/60 before:to-transparent sm:pl-10 sm:before:left-4">
-            <StaggerList
-              items={project.roadmap!.map((item, i) => ({ item, i }))}
-              keyFn={({ item }) => item}
-              as="div"
-              itemAs="div"
-              className="space-y-4"
-              itemClassName="group relative"
-              renderItem={({ item, i }) => (
-                <div className="relative">
-                  <div className="absolute -left-8 sm:-left-10 top-3.5 flex h-7 w-7 items-center justify-center rounded-full border border-accent/60 bg-background text-accent shadow-[0_0_10px_var(--accent-dim)] transition-all duration-300 group-hover:scale-110 group-hover:border-accent group-hover:shadow-[0_0_16px_var(--accent)]">
-                    <span className="font-mono text-[11px] font-semibold">{i + 1}</span>
-                  </div>
-                  <div className="rounded-xl border border-border/80 bg-surface/30 p-4 sm:p-5 backdrop-blur-sm transition-all duration-300 hover:translate-x-1 hover:border-accent/60 hover:bg-surface/50 hover:shadow-lg hover:shadow-black/20">
-                    <div className="flex items-center justify-between gap-3 mb-1.5">
-                      <span className="rounded-full bg-accent/10 border border-accent/25 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-accent font-medium">
-                        {i === 0 ? "Next milestone" : `Phase 0${i + 1}`}
-                      </span>
-                      <span className="font-mono text-[10px] text-muted group-hover:text-foreground/60 transition-colors">
-                        Planned
-                      </span>
-                    </div>
-                    <p className="text-sm leading-relaxed text-foreground/80 transition-colors group-hover:text-foreground">{item}</p>
-                  </div>
-                </div>
-              )}
-            />
-          </div>
+          <h2 className="mt-1.5 font-serif text-2xl font-semibold text-foreground sm:text-3xl">Where this goes next</h2>
+          <p className="mt-2 text-sm text-foreground/70">Switch phases to see the architecture change.</p>
+          <ArchitectureBlueprint project={project} />
         </div>
       )}
     </div>

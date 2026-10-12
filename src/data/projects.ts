@@ -32,6 +32,40 @@ export interface ProjectProgress {
   items: ProgressItem[];
 }
 
+// Which part of the pipeline schematic a boundary scenario highlights
+export type BoundaryFocus = "lower-body" | "hands" | "worker";
+
+export interface BoundaryScenario {
+  label: string;
+  focus: BoundaryFocus;
+  input: string;
+  action: string;
+  tradeoff: string;
+}
+
+export type BlueprintNodeKind = "default" | "frames" | "mesh" | "container";
+
+export interface BlueprintNode {
+  id: string;
+  label: string;
+  detail?: string;
+  kind?: BlueprintNodeKind;
+  contains?: string[];
+}
+
+export interface BlueprintImpact {
+  label: string;
+  value: string;
+  from?: string;
+}
+
+export interface BlueprintPhase {
+  label: string;
+  summary: string;
+  nodes: BlueprintNode[];
+  impact: BlueprintImpact[];
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -48,7 +82,11 @@ export interface Project {
   stats?: ProjectStat[];
   progress?: ProjectProgress;
   limitations?: string[];
+  // optional detail for the boundary inspector, one entry per limitation
+  boundaries?: BoundaryScenario[];
   roadmap?: string[];
+  // optional architecture per phase, the first one being the current system
+  blueprint?: BlueprintPhase[];
   links: {
     repo?: string;
     repoPrivate?: boolean;
@@ -361,52 +399,146 @@ export const projects: Project[] = [
   {
     slug: "coldeye",
     title: "Coldeye",
-    tagline: "An on-device perception system that turns a camera into a timeline of who did what.",
-    summary: "Detects, tracks and understands what happens in front of a camera, and stores it as a queryable event history.",
+    tagline: "An on-device computer vision system that logs real-world actions into a queryable timeline.",
+    summary: "An on-device perception system tracking postures and hand-object interactions in real time.",
     description: [
-      "Coldeye turns a video stream into a structured, queryable event timeline: someone enters, sits, picks up a bottle, puts it down, stands up and leaves. Every action is logged with bounding boxes, 17-point pose keypoints, and time stamps.",
-      "Everything runs locally on consumer hardware without cloud dependencies. Live detections, pose heuristics, and real-time face blurring execute entirely on-device, storing structured events in an append-only SQLite log accessed via a Next.js command-center dashboard.",
+      "Coldeye turns a video stream into a structured event log. It tracks people, identifies sitting or standing postures, and detects when objects are picked up or put down.",
+      "The entire pipeline runs locally on consumer hardware. Detections, pose heuristics, and real-time face blurring write directly to an append-only SQLite WAL database viewed through a Next.js dashboard.",
     ],
     status: "shipped",
     platform: "web",
-    domainTags: ["AI/ML"],
+    featured: true,
+    domainTags: ["AI/ML", "Data Engineering"],
     stack: ["Python", "YOLO11", "ByteTrack", "PyTorch", "OpenCV", "DeepFace", "SQLite", "FastAPI", "Next.js", "Tailwind"],
     designNotes: [
       {
-        title: "Real-time hand-object interactions",
-        body: "Monitors hand proximity against detected objects in 2D space. Sustained contact confirms a pick-up, while releasing past a cooldown logs a put-down, maintaining object identity even through partial occlusion.",
+        title: "Hand-object interactions",
+        body: "Projects each hand past the wrist along the elbow-to-wrist vector. Six frames of overlap with an object confirm a pick-up. Ten frames with the object seen away from the hand log a put-down.",
         screenshot: "/projects/coldeye/desk-pickup.png",
       },
       {
         title: "Geometric posture estimation",
-        body: "Classifies sitting versus standing from the thigh-to-shin length ratio across 17 skeletal keypoints. Requires full lower-body visibility before committing a state change, avoiding false transitions.",
+        body: "Classifies sitting versus standing using the thigh-to-shin ratio across 17 pose keypoints. Commits state changes only when hips, knees, and ankles remain visible across consecutive frames.",
         screenshot: "/projects/coldeye/room-sat.png",
       },
       {
-        title: "Per-target timeline & lifecycle tracking",
-        body: "Every tracked target maintains a chronological event history (detected, sat down, stood up, left the frame). ByteTrack maintains consistent IDs through brief exits and re-entries.",
+        title: "Per-target lifecycle tracking",
+        body: "Maintains a chronological event history for each target from detection to exit. ByteTrack and a re-association layer preserve identity across short occlusions.",
         screenshot: "/projects/coldeye/entity-man.png",
       },
       {
-        title: "Privacy-first biometric architecture",
-        body: "Faces are pixelated by default in the live monitor and recorded snapshots. Facial recognition across sessions is strictly opt-in, storing reversible profiles with zero unconsented persistent tracking.",
+        title: "Privacy-first biometrics",
+        body: "Pixelates faces by default across live monitors and recorded snapshots. Facial recognition across sessions requires explicit consent. Stored embeddings are deleted in one click.",
         screenshot: "/projects/coldeye/entity-woman.png",
       },
       {
-        title: "Append-only SQLite WAL event store",
-        body: "All vision triggers commit to SQLite in Write-Ahead Logging (WAL) mode. The FastAPI service serves live telemetry and historical queries concurrently without frame drop or database locks.",
+        title: "Append-only SQLite WAL store",
+        body: "Writes all vision events to SQLite using Write-Ahead Logging. The pipeline writes while the FastAPI server streams video and serves log queries, without blocking each other.",
         screenshot: "/projects/coldeye/activity.png",
       },
     ],
     limitations: [
-      "Posture classification requires full lower-body visibility; obscured legs default to silent tracking rather than guesswork",
-      "Object holding heuristics rely on 2D bounding box margins rather than depth sensors, sensitive to overlapping angles",
-      "Face analysis runs on CPU worker processes, capping deep attribute extraction under high camera counts",
+      "Posture detection requires visible hips, knees, and ankles. Occluded legs default to silent tracking rather than guessing.",
+      "Hand-object checks compare 2D positions. A mug held by its handle keeps the hand beside its box, which can read as a put-down while drinking.",
+      "Face analysis runs on CPU in a detached worker process, bounding throughput under multi-face loads.",
+    ],
+    boundaries: [
+      {
+        label: "Lower body occluded",
+        focus: "lower-body",
+        input: "Hip, knee or ankle confidence below 0.75.",
+        action: "Posture is not reported. The person stays tracked.",
+        tradeoff: "A missing posture event costs less than a false one.",
+      },
+      {
+        label: "In-hand object overlap",
+        focus: "hands",
+        input: "The hand covers the object. The detector loses it or reads another class.",
+        action: "The held object keeps its identity and class. A put-down needs the object seen away from the hand.",
+        tradeoff: "An object hidden by the hand never triggers a put-down.",
+      },
+      {
+        label: "CPU worker saturation",
+        focus: "worker",
+        input: "Face jobs arrive faster than one CPU worker clears them.",
+        action: "Jobs queue in a separate low-priority process. The video loop never waits.",
+        tradeoff: "Face results arrive late so frames arrive on time.",
+      },
     ],
     roadmap: [
-      "Temporal action recognition model (replacing rule-based heuristic transitions)",
-      "Multi-camera spatial re-identification across non-overlapping views",
-      "Edge deployment container with TensorRT acceleration",
+      "Temporal action recognition model to replace rule-based state transitions.",
+      "Multi-camera spatial tracking across non-overlapping viewpoints.",
+      "Edge container deployment with TensorRT acceleration.",
+    ],
+    blueprint: [
+      {
+        label: "Current V1",
+        summary: "Rule-based events from single-frame pose. One camera, one local process.",
+        nodes: [
+          { id: "camera", label: "Camera source", detail: "Webcam, phone, file" },
+          { id: "detect", label: "YOLO11 + ByteTrack", detail: "Detection, tracking" },
+          { id: "rules", label: "2D heuristic engine", detail: "Posture, hands, exits" },
+          { id: "store", label: "SQLite WAL", detail: "Append-only events" },
+          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
+        ],
+        impact: [
+          { label: "Throughput", value: "~10 fps" },
+          { label: "Cameras", value: "1" },
+          { label: "Event logic", value: "Hand-written rules" },
+        ],
+      },
+      {
+        label: "Phase 01",
+        summary: "Temporal. A model reads pose sequences instead of single frames.",
+        nodes: [
+          { id: "camera", label: "Camera source", detail: "Webcam, phone, file" },
+          { id: "detect", label: "YOLO11 + ByteTrack", detail: "Detection, tracking" },
+          { id: "temporal", label: "Temporal action model", detail: "ST-GCN on pose sequences", kind: "frames" },
+          { id: "store", label: "SQLite WAL", detail: "Append-only events" },
+          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
+        ],
+        impact: [
+          { label: "Decision input", from: "1 frame", value: "Pose sequence" },
+          { label: "Event logic", from: "Rules", value: "Learned" },
+          { label: "Cameras", value: "1" },
+        ],
+      },
+      {
+        label: "Phase 02",
+        summary: "Distributed. Several cameras share one identity space.",
+        nodes: [
+          { id: "mesh", label: "Multi-camera Re-ID mesh", detail: "Non-overlapping views", kind: "mesh" },
+          { id: "detect", label: "YOLO11 + ByteTrack", detail: "Per camera" },
+          { id: "temporal", label: "Temporal action model", detail: "ST-GCN on pose sequences", kind: "frames" },
+          { id: "store", label: "SQLite WAL", detail: "Append-only events" },
+          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
+        ],
+        impact: [
+          { label: "Cameras", from: "1", value: "N" },
+          { label: "Identity scope", from: "One view", value: "Across views" },
+          { label: "Decision input", value: "Pose sequence" },
+        ],
+      },
+      {
+        label: "Phase 03",
+        summary: "Edge. The processing chain ships as one accelerated container.",
+        nodes: [
+          { id: "mesh", label: "Multi-camera Re-ID mesh", detail: "Non-overlapping views", kind: "mesh" },
+          {
+            id: "edge",
+            label: "Edge container",
+            detail: "TensorRT",
+            kind: "container",
+            contains: ["YOLO11", "Temporal model", "SQLite WAL"],
+          },
+          { id: "ui", label: "Dashboard", detail: "FastAPI, Next.js" },
+        ],
+        impact: [
+          { label: "Runtime", from: "PyTorch", value: "TensorRT" },
+          { label: "Deployment", from: "Dev machine", value: "One container" },
+          { label: "Cameras", value: "N" },
+        ],
+      },
     ],
     links: {
       repoPrivate: true,
@@ -414,18 +546,16 @@ export const projects: Project[] = [
     media: {
       cover: "/projects/coldeye/cover.mp4",
       screenshots: [
-        { src: "/projects/coldeye/desk-pickup.png", caption: "Live: a bottle picked up, hand estimated from pose", group: "Live" },
-        { src: "/projects/coldeye/desk-put-down.png", caption: "Live: the same bottle put down, one entity throughout", group: "Live" },
-        { src: "/projects/coldeye/room-sat.png", caption: "Live: sat down, from the thigh-to-shin ratio", group: "Live" },
-        { src: "/projects/coldeye/room-stood.png", caption: "Live: stood up", group: "Live" },
-        { src: "/projects/coldeye/room-left.png", caption: "Live: left, the chair is still tracked", group: "Live" },
-        { src: "/projects/coldeye/activity.png", caption: "Activity: the append-only event log", group: "History" },
-        { src: "/projects/coldeye/entities.png", caption: "Entities: everything seen, with snapshots", group: "History" },
-        { src: "/projects/coldeye/entity-man.png", caption: "Person page: posture timeline", group: "History" },
-        { src: "/projects/coldeye/entity-woman.png", caption: "Person page: face estimates after consent", group: "History" },
-        { src: "/projects/coldeye/sessions.png", caption: "Sessions: one per pipeline run", group: "Setup" },
-        { src: "/projects/coldeye/cameras.png", caption: "Cameras: webcam, phone, file or URL", group: "Setup" },
-        { src: "/projects/coldeye/identities.png", caption: "Identities: consented people, forgotten in one click", group: "Setup" },
+        { src: "/projects/coldeye/desk-pickup.png", caption: "Live desk view: bottle picked up", group: "Live monitor" },
+        { src: "/projects/coldeye/desk-put-down.png", caption: "Live desk view: bottle put down", group: "Live monitor" },
+        { src: "/projects/coldeye/room-sat.png", caption: "Live room view: person sat down", group: "Live monitor" },
+        { src: "/projects/coldeye/room-stood.png", caption: "Live room view: person stood up", group: "Live monitor" },
+        { src: "/projects/coldeye/room-left.png", caption: "Live room view: person left", group: "Live monitor" },
+        { src: "/projects/coldeye/activity.png", caption: "Activity log: append-only event timeline", group: "Activity & Events" },
+        { src: "/projects/coldeye/entities.png", caption: "Entities: all tracked people and objects", group: "Entities & History" },
+        { src: "/projects/coldeye/entity-man.png", caption: "Person profile: movement timeline and estimates", group: "Entities & History" },
+        { src: "/projects/coldeye/entity-woman.png", caption: "Person profile: desk interaction history", group: "Entities & History" },
+        { src: "/projects/coldeye/identities.png", caption: "Identities: consented profiles, deleted in one click", group: "Setup" },
       ],
     },
   },
