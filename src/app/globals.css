@@ -32,22 +32,6 @@
   --font-serif: var(--font-playfair);
 }
 
-@keyframes ambient-drift {
-  0%,
-  100% {
-    background-position:
-      85% -10%,
-      -10% 105%,
-      0 0;
-  }
-  50% {
-    background-position:
-      79% -4%,
-      -4% 99%,
-      0 0;
-  }
-}
-
 body {
   background-color: var(--background);
   background-image:
@@ -59,7 +43,6 @@ body {
   background-blend-mode: normal, normal, overlay;
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  animation: ambient-drift 26s ease-in-out infinite;
 }
 
 @keyframes walk-across {
@@ -146,10 +129,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body {
-    animation: none;
-  }
-
   .walker {
     animation: none !important;
     left: 40% !important;

@@ -2,6 +2,7 @@
 
 import { useRef, type MouseEvent } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { usePlayWhenVisible } from "@/lib/usePlayWhenVisible";
 
 interface BrowserMockupProps {
   src: string;
@@ -14,6 +15,8 @@ const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
   const isVideo = VIDEO_EXTENSIONS.test(src);
   const ref = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  usePlayWhenVisible(videoRef);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), {
@@ -67,6 +70,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
       <div className="relative flex flex-1 items-center justify-center overflow-hidden bg-[#0a0d14] p-1 sm:p-1.5">
         {isVideo ? (
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type MouseEvent } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { usePlayWhenVisible } from "@/lib/usePlayWhenVisible";
 
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
@@ -16,6 +17,7 @@ export function PhoneMockup({ src, alt, className, playbackRate }: PhoneMockupPr
   const ref = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isVideo = VIDEO_EXTENSIONS.test(src);
+  usePlayWhenVisible(videoRef);
 
   useEffect(() => {
     if (videoRef.current && playbackRate) {

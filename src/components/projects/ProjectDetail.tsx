@@ -294,7 +294,7 @@ export function ProjectDetail({ project }: { project: Project }) {
             <video
               controls
               playsInline
-              preload="metadata"
+              preload="auto"
               poster={project.media.videoPoster}
               className="aspect-video w-full object-contain bg-black"
               src={project.media.video}

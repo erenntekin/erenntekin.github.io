@@ -101,13 +101,18 @@ export const projects: Project[] = [
     tradeoffs: [
       {
         label: "Execution Verification",
-        choice: "Verifying real tool execution instead of string regex refusals.",
+        choice: "Verifying actual tool execution instead of string regex refusals.",
         boundary: "Requires intercepting actual agent runtime tool calls or grey-box canary tokens.",
       },
       {
-        label: "Deterministic Testing",
+        label: "Deterministic Speed",
         choice: "Static 19-probe attack matrix alongside dynamic LLM-augmented variants.",
         boundary: "Guarantees reproducible scoring in CI/CD pipelines under 30 seconds.",
+      },
+      {
+        label: "Automated Hardening",
+        choice: "Synthesizing declarative runtime policies (lucid_policy.json) directly from confirmed exploits.",
+        boundary: "Defensive guardrails protect execution boundaries at runtime without modifying LLM weights.",
       },
     ],
     status: "shipped",
@@ -133,24 +138,67 @@ export const projects: Project[] = [
     designNotes: [
       {
         title: "Zero-Knowledge Reconnaissance",
-        body: "Automatically discovers callable functions, parameter schemas, and privilege levels directly from the endpoint without access to source code.",
+        body: "Automatically discovers callable functions, parameter schemas, and privilege levels directly from the endpoint without access to source code or internal architecture diagrams.",
         screenshot: "/projects/mirage/mybelly-audit.svg",
       },
       {
-        title: "Triple Execution Oracles",
-        body: "Eliminates false positives by confirming real canary leakage, unauthorized tool arguments, and guardrail bypasses at runtime.",
-        screenshot: "/projects/mirage/exploit-trace.svg",
+        title: "Polymorphic Mutation Engine",
+        body: "Cycles attack payloads across 6 evasion encodings: ChatML delimiter escapes, Cyrillic homoglyphs (\\u0406), Base64/Hex obfuscation, and cross-lingual translation to bypass static token filters.",
+        screenshot: "/projects/mirage/scan-matrix.svg",
       },
       {
-        title: "Automated Remediation Loop",
-        body: "Closes the loop from offense to defense by compiling confirmed vulnerabilities into an immediate declarative runtime policy (lucid_policy.json).",
+        title: "System Prompt & Secret Extraction",
+        body: "Adversarial metaprompt injection forces the agent to breach internal boundaries, extracting confidential system instructions and root authorization keys in clear text.",
+        screenshot: "/projects/mirage/exploit-canary-leak.svg",
+      },
+      {
+        title: "Privilege Escalation & Tool Interception",
+        body: "Intercepts unauthorized administrative commands attempting to execute destructive database deletions or host commands without secondary authentication.",
+        screenshot: "/projects/mirage/exploit-dangerous-tool.svg",
+      },
+      {
+        title: "Triple Execution Oracles (Zero False Positives)",
+        body: "Eliminates keyword hallucination by verifying three independent ground-truth signals: canary token leakage, intercepted function parameters, and semantic boundary compliance.",
         screenshot: "/projects/mirage/hardened-matrix.svg",
       },
+      {
+        title: "Automated Remediation Loop (LUCID)",
+        body: "Closes the loop from offense to defense in 100 milliseconds, generating declarative circuit-breakers and input sanitization rules that turn a Grade F target into a Grade A hardened deployment.",
+      },
+    ],
+    limitations: [
+      "Black-box evaluation requires observing either structured tool call responses or planted canary secrets to confirm ground-truth exploitation without false positives.",
+      "Non-deterministic LLM temperature settings can introduce variance between runs; MIRAGE counters this with multi-variant fuzzing and deterministic oracle verification.",
+      "Enforcing generated runtime policies (lucid_policy.json) introduces a minor 15-25 ms latency overhead during request sanitization and tool circuit-breaker evaluation.",
     ],
     roadmap: [
-      "Real-time multi-agent orchestration swarm attacks",
-      "Direct integration with enterprise SIEM and telemetry dashboards",
-      "Automated GitHub Actions CI/CD deployment blocker gate",
+      "Multi-agent swarm orchestration attacks to evaluate lateral privilege movement across tools.",
+      "Direct telemetry exporter and webhook alerts for enterprise SIEM platforms (Splunk, Datadog).",
+      "Native GitHub Actions and GitLab CI automated deployment blocker gate.",
+    ],
+    roadmapDetail: [
+      {
+        goal: "Current engine: 19-probe attack matrix, zero-knowledge reconnaissance, triple oracles, and automated LUCID policy generation.",
+        impact: [
+          { label: "Attack probes", value: "19" },
+          { label: "Execution oracles", value: "3" },
+          { label: "Unit & integration tests", value: "273" },
+        ],
+      },
+      {
+        goal: "Multi-agent swarm attacks: Orchestrate coordinated adversarial dialogs across interconnected agent nodes.",
+        impact: [
+          { label: "Attack surface", value: "Multi-agent swarms" },
+          { label: "Lateral movement", value: "Cross-tool privilege escalation" },
+        ],
+      },
+      {
+        goal: "Enterprise SIEM exporter: Stream structured vulnerability telemetry directly to corporate SOC dashboards.",
+        impact: [
+          { label: "Integrations", value: "Splunk, Datadog, Elastic" },
+          { label: "Alert latency", value: "< 500 ms" },
+        ],
+      },
     ],
     links: {
       repo: "https://github.com/erenntekin/MIRAGE",
@@ -158,7 +206,8 @@ export const projects: Project[] = [
     },
     media: {
       video: "/projects/mirage/film.mp4",
-      videoNote: "Launch film rendered at 60 FPS in Remotion. 44-second tour of the attack matrix and automated hardening.",
+      videoPoster: "/projects/mirage/poster.jpg",
+      videoNote: "Launch film rendered at 60 FPS in Remotion. 47-second tour of the live smartphone exploit, attack matrix, and emerald hardening reversal.",
       screenshots: [
         {
           src: "/projects/mirage/exploit-canary-leak.svg",
