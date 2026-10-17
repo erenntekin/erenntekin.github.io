@@ -78,7 +78,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
             muted
             playsInline
             src={src}
-            className="h-full w-full select-none object-contain object-top"
+            className="h-full w-full select-none object-cover object-center"
           />
         ) : (
           <img
