@@ -89,6 +89,27 @@ export function ProjectDetail({ project }: { project: Project }) {
             <div className="flex justify-center h-[380px] sm:h-[460px]">
               <PhoneMockup src={heroSrc} alt={project.title} playbackRate={project.media.videoRate} />
             </div>
+          ) : project.slug === "mirage" ? (
+            <div className="flex justify-center">
+              <div className="relative w-full max-w-4xl aspect-[16/9] overflow-hidden rounded-2xl border border-white/10 bg-[#060911] shadow-2xl">
+                {heroIsVideo ? (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    src={heroSrc}
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <img
+                    src={heroSrc}
+                    alt={project.title}
+                    className="h-full w-full object-contain"
+                  />
+                )}
+              </div>
+            </div>
           ) : heroIsVideo ? (
             <div className="flex justify-center">
               <BrowserMockup src={heroSrc} alt={project.title} className="w-full max-w-4xl aspect-[16/10] shadow-2xl" />

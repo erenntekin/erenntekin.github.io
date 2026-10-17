@@ -38,6 +38,8 @@ function BlueprintConcept({ project, theme }: { project: Project; theme: Project
   );
 }
 
+const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
+
 export function ProjectMedia({
   project,
   heightClass,
@@ -52,7 +54,7 @@ export function ProjectMedia({
   const resolvedSrc = src ?? project.media.cover;
   const theme = getProjectTheme(project.slug, project.title);
   const playbackRate = resolvedSrc === project.media.video ? project.media.videoRate : undefined;
-  const isWidescreen = resolvedSrc?.includes("film.mp4");
+  const isWidescreen = resolvedSrc?.includes("film.mp4") || resolvedSrc?.includes("preview.mp4");
 
   return (
     <div
@@ -65,6 +67,27 @@ export function ProjectMedia({
       <div className="relative flex h-full w-full items-center justify-center">
         {project.platform === "mobile" && !isWidescreen ? (
           <PhoneMockup src={resolvedSrc ?? ""} alt={`${project.title} app`} playbackRate={playbackRate} />
+        ) : project.slug === "mirage" ? (
+          <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
+            {resolvedSrc && VIDEO_EXTENSIONS.test(resolvedSrc) ? (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                src={resolvedSrc}
+                className="h-full w-full select-none object-contain"
+              />
+            ) : resolvedSrc ? (
+              <img
+                src={resolvedSrc}
+                alt={project.title}
+                className="h-full w-full select-none object-contain"
+              />
+            ) : (
+              <BlueprintConcept project={project} theme={theme} />
+            )}
+          </div>
         ) : resolvedSrc ? (
           <BrowserMockup
             src={resolvedSrc}

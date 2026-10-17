@@ -35,6 +35,10 @@ export function Walkthrough({ project, notes }: { project: Project; notes: Desig
               <div className="flex items-center justify-center">
                 {project.platform === "mobile" ? (
                   <PhoneMockup src={note.screenshot!} alt={note.title} className="h-64 sm:h-72 w-auto" />
+                ) : project.slug === "mirage" ? (
+                  <div className="w-full aspect-[16/9] overflow-hidden rounded-xl border border-white/10 bg-[#060911] shadow-2xl">
+                    <img src={note.screenshot!} alt={note.title} className="h-full w-full object-contain" />
+                  </div>
                 ) : (
                   <BrowserMockup src={note.screenshot!} alt={note.title} className="w-full aspect-[16/10] shadow-xl" />
                 )}

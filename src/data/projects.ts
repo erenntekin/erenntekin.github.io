@@ -196,7 +196,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/mirage/cover.jpg",
+      cover: "/projects/mirage/preview.mp4",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
       videoNote: "Film de démonstration de 47 secondes. Visualise l'attaque en direct sur smartphone, la fuite du secret et le verrouillage par le pare-feu.",
