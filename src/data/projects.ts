@@ -137,24 +137,24 @@ export const projects: Project[] = [
     ],
     designNotes: [
       {
-        title: "1. L'assistant MyBelly comme banc d'essai",
-        body: "Pour tester MIRAGE en conditions réelles, j'ai ciblé l'assistant de mon application MyBelly. Il est relié à une base SQLite et possède des outils sensibles, comme la suppression de compte utilisateur ou l'exportation de données.",
-        screenshot: "/projects/mirage/1-cobaye-target.svg",
+        title: "1. L'attaque en direct sur le smartphone MyBelly",
+        body: "Sur le smartphone, l'assistant IA de MyBelly subit une injection de métaprompt. Sans garde-fous, il cède : il divulgue la clé secrète d'autorisation et lance l'exfiltration des données.",
+        screenshot: "/projects/mirage/1-phone-exploit.jpg",
       },
       {
-        title: "2. L'attaque par injection de consigne",
-        body: "Un message malveillant pousse l'IA à ignorer ses règles de base. Sans protection, l'assistant capitule : il dévoile son mot de passe secret interne et déclenche l'ordre de suppression de compte sans vérifier l'identité.",
-        screenshot: "/projects/mirage/2-attack-exploit.svg",
+        title: "2. La cartographie automatique des 10 outils",
+        body: "En mode boîte noire sans lire le code source, MIRAGE interroge l'agent et isole 10 fonctions exécutables, dont 6 fonctions à haut privilège (suppression de compte, requêtes base de données).",
+        screenshot: "/projects/mirage/2-recon-tools.jpg",
       },
       {
-        title: "3. Le scan automatique des 19 failles",
-        body: "MIRAGE prend le relais en automatisant l'attaque. Il teste 19 failles critiques du top 10 OWASP en moins de 30 secondes. Des oracles vérifient si le secret a fuité ou si l'outil dangereux a été appelé, sans aucun faux positif.",
-        screenshot: "/projects/mirage/3-scan-matrix.svg",
+        title: "3. La matrice de scan des 19 attaques OWASP",
+        body: "MIRAGE bombarde l'agent avec 19 attaques réparties sur 4 niveaux de sévérité. L'agent non protégé échoue sur chaque vecteur, obtenant un score initial critique de 0/100 (Grade F).",
+        screenshot: "/projects/mirage/3-scan-matrix.jpg",
       },
       {
-        title: "4. Le pare-feu généré automatiquement",
-        body: "Dès la fin du scan, MIRAGE compile un fichier de règles de sécurité (lucid_policy.json). Ce pare-feu intercepte et bloque net les actions non autorisées. L'assistant résiste à toutes les attaques et passe la note de F à A.",
-        screenshot: "/projects/mirage/4-hardened-shield.svg",
+        title: "4. Le bouclier automatique et coupe-circuit",
+        body: "MIRAGE génère les règles de défense (lucid_policy.json). L'attaque est rejouée sur le smartphone : le coupe-circuit bloque l'appel net, les données sont protégées et le score passe à 100/100 (Grade A).",
+        screenshot: "/projects/mirage/4-hardened-phone.jpg",
       },
     ],
     limitations: [
@@ -196,30 +196,26 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/mirage/cover.svg",
+      cover: "/projects/mirage/cover.jpg",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
       videoNote: "Film de démonstration de 47 secondes. Visualise l'attaque en direct sur smartphone, la fuite du secret et le verrouillage par le pare-feu.",
       screenshots: [
         {
-          src: "/projects/mirage/cover.svg",
-          caption: "Console Red Team MIRAGE : banc d'essai sur l'assistant MyBelly, détection de brèche et pare-feu.",
+          src: "/projects/mirage/cover.jpg",
+          caption: "Attaque sur smartphone : injection de métaprompt sur l'assistant MyBelly et fuite du secret.",
         },
         {
-          src: "/projects/mirage/1-cobaye-target.svg",
-          caption: "Banc d'essai MyBelly : 10 outils réels connectés à SQLite et token secret surveillé.",
-        },
-        {
-          src: "/projects/mirage/2-attack-exploit.svg",
-          caption: "Attaque par injection : fuite du secret et tentative d'exécution de l'outil destructeur.",
+          src: "/projects/mirage/2-recon-tools.jpg",
+          caption: "Cartographie offensive : 10 outils découverts en boîte noire sans accès au code source.",
         },
         {
           src: "/projects/mirage/3-scan-matrix.svg",
-          caption: "Scan complet des 19 failles OWASP : cartographie des brèches et score initial de 0/100 (Grade F).",
+          caption: "Matrice d'attaque : 19 sondes OWASP exécutées, score de robustesse initial de 0/100 (Grade F).",
         },
         {
-          src: "/projects/mirage/4-hardened-shield.svg",
-          caption: "Pare-feu automatique : coupe-circuit déclenché, action bloquée et score relevé à 100/100 (Grade A).",
+          src: "/projects/mirage/4-hardened-phone.jpg",
+          caption: "Bouclier actif : coupe-circuit déclenché sur le smartphone, attaque bloquée et score de 100/100 (Grade A).",
         },
       ],
     },
