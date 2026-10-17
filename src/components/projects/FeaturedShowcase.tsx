@@ -20,7 +20,7 @@ const MARQUEE_SECONDS_PER_TILE = 4.5;
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
 function galleryFor(project: Project): string[] {
-  if (project.slug === "ghostnet") {
+  if (project.slug === "ghostnet" || project.slug === "mirage") {
     return project.media.cover ? [project.media.cover] : [];
   }
   const raw = [project.media.cover, ...project.media.screenshots.map((s) => s.src)];
@@ -239,6 +239,8 @@ export function FeaturedShowcase({
                         <div className={`flex h-5.5 w-9 flex-col rounded-[3px] border p-0.5 shadow-xs transition-colors ${
                           p.slug === "ghostnet"
                             ? isSelected ? "border-cyan-400/80 bg-cyan-500/20" : "border-cyan-500/30 bg-cyan-500/10"
+                            : p.slug === "mirage"
+                            ? isSelected ? "border-red-400/80 bg-red-500/20" : "border-red-500/30 bg-red-500/10"
                             : isSelected ? "border-emerald-400/80 bg-emerald-500/20" : "border-emerald-500/30 bg-emerald-500/10"
                         }`}>
                           <div className="flex items-center gap-0.5 border-b border-white/10 pb-0.5">

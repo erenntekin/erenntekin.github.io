@@ -94,7 +94,7 @@ const THEMES: Record<string, ProjectTheme> = {
   mirage: {
     shortTitle: "MIRAGE",
     category: "OFFENSIVE AI",
-    tagline: "ADVERSARIAL AGENT EVALUATION",
+    tagline: "OFFENSIVE AI SCANNER · OWASP LLM TOP 10",
     glowColor: "rgba(239, 68, 68, 0.28)",
     accentBorder: "border-red-500/50",
     accentBg: "bg-red-500/15",
@@ -102,7 +102,7 @@ const THEMES: Record<string, ProjectTheme> = {
     activeRing: "border-red-400 ring-2 ring-red-400/80",
     activeShadow: "shadow-[0_0_24px_-2px_rgba(239,68,68,0.5)]",
     iconTint: "border-red-400/50 bg-red-500/15 text-red-300",
-    deviceType: "concept",
+    deviceType: "browser",
   },
   lifeos: {
     shortTitle: "LifeOS",
