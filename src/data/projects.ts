@@ -161,16 +161,20 @@ export const projects: Project[] = [
       videoNote: "Launch film rendered at 60 FPS in Remotion. 44-second tour of the attack matrix and automated hardening.",
       screenshots: [
         {
-          src: "/projects/mirage/exploit-trace.svg",
-          caption: "Live exploit trace: Homoglyph injection leading to canary token disclosure and unauthorized database exfiltration.",
+          src: "/projects/mirage/exploit-canary-leak.svg",
+          caption: "Live exploit trace: Metaprompt injection extracting confidential system instructions and canary authorization secret.",
         },
         {
-          src: "/projects/mirage/scan-matrix.svg",
-          caption: "Baseline attack matrix: 19 vectors across 4 tiers, all confirmed vulnerable (Score 0/100, Grade F).",
+          src: "/projects/mirage/exploit-dangerous-tool.svg",
+          caption: "Live exploit trace: Adversarial administrative override executing dangerous delete_user_account() tool on production database.",
         },
         {
           src: "/projects/mirage/mybelly-audit.svg",
           caption: "Production target audit of MyBelly assistant: 10 tools discovered, flagging critical privilege escalation (Grade C).",
+        },
+        {
+          src: "/projects/mirage/scan-matrix.svg",
+          caption: "Baseline attack matrix: 19 vectors across 4 tiers, all confirmed vulnerable (Score 0/100, Grade F).",
         },
         {
           src: "/projects/mirage/hardened-matrix.svg",
