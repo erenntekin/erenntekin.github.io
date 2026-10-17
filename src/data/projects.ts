@@ -90,6 +90,96 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: "mirage",
+    title: "MIRAGE",
+    tagline: "An automated offensive security scanner for AI agents with tool use and function calling.",
+    summary: "Stress-tests autonomous LLM agents against 19 attack vectors and compiles instant runtime defense policies.",
+    description: [
+      "Autonomous agents are connected to production databases, internal APIs, and cloud services. When an agent has execution privileges, prompt injections trigger real-world actions rather than text leaks.",
+      "MIRAGE stress-tests tool-calling agents before deployment using zero-knowledge reconnaissance, a 19-probe attack matrix mapped to OWASP LLM Top 10, triple execution oracles with zero false positives, and deterministic runtime guardrail generation.",
+    ],
+    tradeoffs: [
+      {
+        label: "Execution Verification",
+        choice: "Verifying real tool execution instead of string regex refusals.",
+        boundary: "Requires intercepting actual agent runtime tool calls or grey-box canary tokens.",
+      },
+      {
+        label: "Deterministic Testing",
+        choice: "Static 19-probe attack matrix alongside dynamic LLM-augmented variants.",
+        boundary: "Guarantees reproducible scoring in CI/CD pipelines under 30 seconds.",
+      },
+    ],
+    status: "shipped",
+    platform: "web",
+    featured: true,
+    domainTags: ["Cybersecurity", "AI Red Teaming", "Agent Security"],
+    themeTags: ["Offensive Security"],
+    stack: [
+      "Python",
+      "Typer",
+      "Rich",
+      "Pytest",
+      "OWASP LLM Top 10",
+      "Remotion",
+      "TypeScript",
+    ],
+    stats: [
+      { label: "Attack Vectors", value: "19 Probes" },
+      { label: "Severity Tiers", value: "4 Tiers" },
+      { label: "Execution Oracles", value: "3 Oracles" },
+      { label: "Automated Tests", value: "273 Passed" },
+    ],
+    designNotes: [
+      {
+        title: "Zero-Knowledge Reconnaissance",
+        body: "Automatically discovers callable functions, parameter schemas, and privilege levels directly from the endpoint without access to source code.",
+        screenshot: "/projects/mirage/mybelly-audit.svg",
+      },
+      {
+        title: "Triple Execution Oracles",
+        body: "Eliminates false positives by confirming real canary leakage, unauthorized tool arguments, and guardrail bypasses at runtime.",
+        screenshot: "/projects/mirage/exploit-trace.svg",
+      },
+      {
+        title: "Automated Remediation Loop",
+        body: "Closes the loop from offense to defense by compiling confirmed vulnerabilities into an immediate declarative runtime policy (lucid_policy.json).",
+        screenshot: "/projects/mirage/hardened-matrix.svg",
+      },
+    ],
+    roadmap: [
+      "Real-time multi-agent orchestration swarm attacks",
+      "Direct integration with enterprise SIEM and telemetry dashboards",
+      "Automated GitHub Actions CI/CD deployment blocker gate",
+    ],
+    links: {
+      repo: "https://github.com/erenntekin/MIRAGE",
+      repoPrivate: true,
+    },
+    media: {
+      video: "/projects/mirage/film.mp4",
+      videoNote: "Launch film rendered at 60 FPS in Remotion. 44-second tour of the attack matrix and automated hardening.",
+      screenshots: [
+        {
+          src: "/projects/mirage/exploit-trace.svg",
+          caption: "Live exploit trace: Homoglyph injection leading to canary token disclosure and unauthorized database exfiltration.",
+        },
+        {
+          src: "/projects/mirage/scan-matrix.svg",
+          caption: "Baseline attack matrix: 19 vectors across 4 tiers, all confirmed vulnerable (Score 0/100, Grade F).",
+        },
+        {
+          src: "/projects/mirage/mybelly-audit.svg",
+          caption: "Production target audit of MyBelly assistant: 10 tools discovered, flagging critical privilege escalation (Grade C).",
+        },
+        {
+          src: "/projects/mirage/hardened-matrix.svg",
+          caption: "Hardened re-run behind synthesized LUCID policy: 100% neutralized, Grade A (100/100).",
+        },
+      ],
+    },
+  },
+  {
     slug: "ghostnet",
     title: "GhostNet",
     tagline: "A cybersecurity threat intelligence platform that scores and ranks live malicious IP addresses.",
