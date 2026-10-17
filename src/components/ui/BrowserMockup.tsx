@@ -46,6 +46,8 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
     ? "genai-docs.app"
     : alt.toLowerCase().includes("coldeye")
     ? "coldeye.local"
+    : alt.toLowerCase().includes("mirage")
+    ? "mirage.security"
     : "app.internal";
 
   return (
