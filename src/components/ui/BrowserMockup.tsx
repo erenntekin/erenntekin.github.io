@@ -40,13 +40,18 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
     y.set(0);
   }
 
-  const cleanUrl = alt.toLowerCase().includes("ghostnet")
+  const isGhostNet = alt.toLowerCase().includes("ghostnet") || src.toLowerCase().includes("ghostnet");
+  const isGenAI = alt.toLowerCase().includes("genai") || src.toLowerCase().includes("genai");
+  const isColdEye = alt.toLowerCase().includes("coldeye") || src.toLowerCase().includes("coldeye");
+  const isMirage = alt.toLowerCase().includes("mirage") || src.toLowerCase().includes("mirage");
+
+  const cleanUrl = isGhostNet
     ? "ghostnet.live"
-    : alt.toLowerCase().includes("genai")
+    : isGenAI
     ? "genai-docs.app"
-    : alt.toLowerCase().includes("coldeye")
+    : isColdEye
     ? "coldeye.local"
-    : alt.toLowerCase().includes("mirage")
+    : isMirage
     ? "mirage.security"
     : "app.internal";
 
