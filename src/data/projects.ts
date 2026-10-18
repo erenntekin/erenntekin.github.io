@@ -712,22 +712,27 @@ export const projects: Project[] = [
       {
         title: "1. Real-World Target Defense (MyBelly Cobaye)",
         body: "Tested on the MyBelly assistant connected to SQLite. Under adversarial prompt injection, LUCID intercepts the attempt and returns a safe refusal without calling the database or leaking secrets.",
-        screenshot: "/projects/lucid/1-mybelly-defense.svg",
+        screenshot: "/projects/lucid/1-mybelly-defense.png",
       },
       {
         title: "2. Zero-Trust Tool Gating & Human-in-the-Loop",
         body: "Critical actions like account deletion require human approval before running. Parameter rules reject invalid values like negative calories or wildcard IDs before the tool dispatcher executes.",
-        screenshot: "/projects/lucid/2-tool-gating.svg",
+        screenshot: "/projects/lucid/2-tool-gating.png",
       },
       {
         title: "3. Sliding-Window Circuit Breaker",
         body: "Stops recursive tool loops and wallet exhaustion by enforcing a limit of 3 calls per turn. Repeating the same tool triggers an automatic 60-second cooldown.",
-        screenshot: "/projects/lucid/3-circuit-breaker.svg",
+        screenshot: "/projects/lucid/3-circuit-breaker.png",
       },
       {
         title: "4. Closed-Loop Verification (100/100 Grade A)",
         body: "Replaying all 19 MIRAGE attack probes against the protected MyBelly assistant neutralizes 100% of exploits. The resilience score moves from 0/100 (Grade F) to 100/100 (Grade A).",
-        screenshot: "/projects/lucid/4-verification-matrix.svg",
+        screenshot: "/projects/lucid/4-verification-matrix.png",
+      },
+      {
+        title: "5. Comprehensive Test Suite (35 Passing)",
+        body: "Automated regression suite verifying individual shield mechanics, sliding-window cooldowns, policy parsing, and closed-loop defense in 0.39 seconds.",
+        screenshot: "/projects/lucid/5-pytest-suite.png",
       },
     ],
     tradeoffs: [
@@ -762,23 +767,27 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/lucid/cover-cinematic.svg",
+      cover: "/projects/lucid/cover.png",
       screenshots: [
         {
-          src: "/projects/lucid/1-mybelly-defense.svg",
+          src: "/projects/lucid/1-mybelly-defense.png",
           caption: "Target defense: adversarial injection against MyBelly assistant blocked before reaching SQLite.",
         },
         {
-          src: "/projects/lucid/2-tool-gating.svg",
+          src: "/projects/lucid/2-tool-gating.png",
           caption: "Zero-trust gating: pre-execution interception requiring HITL approval and Pydantic bounds.",
         },
         {
-          src: "/projects/lucid/3-circuit-breaker.svg",
+          src: "/projects/lucid/3-circuit-breaker.png",
           caption: "Circuit breaker: sliding-window rate limiting and oscillating recursion loop detection.",
         },
         {
-          src: "/projects/lucid/4-verification-matrix.svg",
+          src: "/projects/lucid/4-verification-matrix.png",
           caption: "Closed-loop verification: 19/19 MIRAGE attack probes neutralized, achieving 100/100 (Grade A).",
+        },
+        {
+          src: "/projects/lucid/5-pytest-suite.png",
+          caption: "Regression verification: 35 unit and integration tests passing in 0.39s.",
         },
       ],
     },
