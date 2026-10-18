@@ -682,17 +682,17 @@ export const projects: Project[] = [
   {
     slug: "lucid",
     title: "LUCID",
-    tagline: "Runtime application firewall and zero-trust guardrail middleware for AI agents with tool use.",
-    summary: "Enforces deterministic pre-execution security boundaries, circuit breaking, and canary token redaction across four runtime checkpoints.",
+    tagline: "Runtime guardrail firewall that stops AI agents from running unauthorized tools or leaking secrets.",
+    summary: "Intercepts function calls before execution, blocks recursive loops, and redacts system prompt tokens. Proven on MyBelly against 19 OWASP attack vectors.",
     description: [
-      "LUCID is the defensive half of an advanced AI security system. While MIRAGE audits and stress-tests agents, LUCID intercepts and neutralizes threats in real time.",
-      "Sitting as a transparent runtime proxy, it gates function calls before execution, detects oscillating tool recursion loops, defangs indirect RAG injections, and redacts sensitive system prompt tokens.",
-      "In closed-loop benchmarks against the 19 OWASP LLM attack vectors from MIRAGE, LUCID elevates vulnerable agents from 0/100 (Grade F) to a flawless 100/100 (Grade A) with sub-millisecond overhead.",
+      "LUCID is the defensive half of a pair. MIRAGE finds the flaws, LUCID stops them.",
+      "When an AI agent uses tools to query a database or call APIs, prompt injection can trick it into deleting accounts or leaking secrets. System prompts alone cannot stop that.",
+      "LUCID sits as a middleware between the LLM and the tools. It validates parameters, requires human confirmation for sensitive actions, and cuts off runaway loops before any code runs.",
     ],
     status: "shipped",
     platform: "cli",
     featured: true,
-    domainTags: ["AI Security", "AI Agents"],
+    domainTags: ["AI Security", "AI Blue Team"],
     themeTags: ["Defensive Security", "Runtime Guardrails"],
     stack: [
       "Python",
@@ -710,24 +710,24 @@ export const projects: Project[] = [
     ],
     designNotes: [
       {
-        title: "1. 4-Stage Runtime Interception Pipeline",
-        body: "LUCID sits as a transparent proxy executing four deterministic checkpoints: pre-LLM prompt normalization (NFKC and homoglyph canonicalization), pre-tool execution gating, post-tool indirect injection neutralizer, and post-LLM secret redaction.",
-        screenshot: "/projects/lucid/1-pipeline-architecture.svg",
+        title: "1. Real-World Target Defense (MyBelly Cobaye)",
+        body: "Tested on the MyBelly assistant connected to SQLite. Under adversarial prompt injection, LUCID intercepts the attempt and returns a safe refusal without calling the database or leaking secrets.",
+        screenshot: "/projects/lucid/1-mybelly-defense.svg",
       },
       {
-        title: "2. Pre-Execution Tool Gating & Human-in-the-Loop",
-        body: "Critical actions like account deletion and data export are intercepted before the database or API is touched, requiring explicit HITL approval. Numerical bounds and parameter schemas are strictly validated via Pydantic v2.",
-        screenshot: "/projects/lucid/2-pre-tool-hitl.svg",
+        title: "2. Zero-Trust Tool Gating & Human-in-the-Loop",
+        body: "Critical actions like account deletion require human approval before running. Parameter rules reject invalid values like negative calories or wildcard IDs before the tool dispatcher executes.",
+        screenshot: "/projects/lucid/2-tool-gating.svg",
       },
       {
-        title: "3. Sliding-Window Circuit Breaker & Anti-Loop DoS",
-        body: "Protects against runaway autonomous agent loops and API wallet exhaustion by tracking per-turn and per-session velocity, detecting oscillating cycles (A -> B -> A -> B), and placing malicious sessions into cooldown.",
-        screenshot: "/projects/lucid/3-circuit-breaker-loop.svg",
+        title: "3. Sliding-Window Circuit Breaker",
+        body: "Stops recursive tool loops and wallet exhaustion by enforcing a limit of 3 calls per turn. Repeating the same tool triggers an automatic 60-second cooldown.",
+        screenshot: "/projects/lucid/3-circuit-breaker.svg",
       },
       {
-        title: "4. Closed-Loop Defense Verification with MIRAGE",
-        body: "Tested against the 19 OWASP LLM attack vectors from MIRAGE on the MyBelly production assistant. LUCID elevates resilience from 0/100 (Grade F · 19 exploits confirmed) to 100/100 (Grade A · 100% neutralized).",
-        screenshot: "/projects/lucid/4-closed-loop-verification.svg",
+        title: "4. Closed-Loop Verification (100/100 Grade A)",
+        body: "Replaying all 19 MIRAGE attack probes against the protected MyBelly assistant neutralizes 100% of exploits. The resilience score moves from 0/100 (Grade F) to 100/100 (Grade A).",
+        screenshot: "/projects/lucid/4-verification-matrix.svg",
       },
     ],
     tradeoffs: [
@@ -765,19 +765,19 @@ export const projects: Project[] = [
       cover: "/projects/lucid/cover-cinematic.svg",
       screenshots: [
         {
-          src: "/projects/lucid/1-pipeline-architecture.svg",
-          caption: "Defense pipeline: 4-stage runtime interception from user input to tool execution and output redaction.",
+          src: "/projects/lucid/1-mybelly-defense.svg",
+          caption: "Target defense: adversarial injection against MyBelly assistant blocked before reaching SQLite.",
         },
         {
-          src: "/projects/lucid/2-pre-tool-hitl.svg",
-          caption: "Zero-trust tool gating: pre-execution interception requiring HITL approval and Pydantic parameter bounds.",
+          src: "/projects/lucid/2-tool-gating.svg",
+          caption: "Zero-trust gating: pre-execution interception requiring HITL approval and Pydantic bounds.",
         },
         {
-          src: "/projects/lucid/3-circuit-breaker-loop.svg",
-          caption: "Stateful circuit breaker: sliding-window velocity tracking and oscillating recursion loop detection.",
+          src: "/projects/lucid/3-circuit-breaker.svg",
+          caption: "Circuit breaker: sliding-window rate limiting and oscillating recursion loop detection.",
         },
         {
-          src: "/projects/lucid/4-closed-loop-verification.svg",
+          src: "/projects/lucid/4-verification-matrix.svg",
           caption: "Closed-loop verification: 19/19 MIRAGE attack probes neutralized, achieving 100/100 (Grade A).",
         },
       ],

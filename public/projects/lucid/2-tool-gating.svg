@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750" fill="none">
+  <rect width="1200" height="750" fill="#0b0e14" />
+
+  <g transform="translate(40, 30)">
+    <!-- Header -->
+    <rect width="1120" height="42" rx="6" fill="#141923" stroke="#232d3f" stroke-width="1" />
+    <text x="20" y="26" font-family="monospace" font-size="12" font-weight="700" fill="#38bdf8">LUCID PRE-TOOL EXECUTION GATING</text>
+    <text x="320" y="26" font-family="monospace" font-size="12" fill="#64748b">// ZERO-TRUST FUNCTION CALL INTERCEPTION BEFORE RUNTIME DISPATCH</text>
+    <text x="960" y="26" font-family="monospace" font-size="11" font-weight="700" fill="#38bdf8">POLICY: HARDENED</text>
+
+    <!-- Content Grid -->
+    <g transform="translate(0, 58)">
+      
+      <!-- Card 1: HITL Authorization Gate -->
+      <g transform="translate(0, 0)">
+        <rect width="1120" height="185" rx="6" fill="#10131c" stroke="#1f2536" stroke-width="1" />
+        <rect width="1120" height="32" rx="4" fill="#181e2b" />
+        <text x="20" y="21" font-family="monospace" font-size="11" font-weight="700" fill="#f87171">1. HUMAN-IN-THE-LOOP (HITL) GATING · SENSITIVE TOOLS</text>
+        <text x="1100" y="21" text-anchor="end" font-family="monospace" font-size="10.5" fill="#f87171">STATUS: GATED</text>
+
+        <g transform="translate(20, 48)" font-family="monospace" font-size="11">
+          <text y="14" fill="#94a3b8">Model Tool Call Intent: delete_user_account(user_id="u_1002")</text>
+          
+          <g transform="translate(0, 26)">
+            <rect width="1080" height="85" rx="4" fill="#0d111a" stroke="#7f1d1d" />
+            <text x="16" y="24" fill="#fca5a5">[INTERCEPT] Tool is listed in policy.human_in_the_loop -> Flag hitl_approved is False</text>
+            <text x="16" y="46" fill="#ef4444">[VERDICT]   VerdictAction.REQUIRE_HITL (Execution Suspended)</text>
+            <text x="16" y="68" fill="#34d399">[DATABASE]  SQLite 'users' table untouched · 0 rows deleted · Safe refusal returned to LLM</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Card 2: Parameter Range & Type Constraints -->
+      <g transform="translate(0, 205)">
+        <rect width="1120" height="185" rx="6" fill="#10131c" stroke="#1f2536" stroke-width="1" />
+        <rect width="1120" height="32" rx="4" fill="#181e2b" />
+        <text x="20" y="21" font-family="monospace" font-size="11" font-weight="700" fill="#38bdf8">2. PARAMETER RANGE &amp; TYPE VALIDATION (PYDANTIC V2)</text>
+        <text x="1100" y="21" text-anchor="end" font-family="monospace" font-size="10.5" fill="#38bdf8">SCHEMA: STRICT</text>
+
+        <g transform="translate(20, 48)" font-family="monospace" font-size="11">
+          <text y="14" fill="#94a3b8">Rules: calories (int, 0..10000) · user_id (str, ^u_\d+$)</text>
+          
+          <g transform="translate(0, 26)">
+            <rect width="1080" height="85" rx="4" fill="#0d111a" stroke="#102a43" />
+            <text x="16" y="24" fill="#f87171">add_meal(calories=-500)   -> REJECTED: Value -500 is below minimum allowed (0)</text>
+            <text x="16" y="46" fill="#f87171">add_meal(calories=True)   -> REJECTED: Expected integer, got boolean</text>
+            <text x="16" y="68" fill="#34d399">add_meal(calories=450)    -> PERMITTED: Passed Pydantic schema validation</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Card 3: System Tools Denylist -->
+      <g transform="translate(0, 410)">
+        <rect width="1120" height="185" rx="6" fill="#10131c" stroke="#1f2536" stroke-width="1" />
+        <rect width="1120" height="32" rx="4" fill="#181e2b" />
+        <text x="20" y="21" font-family="monospace" font-size="11" font-weight="700" fill="#a855f7">3. SYSTEM TOOLS CATEGORICAL DENYLIST</text>
+        <text x="1100" y="21" text-anchor="end" font-family="monospace" font-size="10.5" fill="#c084fc">DENYLIST: ACTIVE</text>
+
+        <g transform="translate(20, 48)" font-family="monospace" font-size="11">
+          <text y="14" fill="#94a3b8">Blocked tools: [execute_shell_command, register_dynamic_tool, eval_python]</text>
+          
+          <g transform="translate(0, 26)">
+            <rect width="1080" height="85" rx="4" fill="#0d111a" stroke="#581c87" />
+            <text x="16" y="24" fill="#f87171">execute_shell_command(command="whoami") -> HARD REJECT (Rule: TOOL-001-BLOCKED)</text>
+            <text x="16" y="46" fill="#f87171">register_dynamic_tool(name="malicious")  -> HARD REJECT (Tool registry locked)</text>
+            <text x="16" y="68" fill="#34d399">Server shell access completely protected · Neutralizes OWASP T4-05 &amp; T4-06</text>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
