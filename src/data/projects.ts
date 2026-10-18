@@ -118,7 +118,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "cli",
     featured: true,
-    domainTags: ["Cybersecurity", "AI Red Teaming"],
+    domainTags: ["Cybersecurity", "AI Red Teaming", "AI Agents"],
     themeTags: ["Offensive Security"],
     stack: [
       "Python",
@@ -248,7 +248,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["Cybersecurity", "AI/ML", "Data Engineering"],
+    domainTags: ["Cybersecurity", "Threat Intelligence", "Data Engineering"],
     themeTags: ["Threat Intelligence"],
     stack: [
       "Python",
@@ -359,7 +359,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "mobile",
     featured: true,
-    domainTags: ["AI Agents", "Mobile Development"],
+    domainTags: ["Artificial Intelligence", "AI Agents", "Mobile Development"],
     themeTags: ["Health & Nutrition"],
     stack: [
       "Flutter",
@@ -473,7 +473,7 @@ export const projects: Project[] = [
     ],
     status: "ongoing",
     platform: "web",
-    domainTags: ["GenAI", "Data Engineering"],
+    domainTags: ["Artificial Intelligence", "Generative AI", "Data Engineering"],
     stack: ["Java", "Spring Boot", "Spring AI", "React", "PostgreSQL", "OpenSearch"],
     progress: {
       updated: "October 2026",
@@ -570,7 +570,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["Computer Vision", "Data Engineering"],
+    domainTags: ["Artificial Intelligence", "Computer Vision", "Data Engineering"],
     stack: ["Python", "YOLO11", "ByteTrack", "PyTorch", "OpenCV", "DeepFace", "SQLite", "FastAPI", "Next.js", "Tailwind"],
     designNotes: [
       {
@@ -691,7 +691,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "web",
-    domainTags: ["Cybersecurity", "AI Agents"],
+    domainTags: ["Cybersecurity", "AI Security", "AI Agents"],
     stack: ["Python", "Garak"],
     designNotes: [
       {
@@ -745,7 +745,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "web",
-    domainTags: ["Cloud"],
+    domainTags: ["Cloud", "DevOps"],
     stack: ["Terraform", "Kubernetes", "GitHub Actions", "Prometheus", "Grafana", "Oracle Cloud"],
     designNotes: [
       {
@@ -802,7 +802,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "mobile",
-    domainTags: ["AI/ML", "Mobile Development"],
+    domainTags: ["Artificial Intelligence", "AI Agents", "Mobile Development"],
     stack: ["React Native", "TypeScript", "Supabase", "WatermelonDB", "Zustand", "TanStack Query", "Claude API"],
     designNotes: [
       {
@@ -860,7 +860,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "web",
-    domainTags: ["Cybersecurity"],
+    domainTags: ["Cybersecurity", "Offensive Security", "Cloud"],
     stack: ["Docker", "Kali Linux", "Nmap", "OWASP ZAP", "Burp Suite", "Metasploit", "Hashcat", "Python", "React"],
     designNotes: [
       {
@@ -917,7 +917,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "web",
-    domainTags: ["Cybersecurity"],
+    domainTags: ["Cybersecurity", "Threat Detection", "Cloud"],
     stack: ["Wazuh", "Python"],
     designNotes: [
       {
@@ -970,7 +970,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "web",
-    domainTags: ["Cloud"],
+    domainTags: ["Cloud", "FinOps"],
     stack: ["Python", "AWS Cost APIs", "Azure Cost APIs"],
     designNotes: [
       {
