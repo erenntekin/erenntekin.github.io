@@ -10,6 +10,7 @@ export function domainTagColor(_tag?: string) {
 const SHORT_LABELS: Record<string, string> = {
   "Mobile Development": "Mobile Dev",
   "Threat Intelligence": "Threat Intel",
+  "Data Engineering": "Data",
 };
 
 export function shortTagLabel(tag: string) {

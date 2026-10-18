@@ -195,7 +195,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/mirage/preview.mp4",
+      cover: "/projects/mirage/cover.png",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
       videoNote: "47-second demonstration video visualizing the real-world attack sequence against the MyBelly assistant, canary token leakage, and automated circuit-breaker enforcement.",
@@ -248,7 +248,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["Cybersecurity", "Threat Intelligence"],
+    domainTags: ["Cybersecurity", "Threat Intelligence", "Data Engineering"],
     themeTags: ["Threat Intelligence"],
     stack: [
       "Python",
