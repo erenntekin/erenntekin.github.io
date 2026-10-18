@@ -118,7 +118,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "cli",
     featured: true,
-    domainTags: ["AI Security", "Offensive AI"],
+    domainTags: ["AI Security", "AI Red Teaming"],
     themeTags: ["Offensive Security"],
     stack: [
       "Python",
@@ -473,7 +473,7 @@ export const projects: Project[] = [
     ],
     status: "ongoing",
     platform: "web",
-    domainTags: ["Generative AI", "Knowledge Graph"],
+    domainTags: ["Generative AI", "Data Engineering"],
     stack: ["Java", "Spring Boot", "Spring AI", "React", "PostgreSQL", "OpenSearch"],
     progress: {
       updated: "October 2026",
@@ -570,7 +570,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["Computer Vision", "Edge AI"],
+    domainTags: ["Computer Vision", "Machine Learning"],
     stack: ["Python", "YOLO11", "ByteTrack", "PyTorch", "OpenCV", "DeepFace", "SQLite", "FastAPI", "Next.js", "Tailwind"],
     designNotes: [
       {
