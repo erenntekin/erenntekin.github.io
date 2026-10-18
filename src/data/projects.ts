@@ -96,7 +96,7 @@ export const projects: Project[] = [
     summary: "Stress-tests AI agents against 19 OWASP attack vectors, verifies real database and API impacts, and synthesizes runtime guardrails.",
     description: [
       "Modern AI agents do more than chat: they execute database queries, call internal APIs, and trigger real actions. When an agent has execution privileges, prompt injections lead to real-world breaches rather than text leaks.",
-      "MIRAGE stress-tests target agents using 19 adversarial attack probes mapped to the OWASP Top 10 for LLM Applications. Tested in production against the assistant from my MyBelly project, MIRAGE uncovered critical vulnerabilities, confirmed zero false positives using execution oracles, and compiled an automated runtime policy that restored resilience to 100/100.",
+      "MIRAGE stress-tests target agents using 19 adversarial attack probes mapped to the OWASP Top 10 for LLM Applications. Tested in production against the assistant from my MyBelly project, MIRAGE uncovered critical vulnerabilities, confirmed zero false positives using execution oracles, and compiled an automated runtime policy that restored resilience from 0/100 to 100/100.",
     ],
     tradeoffs: [
       {
@@ -195,7 +195,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/mirage/cover.svg",
+      cover: "/projects/mirage/preview.mp4",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
       videoNote: "47-second demonstration video visualizing the real-world attack sequence against the MyBelly assistant, canary token leakage, and automated circuit-breaker enforcement.",
