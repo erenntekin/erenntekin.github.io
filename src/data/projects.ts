@@ -359,7 +359,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "mobile",
     featured: true,
-    domainTags: ["AI/ML", "Mobile Development"],
+    domainTags: ["AI Agents", "Mobile Development"],
     themeTags: ["Health & Nutrition"],
     stack: [
       "Flutter",
@@ -473,7 +473,7 @@ export const projects: Project[] = [
     ],
     status: "ongoing",
     platform: "web",
-    domainTags: ["AI/ML", "Data Engineering"],
+    domainTags: ["GenAI", "Data Engineering"],
     stack: ["Java", "Spring Boot", "Spring AI", "React", "PostgreSQL", "OpenSearch"],
     progress: {
       updated: "October 2026",
@@ -570,7 +570,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["AI/ML", "Data Engineering"],
+    domainTags: ["Computer Vision", "Data Engineering"],
     stack: ["Python", "YOLO11", "ByteTrack", "PyTorch", "OpenCV", "DeepFace", "SQLite", "FastAPI", "Next.js", "Tailwind"],
     designNotes: [
       {
@@ -691,7 +691,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "web",
-    domainTags: ["Cybersecurity", "AI/ML"],
+    domainTags: ["Cybersecurity", "AI Agents"],
     stack: ["Python", "Garak"],
     designNotes: [
       {
