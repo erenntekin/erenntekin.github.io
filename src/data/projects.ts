@@ -118,7 +118,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "cli",
     featured: true,
-    domainTags: ["Cybersecurity", "AI Red Teaming", "AI Agents"],
+    domainTags: ["AI Security", "Offensive AI"],
     themeTags: ["Offensive Security"],
     stack: [
       "Python",
@@ -248,7 +248,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["Cybersecurity", "Threat Intelligence", "Data Engineering"],
+    domainTags: ["Cybersecurity", "Threat Intelligence"],
     themeTags: ["Threat Intelligence"],
     stack: [
       "Python",
@@ -359,7 +359,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "mobile",
     featured: true,
-    domainTags: ["Artificial Intelligence", "AI Agents", "Mobile Development"],
+    domainTags: ["AI Agents", "Mobile Development"],
     themeTags: ["Health & Nutrition"],
     stack: [
       "Flutter",
@@ -473,7 +473,7 @@ export const projects: Project[] = [
     ],
     status: "ongoing",
     platform: "web",
-    domainTags: ["Artificial Intelligence", "Generative AI", "Data Engineering"],
+    domainTags: ["Generative AI", "Knowledge Graph"],
     stack: ["Java", "Spring Boot", "Spring AI", "React", "PostgreSQL", "OpenSearch"],
     progress: {
       updated: "October 2026",
@@ -570,7 +570,7 @@ export const projects: Project[] = [
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["Artificial Intelligence", "Computer Vision", "Data Engineering"],
+    domainTags: ["Computer Vision", "Edge AI"],
     stack: ["Python", "YOLO11", "ByteTrack", "PyTorch", "OpenCV", "DeepFace", "SQLite", "FastAPI", "Next.js", "Tailwind"],
     designNotes: [
       {
@@ -691,7 +691,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "web",
-    domainTags: ["Cybersecurity", "AI Security", "AI Agents"],
+    domainTags: ["AI Security", "Agent Defense"],
     stack: ["Python", "Garak"],
     designNotes: [
       {
@@ -802,7 +802,7 @@ export const projects: Project[] = [
     ],
     status: "planned",
     platform: "mobile",
-    domainTags: ["Artificial Intelligence", "AI Agents", "Mobile Development"],
+    domainTags: ["AI Agents", "Mobile Development"],
     stack: ["React Native", "TypeScript", "Supabase", "WatermelonDB", "Zustand", "TanStack Query", "Claude API"],
     designNotes: [
       {
