@@ -231,28 +231,20 @@ export function FeaturedShowcase({
                     {/* Center device icon / silhouette with project accent */}
                     <div className="flex flex-1 items-center justify-center py-0.5">
                       {pTheme.deviceType === "mobile" ? (
-                        <div className={`flex h-6 w-4 flex-col justify-between rounded-[3px] border p-0.5 shadow-xs transition-colors ${isSelected ? "border-amber-400/80 bg-amber-500/20" : "border-amber-500/30 bg-amber-500/10"}`}>
+                        <div className={`flex h-6 w-4 flex-col justify-between rounded-[3px] border p-0.5 shadow-xs transition-colors ${isSelected ? "border-accent bg-accent/20" : "border-border/80 bg-white/[0.04]"}`}>
                           <div className="mx-auto h-0.5 w-1.5 rounded-full bg-white/40" />
-                          <div className="mx-auto h-1 w-1 rounded-full bg-amber-400" />
-                        </div>
-                      ) : pTheme.deviceType === "browser" ? (
-                        <div className={`flex h-5.5 w-9 flex-col rounded-[3px] border p-0.5 shadow-xs transition-colors ${
-                          p.slug === "ghostnet"
-                            ? isSelected ? "border-cyan-400/80 bg-cyan-500/20" : "border-cyan-500/30 bg-cyan-500/10"
-                            : p.slug === "mirage"
-                            ? isSelected ? "border-red-400/80 bg-red-500/20" : "border-red-500/30 bg-red-500/10"
-                            : isSelected ? "border-emerald-400/80 bg-emerald-500/20" : "border-emerald-500/30 bg-emerald-500/10"
-                        }`}>
-                          <div className="flex items-center gap-0.5 border-b border-white/10 pb-0.5">
-                            <span className="h-1 w-1 rounded-full bg-red-400/90" />
-                            <span className="h-1 w-1 rounded-full bg-amber-400/90" />
-                            <span className="h-1 w-1 rounded-full bg-emerald-400/90" />
-                          </div>
-                          <div className={`mt-0.5 flex-1 rounded-[1px] ${isSelected ? "bg-white/15" : "bg-white/5"}`} />
+                          <div className="mx-auto h-1 w-1 rounded-full bg-accent" />
                         </div>
                       ) : (
-                        <div className={`flex h-5.5 w-9 items-center justify-center rounded-[3px] border border-dashed transition-colors ${isSelected ? "border-rose-400 bg-rose-500/20" : "border-rose-500/40 bg-rose-500/10"}`}>
-                          <span className="font-mono text-[7px] font-bold text-rose-400">CV · LAB</span>
+                        <div className={`flex h-5.5 w-9 flex-col rounded-[3px] border p-0.5 shadow-xs transition-colors ${
+                          isSelected ? "border-accent bg-accent/20" : "border-border/80 bg-white/[0.04]"
+                        }`}>
+                          <div className="flex items-center gap-0.5 border-b border-white/10 pb-0.5">
+                            <span className="h-1 w-1 rounded-full bg-white/30" />
+                            <span className="h-1 w-1 rounded-full bg-white/30" />
+                            <span className="h-1 w-1 rounded-full bg-white/30" />
+                          </div>
+                          <div className={`mt-0.5 flex-1 rounded-[1px] ${isSelected ? "bg-accent/20" : "bg-white/5"}`} />
                         </div>
                       )}
                     </div>
