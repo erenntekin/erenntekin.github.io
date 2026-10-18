@@ -157,7 +157,7 @@ export function ProjectDetail({ project }: { project: Project }) {
               Watch demo
             </a>
           )}
-          {project.links.repo && (
+          {project.links.repo && !project.links.repoPrivate && (
             <a
               href={project.links.repo}
               target="_blank"
@@ -212,7 +212,17 @@ export function ProjectDetail({ project }: { project: Project }) {
             </div>
             <dl className="divide-y divide-border/60 border-t border-border/70 md:border-t-0 md:border-l">
               {[
-                { label: "Platform", value: project.platform === "mobile" ? "Mobile app" : "Web app" },
+                {
+                  label: "Platform",
+                  value:
+                    project.platform === "mobile"
+                      ? "Mobile app"
+                      : project.platform === "cli"
+                      ? "CLI / Python library"
+                      : project.platform === "desktop"
+                      ? "Desktop app"
+                      : "Web app",
+                },
                 { label: "Status", value: project.status === "ongoing" ? "In progress" : "Shipped" },
                 { label: "Domain", value: project.domainTags.join(" · ") },
               ].map((row) => (

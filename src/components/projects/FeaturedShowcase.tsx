@@ -145,7 +145,7 @@ export function FeaturedShowcase({
                   View project →
                 </span>
               )}
-              {project.links.repo && (
+              {project.links.repo && !project.links.repoPrivate && (
                 <a
                   href={project.links.repo}
                   target="_blank"

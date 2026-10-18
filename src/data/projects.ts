@@ -5,7 +5,7 @@ export interface ProjectStat {
   value: string;
 }
 
-export type ProjectPlatform = "web" | "mobile";
+export type ProjectPlatform = "web" | "mobile" | "cli" | "desktop";
 
 export interface DesignNote {
   title: string;
@@ -95,30 +95,30 @@ export const projects: Project[] = [
     tagline: "Automated offensive security scanner for AI agents with tool use and function calling.",
     summary: "Stress-tests AI agents against 19 OWASP attack vectors, verifies real database and API impacts, and synthesizes runtime guardrails.",
     description: [
-      "Modern AI agents do more than chat: they execute database queries, call internal APIs, and trigger real actions. When an agent has execution privileges, prompt injections lead to real-world breaches rather than text leaks.",
-      "MIRAGE stress-tests target agents using 19 adversarial attack probes mapped to the OWASP Top 10 for LLM Applications. Tested in production against the assistant from my MyBelly project, MIRAGE uncovered critical vulnerabilities, confirmed zero false positives using execution oracles, and compiled an automated runtime policy that restored resilience from 0/100 to 100/100.",
+      "An automated red teaming scanner that stress-tests AI agents against 19 OWASP attack vectors.",
+      "Tested against a production assistant, it maps callable tools, verifies real unauthorized actions via execution oracles, and synthesizes runtime guardrails.",
     ],
     tradeoffs: [
       {
-        label: "Real execution verification",
-        choice: "Verify actual tool calls and canary leakage rather than parsing model text responses.",
-        boundary: "Requires intercepting tool-call dispatches at the execution boundary.",
+        label: "Deterministic matrix",
+        choice: "19 reproducible attack probes running under 30 seconds.",
+        boundary: "Novel zero-day prompt injection vectors require authoring new probes.",
       },
       {
-        label: "Fast deterministic gating",
-        choice: "Run a deterministic 19-probe audit suite in under 30 seconds before deployment.",
-        boundary: "Focuses on reproducible attack vectors over open-ended fuzzing.",
+        label: "Tool-boundary defense",
+        choice: "Declarative runtime guardrails blocking dangerous tool execution.",
+        boundary: "Enforces safety at the application layer without modifying model weights.",
       },
       {
-        label: "Runtime policy enforcement",
-        choice: "Compile declarative guardrails (lucid_policy.json) to block unauthorized execution at the boundary.",
-        boundary: "Neutralizes 100% of unauthorized tool calls without retraining the underlying model.",
+        label: "Controlled environment",
+        choice: "Deep execution oracles monitoring real tool dispatches and canaries.",
+        boundary: "Requires instrumented staging endpoints; cannot audit arbitrary black-box web services.",
       },
     ],
     status: "shipped",
-    platform: "web",
+    platform: "cli",
     featured: true,
-    domainTags: ["Cybersecurity", "AI Red Teaming", "Agent Security"],
+    domainTags: ["Cybersecurity", "AI Red Teaming"],
     themeTags: ["Offensive Security"],
     stack: [
       "Python",
@@ -157,9 +157,9 @@ export const projects: Project[] = [
       },
     ],
     limitations: [
-      "New emerging jailbreak techniques require adding new attack probes to the matrix.",
-      "The scanner runs against dedicated testing targets and authorized environments; it does not scan third-party endpoints without authorization.",
-      "Runtime guardrails intercept unauthorized actions at execution time but do not modify the weights of the underlying model.",
+      "Fixed 19-probe matrix: new jailbreak techniques require adding dedicated probes.",
+      "Requires instrumented endpoints or local environments to intercept tool dispatches.",
+      "Application-boundary protection: blocks malicious actions without altering LLM weights.",
     ],
     roadmap: [
       "Dynamic prompt mutation using an adversarial LLM loop to explore variant evasion techniques.",
@@ -453,10 +453,10 @@ export const projects: Project[] = [
   {
     slug: "genai-document-analysis",
     title: "GenAI Document Analysis",
-    tagline: "A document platform with typo-tolerant search and ontology models.",
-    summary: "Search and ask questions across a collection of documents using knowledge models.",
+    tagline: "A document intelligence platform with typo-tolerant search and ontology models, engineered for Thales.",
+    summary: "Search and ask questions across a collection of documents using knowledge models, built for Thales.",
     description: [
-      "A document management system built to organize, validate, and search multi-format file collections.",
+      "A document management system built for Thales to organize, validate, and search multi-format file collections.",
       "Engineered with Spring Boot using hexagonal architecture. Combines relational storage in PostgreSQL with fuzzy indexing in OpenSearch.",
     ],
     tradeoffs: [
