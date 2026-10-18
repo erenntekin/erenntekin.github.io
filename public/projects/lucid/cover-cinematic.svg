@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" fill="none">
+  <defs>
+    <!-- Background Vignette -->
+    <radialGradient id="deepDark" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#04131f" />
+      <stop offset="55%" stop-color="#060c14" />
+      <stop offset="100%" stop-color="#030508" />
+    </radialGradient>
+
+    <!-- Center Cyan/Blue Aura -->
+    <radialGradient id="blueAura" cx="50%" cy="48%" r="42%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.32" />
+      <stop offset="50%" stop-color="#0369a1" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Soft Horizontal Scanning Beam -->
+    <linearGradient id="scanBeam" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0" />
+      <stop offset="25%" stop-color="#0284c7" stop-opacity="0.4" />
+      <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.95" />
+      <stop offset="75%" stop-color="#0284c7" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Glow Filter for Main Text -->
+    <filter id="neonCyan" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <pattern id="tacticalGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.025" stroke-width="1" />
+      <circle cx="0" cy="0" r="1" fill="#38bdf8" fill-opacity="0.2" />
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="675" fill="url(#deepDark)" />
+  <rect width="1200" height="675" fill="url(#tacticalGrid)" />
+  <rect width="1200" height="675" fill="url(#blueAura)" />
+
+  <!-- Corner Brackets (Tactical Defense HUD) -->
+  <g stroke="#38bdf8" stroke-opacity="0.45" stroke-width="2" fill="none">
+    <!-- Top-Left -->
+    <path d="M 48 76 L 48 48 L 76 48" />
+    <!-- Top-Right -->
+    <path d="M 1124 48 L 1152 48 L 1152 76" />
+    <!-- Bottom-Left -->
+    <path d="M 48 599 L 48 627 L 76 627" />
+    <!-- Bottom-Right -->
+    <path d="M 1124 627 L 1152 627 L 1152 599" />
+  </g>
+
+  <!-- Micro HUD Header -->
+  <g font-family="monospace" font-size="11" letter-spacing="3" fill="#64748b">
+    <text x="64" y="58" fill="#38bdf8" fill-opacity="0.9">// DEFENSE_SHIELD: ACTIVE</text>
+    <text x="1136" y="58" text-anchor="end">GATEWAY // RUNTIME WAF</text>
+  </g>
+
+  <!-- Reticle / Shield Rings -->
+  <circle cx="600" cy="320" r="160" stroke="#38bdf8" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="4 6" />
+  <circle cx="600" cy="320" r="230" stroke="#38bdf8" stroke-opacity="0.06" stroke-width="1" />
+  <polygon points="600,165 730,230 730,370 600,445 470,370 470,230" stroke="#0ea5e9" stroke-opacity="0.15" stroke-width="1.5" fill="none" />
+
+  <!-- Subtle Crosshairs -->
+  <line x1="600" y1="120" x2="600" y2="170" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
+  <line x1="600" y1="470" x2="600" y2="520" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
+  <line x1="360" y1="320" x2="410" y2="320" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
+  <line x1="790" y1="320" x2="840" y2="320" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
+
+  <!-- Center Laser Line through Title -->
+  <line x1="240" y1="320" x2="960" y2="320" stroke="url(#scanBeam)" stroke-width="1.5" />
+
+  <!-- Main Center Title: LUCID -->
+  <text 
+    x="600" 
+    y="346" 
+    text-anchor="middle" 
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" 
+    font-size="88" 
+    font-weight="900" 
+    letter-spacing="20" 
+    fill="#38bdf8" 
+    filter="url(#neonCyan)"
+  >LUCID</text>
+
+  <!-- Subtitle -->
+  <text 
+    x="600" 
+    y="404" 
+    text-anchor="middle" 
+    font-family="monospace" 
+    font-size="12.5" 
+    font-weight="600" 
+    letter-spacing="5" 
+    fill="#7dd3fc" 
+    fill-opacity="0.9"
+  >AUTONOMOUS AI AGENT RUNTIME FIREWALL &amp; DEFENSE MIDDLEWARE</text>
+
+  <!-- Bottom Badges / Metrics -->
+  <g font-family="monospace" font-size="11" letter-spacing="2" fill="#94a3b8">
+    <text x="64" y="620">THREAT DEFENSE: 19/19 NEUTRALIZED</text>
+    <text x="600" y="620" text-anchor="middle" fill="#38bdf8" fill-opacity="0.95">RESILIENCE SCORE: 100/100 (GRADE A)</text>
+    <text x="1136" y="620" text-anchor="end">STATUS: ARMED</text>
+  </g>
+</svg>
