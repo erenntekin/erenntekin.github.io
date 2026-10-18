@@ -195,7 +195,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/mirage/cover.png",
+      cover: "/projects/mirage/cover-cinematic.svg",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
       videoNote: "47-second demonstration video visualizing the real-world attack sequence against the MyBelly assistant, canary token leakage, and automated circuit-breaker enforcement.",
