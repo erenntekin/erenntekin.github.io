@@ -93,10 +93,10 @@ export const projects: Project[] = [
     slug: "mirage",
     title: "MIRAGE",
     tagline: "Automated offensive security scanner for AI agents with tool use and function calling.",
-    summary: "Stress-tests AI agents against 19 OWASP attack vectors, verifies real database and API impacts, and synthesizes runtime guardrails.",
+    summary: "Stress-tests LLM agents against 19 OWASP attack vectors, verifies real database and API impacts with triple execution oracles, and synthesizes runtime guardrails.",
     description: [
-      "An automated red teaming scanner that stress-tests AI agents against 19 OWASP attack vectors.",
-      "Tested against a production assistant, it maps callable tools, verifies real unauthorized actions via execution oracles, and synthesizes runtime guardrails.",
+      "MIRAGE is an automated red teaming engine that stress-tests tool-calling AI agents before deployment.",
+      "Operating in black-box mode without source code, it maps callable functions, verifies real-world exploitation using triple execution oracles (canary disclosure, parameter corruption, unauthorized tool execution), and compiles declarative guardrails directly from confirmed vulnerabilities.",
     ],
     tradeoffs: [
       {
@@ -132,28 +132,33 @@ export const projects: Project[] = [
       { label: "Attack Vectors", value: "19 Probes" },
       { label: "Audit Runtime", value: "< 30 sec" },
       { label: "Hardened Score", value: "100 / 100" },
-      { label: "Unit Tests", value: "273 Passed" },
+      { label: "Unit & Integration Tests", value: "273 Passed" },
     ],
     designNotes: [
       {
-        title: "1. Real-World Target Testing (MyBelly Cobaye)",
-        body: "Tested on a production assistant connected to SQLite. Under adversarial prompt injection, the unprotected assistant leaked its internal authorization token (CANARY_SECRET_MYBELLY_9981) and triggered unauthorized data export.",
-        screenshot: "/projects/mirage/1-cobaye-target.svg",
+        title: "1. Zero-Knowledge Tool Reconnaissance",
+        body: "Discovers all 10 callable functions, parameter schemas, and privilege levels on the MyBelly assistant directly from the endpoint without source code access.",
+        screenshot: "/projects/mirage/1-mirage-target-recon.png",
       },
       {
-        title: "2. Zero-Knowledge Tool Reconnaissance",
-        body: "Operating strictly in black-box mode without source code access, MIRAGE maps all 10 callable functions and isolates high-privilege operations like account deletion and raw database queries.",
-        screenshot: "/projects/mirage/2-recon-tools.svg",
+        title: "2. Execution Oracles & Canary Verification",
+        body: "Eliminates false positives by verifying real execution impacts: canary token disclosures (CANARY_SECRET_MYBELLY_9981), dangerous function executions, and SQLite database mutations.",
+        screenshot: "/projects/mirage/2-mirage-exploit-oracle.png",
       },
       {
         title: "3. Automated 19-Probe OWASP Attack Matrix",
-        body: "MIRAGE executes 19 probes across 4 severity tiers (Critical to Advanced). The baseline audit verified 19 successful exploits, yielding a critical baseline score of 0/100 (Grade F).",
-        screenshot: "/projects/mirage/3-scan-matrix.svg",
+        body: "Executes 19 reproducible attack probes across 4 severity tiers (Critical to Advanced). Baseline scan confirms 19/19 active exploits, scoring 0/100 (Grade F).",
+        screenshot: "/projects/mirage/3-mirage-scan-matrix.png",
       },
       {
-        title: "4. Automated Guardrail Synthesis & Policy Verification",
-        body: "MIRAGE compiles verified exploits into declarative defense rules (lucid_policy.json). Re-running the attack suite with the runtime circuit breaker blocks all 19 exploits, elevating the score to 100/100 (Grade A).",
-        screenshot: "/projects/mirage/4-hardened-shield.svg",
+        title: "4. Automated Guardrail Synthesis (lucid_policy.json)",
+        body: "Compiles confirmed attack traces into an immediate declarative runtime policy, closing the loop from offensive red teaming to automated blue team hardening.",
+        screenshot: "/projects/mirage/4-mirage-policy-synthesis.png",
+      },
+      {
+        title: "5. Comprehensive Test Suite (273 Passing)",
+        body: "Automated regression suite verifying probe payloads, triple execution oracles, black-box target adapters, and policy generators in 24 seconds.",
+        screenshot: "/projects/mirage/5-mirage-pytest-suite.png",
       },
     ],
     limitations: [
@@ -195,26 +200,30 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/mirage/cover-cinematic.svg",
+      cover: "/projects/mirage/cover.png",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
       videoNote: "47-second demonstration video visualizing the real-world attack sequence against the MyBelly assistant, canary token leakage, and automated circuit-breaker enforcement.",
       screenshots: [
         {
-          src: "/projects/mirage/1-cobaye-target.svg",
-          caption: "Target exploitation: adversarial metaprompt injection against the MyBelly assistant leaking canary token.",
-        },
-        {
-          src: "/projects/mirage/2-recon-tools.svg",
+          src: "/projects/mirage/1-mirage-target-recon.png",
           caption: "Zero-knowledge reconnaissance: 10 executable tools mapped in black-box mode without source code.",
         },
         {
-          src: "/projects/mirage/3-scan-matrix.svg",
+          src: "/projects/mirage/2-mirage-exploit-oracle.png",
+          caption: "Execution oracle verification: prompt injection extracting canary secret CANARY_SECRET_MYBELLY_9981.",
+        },
+        {
+          src: "/projects/mirage/3-mirage-scan-matrix.png",
           caption: "Automated scan matrix: 19 OWASP LLM attack probes executed, establishing baseline score of 0/100 (Grade F).",
         },
         {
-          src: "/projects/mirage/4-hardened-shield.svg",
-          caption: "Automated remediation: declarative guardrails (lucid_policy.json) block all 19 vectors, achieving 100/100 (Grade A).",
+          src: "/projects/mirage/4-mirage-policy-synthesis.png",
+          caption: "Automated remediation: declarative guardrails (lucid_policy.json) compiled directly from confirmed exploits.",
+        },
+        {
+          src: "/projects/mirage/5-mirage-pytest-suite.png",
+          caption: "Regression verification: 273 unit and integration tests passing in 24.05s.",
         },
       ],
     },
@@ -682,12 +691,12 @@ export const projects: Project[] = [
   {
     slug: "lucid",
     title: "LUCID",
-    tagline: "Runtime guardrail firewall that stops AI agents from running unauthorized tools or leaking secrets.",
-    summary: "Intercepts function calls before execution, blocks recursive loops, and redacts system prompt tokens. Proven on MyBelly against 19 OWASP attack vectors.",
+    tagline: "Runtime application firewall and zero-trust guardrails middleware for tool-using AI agents.",
+    summary: "Intercepts function calls before execution, halts recursive loops, and redacts system secrets. Elevates MyBelly resilience from 0/100 to 100/100 across 19 OWASP vectors.",
     description: [
-      "LUCID is the defensive half of a pair. MIRAGE finds the flaws, LUCID stops them.",
-      "When an AI agent uses tools to query a database or call APIs, prompt injection can trick it into deleting accounts or leaking secrets. System prompts alone cannot stop that.",
-      "LUCID sits as a middleware between the LLM and the tools. It validates parameters, requires human confirmation for sensitive actions, and cuts off runaway loops before any code runs.",
+      "LUCID is a deterministic runtime application firewall (AI-WAF) and the defensive counterpart to MIRAGE.",
+      "Sitting as a middleware between the model and tools, it short-circuits prompt overrides, enforces human-in-the-loop authorization on critical actions, validates parameter boundaries via Pydantic schemas, and trips an automatic circuit breaker on runaway loops.",
+      "Operating entirely in local Python with sub-millisecond overhead (< 0.5 ms) and zero additional LLM token costs, it neutralizes 100% of confirmed exploits in closed-loop verification.",
     ],
     status: "shipped",
     platform: "cli",

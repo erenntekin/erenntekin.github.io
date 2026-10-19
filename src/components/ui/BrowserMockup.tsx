@@ -44,6 +44,7 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
   const isGenAI = alt.toLowerCase().includes("genai") || src.toLowerCase().includes("genai");
   const isColdEye = alt.toLowerCase().includes("coldeye") || src.toLowerCase().includes("coldeye");
   const isMirage = alt.toLowerCase().includes("mirage") || src.toLowerCase().includes("mirage");
+  const isLucid = alt.toLowerCase().includes("lucid") || src.toLowerCase().includes("lucid");
 
   const cleanUrl = isGhostNet
     ? "ghostnet.live"
@@ -53,6 +54,8 @@ export function BrowserMockup({ src, alt, className }: BrowserMockupProps) {
     ? "coldeye.local"
     : isMirage
     ? "mirage.security"
+    : isLucid
+    ? "lucid.firewall"
     : "app.internal";
 
   return (

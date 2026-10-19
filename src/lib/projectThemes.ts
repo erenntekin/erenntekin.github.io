@@ -41,7 +41,7 @@ const THEMES: Record<string, ProjectTheme> = {
   mybelly: makeTheme("MyBelly", "AI & MOBILE", "NUTRITION AGENT · OFFLINE-FIRST", "mobile"),
   "genai-document-analysis": makeTheme("GenAI Docs", "ENTERPRISE AI", "KNOWLEDGE GRAPH · THALES", "browser"),
   coldeye: makeTheme("Coldeye", "COMPUTER VISION", "ON-DEVICE PERCEPTION · YOLO11", "browser"),
-  lucid: makeTheme("LUCID", "AI SAFETY", "DETERMINISTIC GUARDRAILS", "concept"),
+  lucid: makeTheme("LUCID", "AI BLUE TEAM", "RUNTIME AGENT FIREWALL · OWASP DEFENSE", "browser"),
   phoenix: makeTheme("Phoenix", "CLOUD INFRA", "SELF-HEALING KUBERNETES", "concept"),
   lifeos: makeTheme("LifeOS", "PERSONAL AI", "MULTI-AGENT PRODUCTIVITY", "concept"),
   blackbox: makeTheme("BlackBox", "SECURITY AUDIT", "LAB PENTEST & EXPLOITATION", "concept"),

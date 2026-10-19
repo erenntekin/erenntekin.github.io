@@ -58,31 +58,21 @@ export function ProjectMedia({
 
   return (
     <div
-      className={`group/stage relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-border/80 bg-[#07090e] p-2 sm:p-3 select-none ${heightClass} ${className ?? ""}`}
+      className={`group/stage relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-border/70 bg-[#07090e] p-3 sm:p-5 select-none ${heightClass} ${className ?? ""}`}
+      style={{
+        background: `radial-gradient(circle at 50% 50%, ${theme.glowColor}, rgba(7, 9, 14, 0.98) 75%)`,
+      }}
     >
       {/* Stage Canvas / Device Display */}
       <div className="relative flex h-full w-full items-center justify-center">
         {project.platform === "mobile" && !isWidescreen ? (
           <PhoneMockup src={resolvedSrc ?? ""} alt={`${project.title} app`} playbackRate={playbackRate} />
         ) : resolvedSrc ? (
-          <div className="relative flex h-full w-full max-w-full items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#0a0d14] shadow-xl">
-            {VIDEO_EXTENSIONS.test(resolvedSrc) ? (
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                src={resolvedSrc}
-                className="h-full w-full object-contain"
-              />
-            ) : (
-              <img
-                src={resolvedSrc}
-                alt={`${project.title} preview`}
-                className="h-full w-full object-contain"
-              />
-            )}
-          </div>
+          <BrowserMockup
+            src={resolvedSrc}
+            alt={`${project.title} preview`}
+            className="h-full w-auto max-h-full max-w-full aspect-[16/10] shadow-2xl"
+          />
         ) : (
           <BlueprintConcept project={project} theme={theme} />
         )}
