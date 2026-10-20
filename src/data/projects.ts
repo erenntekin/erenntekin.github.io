@@ -777,6 +777,9 @@ export const projects: Project[] = [
     },
     media: {
       cover: "/projects/lucid/cover.png",
+      video: "/projects/lucid/film.mp4",
+      videoPoster: "/projects/lucid/poster.jpg",
+      videoNote: "48-second demonstration video showcasing zero-trust tool interception, human-in-the-loop authorization, and automated circuit breaker enforcement against live prompt injection.",
       screenshots: [
         {
           src: "/projects/lucid/1-mybelly-defense.png",
