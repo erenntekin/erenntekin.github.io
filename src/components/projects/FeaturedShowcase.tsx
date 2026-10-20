@@ -20,7 +20,7 @@ const MARQUEE_SECONDS_PER_TILE = 4.5;
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
 function galleryFor(project: Project): string[] {
-  if (project.slug === "ghostnet" || project.slug === "mirage") {
+  if (project.slug === "ghostnet" || project.slug === "mirage" || project.slug === "lucid") {
     return project.media.cover ? [project.media.cover] : [];
   }
   const raw = [project.media.cover, ...project.media.screenshots.map((s) => s.src)];

@@ -200,7 +200,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/mirage/cover.png",
+      cover: "/projects/mirage/film.mp4",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
       videoNote: "47-second demonstration video visualizing the real-world attack sequence against the MyBelly assistant, canary token leakage, and automated circuit-breaker enforcement.",
@@ -776,7 +776,7 @@ export const projects: Project[] = [
       repoPrivate: true,
     },
     media: {
-      cover: "/projects/lucid/cover.png",
+      cover: "/projects/lucid/film.mp4",
       video: "/projects/lucid/film.mp4",
       videoPoster: "/projects/lucid/poster.jpg",
       videoNote: "48-second demonstration video showcasing zero-trust tool interception, human-in-the-loop authorization, and automated circuit breaker enforcement against live prompt injection.",

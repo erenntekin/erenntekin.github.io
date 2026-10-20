@@ -67,6 +67,27 @@ export function ProjectMedia({
       <div className="relative flex h-full w-full items-center justify-center">
         {project.platform === "mobile" && !isWidescreen ? (
           <PhoneMockup src={resolvedSrc ?? ""} alt={`${project.title} app`} playbackRate={playbackRate} />
+        ) : project.platform === "cli" ? (
+          <div className="relative flex h-full w-auto max-h-full max-w-full aspect-[16/10] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#0a0d14] shadow-2xl">
+            {resolvedSrc && VIDEO_EXTENSIONS.test(resolvedSrc) ? (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                src={resolvedSrc}
+                className="h-full w-full object-cover object-center"
+              />
+            ) : resolvedSrc ? (
+              <img
+                src={resolvedSrc}
+                alt={`${project.title} preview`}
+                className="h-full w-full object-cover object-center"
+              />
+            ) : (
+              <BlueprintConcept project={project} theme={theme} />
+            )}
+          </div>
         ) : resolvedSrc ? (
           <BrowserMockup
             src={resolvedSrc}
