@@ -92,27 +92,27 @@ export const projects: Project[] = [
   {
     slug: "mirage",
     title: "MIRAGE",
-    tagline: "Automated offensive security scanner for AI agents with tool use and function calling.",
-    summary: "Stress-tests LLM agents against 19 OWASP attack vectors, verifies real database and API impacts with triple execution oracles, and synthesizes runtime guardrails.",
+    tagline: "Automated offensive security scanner for tool-calling AI agents.",
+    summary: "Stress-tests tool-calling AI agents, verifies real exploits with execution oracles, and generates runtime guardrails.",
     description: [
       "MIRAGE is an automated red teaming engine that stress-tests tool-calling AI agents before deployment.",
-      "Operating in black-box mode without source code, it maps callable functions, verifies real-world exploitation using triple execution oracles (canary disclosure, parameter corruption, unauthorized tool execution), and compiles declarative guardrails directly from confirmed vulnerabilities.",
+      "It maps callable functions without source code, verifies exploits with execution oracles, and writes guardrails to block confirmed vulnerabilities.",
     ],
     tradeoffs: [
       {
         label: "Deterministic matrix",
-        choice: "19 reproducible attack probes running under 30 seconds.",
-        boundary: "Novel zero-day prompt injection vectors require authoring new probes.",
+        choice: "Reproducible attack probes executed rapidly in local test environments.",
+        boundary: "Novel prompt injection patterns require authoring new probes.",
       },
       {
-        label: "Tool-boundary defense",
-        choice: "Declarative runtime guardrails blocking dangerous tool execution.",
-        boundary: "Enforces safety at the application layer without modifying model weights.",
+        label: "Single-turn scope",
+        choice: "Fast, isolated attack payloads executed per invocation.",
+        boundary: "Does not yet simulate multi-turn social engineering across long conversations.",
       },
       {
         label: "Controlled environment",
-        choice: "Deep execution oracles monitoring real tool dispatches and canaries.",
-        boundary: "Requires instrumented staging endpoints; cannot audit arbitrary black-box web services.",
+        choice: "Deep execution oracles monitoring real tool dispatches and canary disclosures.",
+        boundary: "Requires instrumented staging endpoints to intercept tool execution signals.",
       },
     ],
     status: "shipped",
@@ -122,11 +122,10 @@ export const projects: Project[] = [
     themeTags: ["Offensive Security"],
     stack: [
       "Python",
+      "Llama 3",
+      "Pydantic",
       "Typer",
-      "Rich",
-      "Pytest",
       "OWASP LLM Top 10",
-      "TypeScript",
     ],
     stats: [
       { label: "Attack Vectors", value: "19 Probes" },
@@ -162,14 +161,14 @@ export const projects: Project[] = [
       },
     ],
     limitations: [
-      "Fixed 19-probe matrix: new jailbreak techniques require adding dedicated probes.",
-      "Requires instrumented endpoints or local environments to intercept tool dispatches.",
-      "Application-boundary protection: blocks malicious actions without altering LLM weights.",
+      "Signature probes cover known OWASP vectors. Novel zero-day prompt injection patterns require authoring new probes.",
+      "Deep execution oracles require observing tool dispatch signals on local or staging environments rather than unmonitored commercial chat interfaces.",
+      "Guardrails enforce safety at the application boundary around tool calls, without altering the underlying model weights.",
     ],
     roadmap: [
-      "Dynamic prompt mutation using an adversarial LLM loop to explore variant evasion techniques.",
-      "GitHub Actions CI/CD integration to fail deployment builds if resilience drops below 95%.",
-      "Multi-agent security audits testing chained privilege escalation across LangGraph and CrewAI workflows.",
+      "Integrate a secondary model loop that automatically generates variations of prompt injections to find edge-case evasions.",
+      "Add CI/CD actions that run automated scans during code builds and block deployments if security regressions occur.",
+      "Expand probes to test chained privilege escalation across complex multi-agent workflows where models delegate tasks to one another.",
     ],
     roadmapDetail: [
       {
@@ -203,7 +202,7 @@ export const projects: Project[] = [
       cover: "/projects/mirage/cover-cinematic.svg",
       video: "/projects/mirage/film.mp4",
       videoPoster: "/projects/mirage/poster.jpg",
-      videoNote: "47-second demonstration video visualizing the real-world attack sequence against the MyBelly assistant, canary token leakage, and automated circuit-breaker enforcement.",
+      videoNote: "Demonstration video showing the red-teaming attack sequence against the assistant, canary token leakage, and automated guardrail enforcement.",
       screenshots: [
         {
           src: "/projects/mirage/1-mirage-target-recon.png",
@@ -231,8 +230,8 @@ export const projects: Project[] = [
   {
     slug: "ghostnet",
     title: "GhostNet",
-    tagline: "A cybersecurity threat intelligence platform that scores and ranks live malicious IP addresses.",
-    summary: "A cybersecurity dashboard that scores attacker IPs and flags what to block first.",
+    tagline: "A threat intelligence platform that scores and ranks malicious IPs.",
+    summary: "A threat intelligence dashboard that scores attacker IPs and prioritizes firewall blocks.",
     description: [
       "GhostNet ingests live threat data from four public blocklists to help security teams prioritize firewall blocks.",
       "A streaming pipeline cleans raw reports, runs anomaly detection, and predicts reoffense risk. The web dashboard updates in real time over WebSockets.",
@@ -240,24 +239,24 @@ export const projects: Project[] = [
     tradeoffs: [
       {
         label: "API rate limit",
-        choice: "Live IP lookups through the AbuseIPDB API.",
-        boundary: "Capped at 1,000 requests per day. Past that, lookups fall back to local history.",
+        choice: "Live IP reputation lookups through external intelligence feeds.",
+        boundary: "Daily rate limits require caching queries in local PostgreSQL history.",
       },
       {
         label: "Unmapped bulk events",
-        choice: "Bulk feeds ingested for volume.",
-        boundary: "They omit attack categories, so part of the events stay unmapped to MITRE techniques.",
+        choice: "High-volume blocklists ingested for comprehensive IP coverage.",
+        boundary: "Bulk feeds omit granular categories, leaving some events unmapped to MITRE techniques.",
       },
       {
         label: "Micro-batch lag",
-        choice: "Spark writes in five-minute micro-batches.",
-        boundary: "Aggregate charts lag a few minutes behind raw ingestion.",
+        choice: "Stream writes executed in periodic micro-batches for efficient ingestion.",
+        boundary: "Aggregate metric charts reflect updates with a brief micro-batch delay.",
       },
     ],
     status: "shipped",
     platform: "web",
     featured: true,
-    domainTags: ["Cybersecurity", "Threat Intelligence", "Data Engineering"],
+    domainTags: ["Cybersecurity", "Data Science"],
     themeTags: ["Threat Intelligence"],
     stack: [
       "Python",
@@ -314,14 +313,14 @@ export const projects: Project[] = [
       { label: "API endpoints", value: "16" },
     ],
     limitations: [
-      "External API rate limits restrict live threat queries to 1,000 requests per day before falling back to local history.",
-      "Bulk data feeds omit specific attack categories, leaving a portion of events unmapped to MITRE techniques.",
-      "Spark writes data in five-minute micro-batches, creating a short lag between raw ingestion and aggregate charts.",
+      "Certain bulk blocklists only provide raw IP addresses without incident categories, leaving a portion of events unmapped to MITRE techniques.",
+      "Live third-party reputation lookups are subject to daily API rate limits before falling back to local database history.",
+      "Stream writes execute in short micro-batches, introducing a brief delay between raw ingestion and aggregate metric charts.",
     ],
     roadmap: [
-      "Dedicated honeypot ingestion node to capture proprietary threat telemetry.",
-      "Automated webhook alerts for multi-source corroborated attacks.",
-      "Distributed Kafka partition scaling for higher ingestion throughput.",
+      "Deploy dedicated decoy honeypots to capture raw, unmanipulated attack payloads directly from the edge.",
+      "Trigger automated firewall blocklist webhooks only when an attacker is corroborated across multiple independent feeds.",
+      "Partition Kafka topics across distributed brokers to support higher multi-gigabit ingestion throughput.",
     ],
     links: {
       repoPrivate: true,
@@ -342,7 +341,7 @@ export const projects: Project[] = [
   {
     slug: "mybelly",
     title: "MyBelly",
-    tagline: "An offline-first mobile nutrition assistant driven by natural language tool use.",
+    tagline: "A conversational nutrition and pantry tracker that logs meals, tracks fridge inventory, and finds recipes through everyday language.",
     summary: "A nutrition tracker that also manages your food inventory. Describe a meal, and an AI agent updates both.",
     description: [
       "MyBelly logs meals, calculates daily macronutrients, and manages pantry inventory through conversational natural language.",
@@ -371,14 +370,13 @@ export const projects: Project[] = [
     domainTags: ["AI Agents", "Mobile Development"],
     themeTags: ["Health & Nutrition"],
     stack: [
-      "Flutter",
       "Dart",
-      "Claude API",
+      "SQL",
+      "Flutter",
+      "Function-Calling LLMs",
+      "SQLite",
       "Supabase",
       "PostgreSQL",
-      "sqflite",
-      "Riverpod",
-      "GoRouter",
     ],
     designNotes: [
       {
@@ -425,14 +423,14 @@ export const projects: Project[] = [
       },
     ],
     limitations: [
-      "Direct client-side LLM calls bypass an intermediate gateway, requiring local key handling rather than server-side token controls.",
-      "Runtime execution is validated on Android targets, with iOS distribution pending macOS code signing.",
-      "Active authentication relies on email and password credentials pending social OAuth provider redirects.",
+      "Tool resolution relies on hosted Claude API endpoints, requiring an active internet connection for conversational meal logging.",
+      "On-device intent routing only handles rigid, unambiguous commands, falling back to network API calls for natural language variations.",
+      "Barcode scans populate product macros in an editable preview rather than committing directly, requiring user confirmation for unverified items.",
     ],
     roadmap: [
-      "Dedicated API proxy gateway with per-user token rate limits and cost control.",
-      "Federated OAuth sign-in integration for Google and Apple accounts.",
-      "Automated CI/CD release pipeline for production Android and iOS builds.",
+      "Embed a quantized local model to resolve conversational meal logging and nutritional estimates entirely offline.",
+      "Predict upcoming ingredient expirations and auto-generate grocery orders based on weekly meal plans.",
+      "Sync burned calories and hydration expenditure from Apple Health and Health Connect automatically.",
     ],
     links: {
       repoPrivate: true,
@@ -462,11 +460,11 @@ export const projects: Project[] = [
   {
     slug: "genai-document-analysis",
     title: "GenAI Document Analysis",
-    tagline: "A document intelligence platform with typo-tolerant search and ontology models, engineered for Thales.",
-    summary: "Search and ask questions across a collection of documents using knowledge models, built for Thales.",
+    tagline: "An AI document analysis platform integrating RAG, GraphRAG, and autonomous agents. Engineering capstone project supervised by Thales.",
+    summary: "An AI document analysis platform combining RAG, GraphRAG, and autonomous agents, supervised by Thales.",
     description: [
-      "A document management system built for Thales to organize, validate, and search multi-format file collections.",
-      "Engineered with Spring Boot using hexagonal architecture. Combines relational storage in PostgreSQL with fuzzy indexing in OpenSearch.",
+      "A document management and intelligence platform built to organize, search, and interrogate heterogeneous file collections.",
+      "Combines typo-tolerant search in OpenSearch, relational models in PostgreSQL, and semantic question answering with grounded source citations.",
     ],
     tradeoffs: [
       {
@@ -482,40 +480,51 @@ export const projects: Project[] = [
     ],
     status: "ongoing",
     platform: "web",
-    domainTags: ["Generative AI", "Data Engineering"],
-    stack: ["Java", "Spring Boot", "Spring AI", "React", "PostgreSQL", "OpenSearch"],
+    domainTags: ["Generative AI", "Information Retrieval"],
+    stack: [
+      "Java",
+      "TypeScript",
+      "SQL",
+      "Spring Boot",
+      "React",
+      "Spring AI",
+      "Apache Tika",
+      "OpenSearch",
+      "PostgreSQL",
+      "SeaweedFS",
+    ],
     progress: {
       updated: "October 2026",
       items: [
         {
-          title: "Documents",
+          title: "Document Ingestion & Search",
           state: "done",
-          note: "Add, edit, trash and search documents. My package.",
+          note: "Multi-format file upload, OpenSearch fuzzy indexing, and recoverable trash lifecycle.",
         },
         {
-          title: "Ontologies",
+          title: "Domain Ontologies",
           state: "done",
-          note: "Types, relations and rules. JSON import and export. My package.",
+          note: "Entity modeling, directional relation rules, referential integrity guards, and JSON import/export.",
         },
         {
-          title: "RAG",
-          state: "in-progress",
-          note: "Ask a question about a document. Done by a teammate, waiting for review.",
+          title: "Semantic RAG",
+          state: "done",
+          note: "Document chunking, local vector embeddings, OpenSearch k-NN search, and grounded LLM answers.",
         },
         {
-          title: "GraphRAG",
+          title: "GraphRAG & Knowledge Graph",
           state: "planned",
-          note: "A knowledge graph built on the ontology. My package.",
+          note: "Knowledge graph connecting text chunks to ontology entities for multi-hop graph exploration.",
         },
         {
-          title: "Configuration manager",
+          title: "Autonomous Agents",
           state: "planned",
-          note: "A teammate's package.",
+          note: "Coordinating multi-document query resolution across disparate sources.",
         },
         {
-          title: "Agents",
+          title: "Configuration Manager",
           state: "planned",
-          note: "A teammate's package.",
+          note: "Centralized environment configuration for models and indexing pipelines.",
         },
       ],
     },
@@ -551,13 +560,14 @@ export const projects: Project[] = [
       },
     ],
     limitations: [
-      "Search indexing currently targets file titles and document metadata rather than deep full-text contents.",
-      "Ontology relationship definitions are static, without temporal validity dates or weighted connection properties.",
+      "Search queries currently match document titles and metadata fields, pending deep chunked full-text vector embeddings.",
+      "Relationship definitions are static, without temporal validity dates or dynamic link weightings.",
+      "Question answering evaluates isolated document files without cross-referencing multi-file knowledge graphs.",
     ],
     roadmap: [
-      "Full-text content extraction and semantic search over file contents.",
-      "GraphRAG knowledge graph connecting document entities with ontology rules.",
-      "Multi-agent orchestration to query cross-document knowledge bases.",
+      "Chunk and embed entire document bodies using Spring AI vector stores for comprehensive semantic retrieval.",
+      "Connect document chunks with ontology entities to build a traversable knowledge graph.",
+      "Coordinate specialized agents to answer complex queries across multi-document corpuses.",
     ],
     links: {
       repoPrivate: true,
@@ -570,7 +580,7 @@ export const projects: Project[] = [
   {
     slug: "coldeye",
     title: "Coldeye",
-    tagline: "An on-device computer vision system that logs real-world actions into a queryable timeline.",
+    tagline: "A computer vision system that tracks people, objects, and interactions into an event timeline.",
     summary: "An on-device perception system tracking postures and hand-object interactions in real time.",
     description: [
       "Coldeye watches a camera and keeps a log of what people do. It notices when someone sits down, stands up, picks up an object, puts it down, or leaves.",
@@ -691,24 +701,21 @@ export const projects: Project[] = [
   {
     slug: "lucid",
     title: "LUCID",
-    tagline: "Runtime application firewall and zero-trust guardrails middleware for tool-using AI agents.",
-    summary: "Intercepts function calls before execution, halts recursive loops, and redacts system secrets. Elevates MyBelly resilience from 0/100 to 100/100 across 19 OWASP vectors.",
+    tagline: "Runtime guardrails and firewall middleware for tool-calling AI agents.",
+    summary: "Intercepts unauthorized function calls, breaks recursive execution loops, and redacts leaked secrets.",
     description: [
-      "LUCID is a deterministic runtime application firewall (AI-WAF) and the defensive counterpart to MIRAGE.",
-      "Sitting as a middleware between the model and tools, it short-circuits prompt overrides, enforces human-in-the-loop authorization on critical actions, validates parameter boundaries via Pydantic schemas, and trips an automatic circuit breaker on runaway loops.",
-      "Operating entirely in local Python with sub-millisecond overhead (< 0.5 ms) and zero additional LLM token costs, it neutralizes 100% of confirmed exploits in closed-loop verification.",
+      "LUCID is a runtime application firewall and the defensive counterpart to MIRAGE.",
+      "Sitting between the model and tools, it intercepts prompt injections, enforces authorization on critical functions, validates parameters with Pydantic, and trips a circuit breaker on runaway loops.",
     ],
     status: "shipped",
     platform: "cli",
     featured: true,
-    domainTags: ["AI Security", "AI Blue Team"],
+    domainTags: ["AI Security", "AI Guardrails"],
     themeTags: ["Defensive Security", "Runtime Guardrails"],
     stack: [
       "Python",
-      "Pydantic v2",
+      "Pydantic",
       "Typer",
-      "Rich",
-      "Pytest",
       "OWASP LLM Top 10",
     ],
     stats: [
@@ -747,7 +754,7 @@ export const projects: Project[] = [
     tradeoffs: [
       {
         label: "Deterministic boundary",
-        choice: "Local Python validation with zero LLM API calls and sub-millisecond latency.",
+        choice: "Local Python validation with zero external API calls and near-zero latency.",
         boundary: "Novel semantic jailbreaks require updating signature rules or embedding classifiers.",
       },
       {
@@ -757,19 +764,19 @@ export const projects: Project[] = [
       },
       {
         label: "Short-circuit economy",
-        choice: "Immediately aborts turns when hostile input is detected without calling the LLM.",
-        boundary: "Saves 100% of LLM token costs on hostile inputs while returning standardized refusals.",
+        choice: "Aborts turns immediately when hostile input is detected without forwarding to the model.",
+        boundary: "Saves model token usage on hostile inputs while returning standardized refusals.",
       },
     ],
     limitations: [
-      "Strict parameter constraints reject unusual but valid inputs if not configured in the policy schema.",
-      "Human-in-the-loop gating requires asynchronous confirmation hooks in user-facing client applications.",
-      "Deterministic pattern filtering does not replace periodic adversarial red teaming scans.",
+      "Strict parameter constraints reject unexpected inputs unless explicitly allowed in the policy schema.",
+      "Human-in-the-loop gating requires client-side asynchronous confirmation hooks to avoid blocking interactive flows.",
+      "Guardrails enforce safety at the execution boundary around tools, without altering the model's underlying weights.",
     ],
     roadmap: [
-      "Async distributed rate limiting via Redis token bucket for multi-node deployments",
-      "Dynamic OpenAPI and JSON Schema parser for auto-generating tool parameter constraints",
-      "Lightweight local ONNX embedding classifier for zero-latency semantic intent detection",
+      "Implement distributed rate limiting and state coordination for multi-instance deployments.",
+      "Automatically derive parameter constraints and type rules directly from OpenAPI specifications.",
+      "Integrate a lightweight local embedding model to detect ambiguous adversarial intentions with near-zero latency.",
     ],
     links: {
       repo: "https://github.com/erenntekin/lucid",

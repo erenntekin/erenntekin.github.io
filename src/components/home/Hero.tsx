@@ -38,13 +38,13 @@ export function Hero({ onAdvance }: { onAdvance?: () => void }) {
       <RevealOnMount delay={0.45}>
         <div className="mt-8 flex items-center gap-3 lg:mt-10 lg:gap-4">
           <MagneticLink href="/projects" className="bg-accent text-accent-foreground hover:bg-accent/90">
-            Enter the gallery
+            Explore projects
           </MagneticLink>
           <MagneticLink
             href="/contact"
-            className="border border-border text-foreground hover:border-accent hover:text-accent"
+            className="border border-border/80 bg-surface/40 text-foreground hover:border-accent hover:text-accent"
           >
-            Contact the curator
+            Get in touch
           </MagneticLink>
         </div>
       </RevealOnMount>
@@ -84,7 +84,7 @@ function MagneticLink({
     <motion.div style={{ x, y }} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
       <Link
         href={href}
-        className={`inline-flex rounded-full px-5 py-2.5 text-sm font-medium shadow-lg shadow-black/0 transition-all hover:scale-105 hover:shadow-xl hover:shadow-accent/20 active:scale-95 lg:px-6 lg:py-3 lg:text-base 2xl:px-7 2xl:py-3.5 2xl:text-lg ${className}`}
+        className={`inline-flex w-44 sm:w-48 items-center justify-center rounded-sm py-2.5 text-sm font-medium shadow-lg shadow-black/0 transition-all hover:scale-105 hover:shadow-xl hover:shadow-accent/20 active:scale-95 lg:py-3 lg:text-base 2xl:py-3.5 2xl:text-lg ${className}`}
       >
         {children}
       </Link>

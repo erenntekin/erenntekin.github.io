@@ -27,7 +27,7 @@ export const certifications: Certification[] = [
   {
     slug: "ibm-ai-engineering",
     title: "IBM AI Engineering Professional Certificate",
-    issuer: "IBM · Coursera",
+    issuer: "IBM",
     status: "completed",
     image: "/certificates/ibm-ai-engineering/images/overall.jpg",
     certificateFile: "/certificates/ibm-ai-engineering/professional-certificate.pdf",
@@ -142,7 +142,7 @@ export const certifications: Certification[] = [
   {
     slug: "ibm-machine-learning",
     title: "IBM Machine Learning Professional Certificate",
-    issuer: "IBM · Coursera",
+    issuer: "IBM",
     status: "completed",
     image: "/certificates/ibm-ml/images/overall.jpg",
     certificateFile: "/certificates/ibm-ml/professional-certificate.pdf",
@@ -208,7 +208,7 @@ export const certifications: Certification[] = [
   {
     slug: "google-cybersecurity",
     title: "Google Cybersecurity Professional Certificate",
-    issuer: "Google · Coursera",
+    issuer: "Google",
     status: "completed",
     image: "/certificates/google-cybersecurity/images/overall.jpg",
     certificateFile: "/certificates/google-cybersecurity/professional-certificate.pdf",
@@ -302,6 +302,7 @@ export const certifications: Certification[] = [
     title: "Kaggle Certificates",
     issuer: "Kaggle",
     status: "completed",
+    image: "/certificates/kaggle/intro-to-deep-learning.png",
     courses: [
       {
         slug: "python",

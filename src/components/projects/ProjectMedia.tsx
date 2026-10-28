@@ -1,14 +1,13 @@
 "use client";
 
 import type { Project } from "@/data/projects";
-import { BrowserMockup } from "@/components/ui/BrowserMockup";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { getProjectTheme, type ProjectTheme } from "@/lib/projectThemes";
 
 function BlueprintConcept({ project, theme }: { project: Project; theme: ProjectTheme }) {
   const repoPath = project.links.repo?.replace(/^https?:\/\/github\.com\//, "");
   return (
-    <div className="relative flex h-full w-full max-w-[340px] flex-col justify-between rounded-lg border border-border/80 bg-surface/90 p-4 shadow-2xl backdrop-blur select-none">
+    <div className="relative flex h-full w-full max-w-[340px] flex-col justify-between rounded-sm border border-border/80 bg-surface/90 p-4 shadow-2xl backdrop-blur select-none">
       <div className="flex items-center justify-between border-b border-border/60 pb-2 text-[9px] font-mono text-muted/70">
         <div className="flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -56,40 +55,47 @@ export function ProjectMedia({
   const playbackRate = resolvedSrc === project.media.video ? project.media.videoRate : undefined;
   const isWidescreen = resolvedSrc?.includes("film.mp4") || resolvedSrc?.includes("preview.mp4");
 
-  return (
-    <div
-      className={`group/stage relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-border/70 bg-[#07090e] p-3 sm:p-5 select-none ${heightClass} ${className ?? ""}`}
-      style={{
-        background: `radial-gradient(circle at 50% 50%, ${theme.glowColor}, rgba(7, 9, 14, 0.98) 75%)`,
-      }}
-    >
-      {/* Stage Canvas / Device Display */}
-      <div className="relative flex h-full w-full items-center justify-center">
-        {project.platform === "mobile" && !isWidescreen ? (
-          <PhoneMockup src={resolvedSrc ?? ""} alt={`${project.title} app`} playbackRate={playbackRate} />
-        ) : resolvedSrc ? (
-          <div className="relative flex h-full w-auto max-h-full max-w-full aspect-[16/10] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#0a0d14] shadow-2xl">
-            {VIDEO_EXTENSIONS.test(resolvedSrc) ? (
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                src={resolvedSrc}
-                className="h-full w-full object-cover object-center"
-              />
-            ) : (
-              <img
-                src={resolvedSrc}
-                alt={`${project.title} preview`}
-                className="h-full w-full object-cover object-center"
-              />
-            )}
-          </div>
+  // Mobile mockup specifically preserved for mobile projects (e.g. MyBelly)
+  if (project.platform === "mobile" && !isWidescreen) {
+    return (
+      <div
+        className={`relative flex items-center justify-center overflow-hidden rounded-sm border border-white/10 bg-[#07090e] p-3 select-none ${heightClass} ${className ?? ""}`}
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${theme.glowColor}, rgba(7, 9, 14, 0.98) 75%)`,
+        }}
+      >
+        <PhoneMockup src={resolvedSrc ?? ""} alt={`${project.title} app`} playbackRate={playbackRate} />
+      </div>
+    );
+  }
+
+  // Clean direct media for all other projects (no nested box wrappers)
+  if (resolvedSrc) {
+    return (
+      <div className={`relative w-full overflow-hidden rounded-sm border border-white/10 bg-[#060911] shadow-md select-none ${heightClass} ${className ?? ""}`}>
+        {VIDEO_EXTENSIONS.test(resolvedSrc) ? (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            src={resolvedSrc}
+            className="h-full w-full object-cover object-center"
+          />
         ) : (
-          <BlueprintConcept project={project} theme={theme} />
+          <img
+            src={resolvedSrc}
+            alt={`${project.title} preview`}
+            className="h-full w-full object-cover object-center"
+          />
         )}
       </div>
+    );
+  }
+
+  return (
+    <div className={`relative flex items-center justify-center overflow-hidden rounded-sm border border-white/10 bg-[#060911] p-3 ${heightClass} ${className ?? ""}`}>
+      <BlueprintConcept project={project} theme={theme} />
     </div>
   );
 }

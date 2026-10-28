@@ -10,7 +10,6 @@ export function CertificationsContent() {
     <MuseumGallery
       items={items}
       title="Certifications"
-      subtitle="Coursework I've completed alongside my degree, with the real projects that came out of it."
       credlyProfileUrl={credlyProfile}
     />
   );

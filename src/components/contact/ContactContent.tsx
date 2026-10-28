@@ -34,10 +34,10 @@ function CopyEmailButton() {
     <button
       type="button"
       onClick={handleCopy}
-      className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+      className={`flex items-center gap-1.5 rounded-sm border px-2.5 py-1 font-mono text-xs transition-colors ${
         status === "error"
           ? "border-red-500/40 text-red-300"
-          : "border-border text-muted hover:border-accent hover:text-accent"
+          : "border-border/80 bg-surface/50 text-muted hover:border-accent hover:text-accent"
       }`}
     >
       {status === "copied" && <CheckIcon className="h-3.5 w-3.5 text-accent" />}
@@ -49,59 +49,57 @@ function CopyEmailButton() {
 
 export function ContactContent() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-6 py-20 sm:py-24">
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
       <RevealOnMount>
-        <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Contact</h1>
+        <div className="border-b border-border/70 pb-6">
+          <h1 className="font-serif text-2xl font-semibold text-accent sm:text-3xl">Contact</h1>
+        </div>
       </RevealOnMount>
 
-      <RevealOnMount delay={0.1}>
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-          Best way to reach me is email. I'll get back to you as soon as I can.
-        </p>
-      </RevealOnMount>
+      <div className="mt-8 space-y-8">
+        <RevealOnMount delay={0.1}>
+          <section>
+            <SectionLabel>Email</SectionLabel>
+            <SectionCard>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="flex items-center gap-3 text-sm sm:text-base font-medium text-foreground transition-colors hover:text-accent"
+                >
+                  <MailIcon className="h-4 w-4 text-accent" />
+                  {EMAIL}
+                </a>
+                <CopyEmailButton />
+              </div>
+            </SectionCard>
+          </section>
+        </RevealOnMount>
 
-      <RevealOnMount delay={0.2}>
-        <section className="mt-8">
-          <SectionLabel>Email</SectionLabel>
-          <SectionCard>
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <a
-                href={`mailto:${EMAIL}`}
-                className="flex items-center gap-3 text-base font-medium text-foreground transition-colors hover:text-accent sm:text-lg"
-              >
-                <MailIcon className="h-5 w-5 text-accent" />
-                {EMAIL}
-              </a>
-              <CopyEmailButton />
-            </div>
-          </SectionCard>
-        </section>
-      </RevealOnMount>
-
-      <RevealOnMount delay={0.3}>
-        <section className="mt-10">
-          <SectionLabel>Social</SectionLabel>
-          <SectionCard>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              {socialLinks.map((link) => {
-                const Icon = SOCIAL_ICONS[link.label as keyof typeof SOCIAL_ICONS];
-                return (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex flex-1 items-center gap-3 rounded-xl border border-border px-4 py-3 text-sm text-foreground transition-colors hover:border-accent hover:text-accent"
-                  >
-                    <Icon className="h-5 w-5" />
-                    {link.label}
-                  </a>
-                );
-              })}
-            </div>
-          </SectionCard>
-        </section>
-      </RevealOnMount>
+        <RevealOnMount delay={0.2}>
+          <section>
+            <SectionLabel>Profiles</SectionLabel>
+            <SectionCard>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {socialLinks.map((link) => {
+                  const Icon = SOCIAL_ICONS[link.label as keyof typeof SOCIAL_ICONS];
+                  return (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-3 rounded-sm border border-border/80 bg-surface/30 px-3.5 py-2.5 text-xs text-foreground transition-colors hover:border-accent hover:text-accent"
+                    >
+                      <Icon className="h-4 w-4 text-accent" />
+                      {link.label}
+                    </a>
+                  );
+                })}
+              </div>
+            </SectionCard>
+          </section>
+        </RevealOnMount>
+      </div>
     </div>
   );
 }

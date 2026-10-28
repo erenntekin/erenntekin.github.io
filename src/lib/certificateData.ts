@@ -7,6 +7,8 @@ export interface CertificateItem {
   slug: string;
   title: string;
   issuer: string;
+  tagline?: string;
+  badgeCount?: string;
   image?: string;
   certificateFile?: string;
   credentialUrl?: string;
@@ -16,6 +18,29 @@ export interface CertificateItem {
   tier: "certificate" | "course";
   courses?: CertificateItem[];
 }
+
+const CERTIFICATE_METADATA: Record<string, { tagline: string; badgeCount: string }> = {
+  "ibm-ai-engineering": {
+    tagline: "PyTorch neural networks, deep learning architectures, and generative AI systems.",
+    badgeCount: "13 Courses",
+  },
+  "ibm-machine-learning": {
+    tagline: "Supervised & unsupervised learning, classification models, and neural recommender systems.",
+    badgeCount: "6 Courses",
+  },
+  "google-cybersecurity": {
+    tagline: "Network security, threat detection, Linux security operations, and automated Python defense.",
+    badgeCount: "9 Courses",
+  },
+  toeic: {
+    tagline: "Certified professional English proficiency for international engineering teams.",
+    badgeCount: "Score 885 · C1",
+  },
+  "kaggle-learn": {
+    tagline: "Hands-on tracks in computer vision, deep learning, feature engineering, and data analysis.",
+    badgeCount: "8 Certificates",
+  },
+};
 
 function fileExists(publicPath?: string) {
   if (!publicPath) return undefined;
@@ -39,11 +64,14 @@ function toCourseItem(cert: Certification, course: CertificationCourse): Certifi
 }
 
 function toCertificateItem(cert: Certification): CertificateItem {
+  const meta = CERTIFICATE_METADATA[cert.slug];
   return {
     href: `/certifications/${cert.slug}`,
     slug: cert.slug,
     title: cert.title,
     issuer: cert.issuer,
+    tagline: meta?.tagline,
+    badgeCount: meta?.badgeCount,
     image: cert.image,
     certificateFile: fileExists(cert.certificateFile),
     credentialUrl: cert.credentialUrl,

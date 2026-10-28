@@ -19,6 +19,12 @@ import { Walkthrough } from "./Walkthrough";
 import { SectionNav } from "./SectionNav";
 import { LimitBarriers } from "./LimitBarriers";
 import { RoadmapTrail } from "./RoadmapTrail";
+import { ColdeyeDetail } from "./ColdeyeDetail";
+import { MirageDetail } from "./MirageDetail";
+import { LucidDetail } from "./LucidDetail";
+import { GhostnetDetail } from "./GhostnetDetail";
+import { MybellyDetail } from "./MybellyDetail";
+import { DocAnalysisDetail } from "./DocAnalysisDetail";
 
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov)$/i;
 
@@ -50,6 +56,25 @@ function balancedGrid(count: number) {
 }
 
 export function ProjectDetail({ project }: { project: Project }) {
+  if (project.slug === "coldeye") {
+    return <ColdeyeDetail project={project} />;
+  }
+  if (project.slug === "mirage") {
+    return <MirageDetail project={project} />;
+  }
+  if (project.slug === "lucid") {
+    return <LucidDetail project={project} />;
+  }
+  if (project.slug === "ghostnet") {
+    return <GhostnetDetail project={project} />;
+  }
+  if (project.slug === "mybelly") {
+    return <MybellyDetail project={project} />;
+  }
+  if (project.slug === "genai-document-analysis") {
+    return <DocAnalysisDetail project={project} />;
+  }
+
   const heroSrc = project.media.cover ?? project.media.video;
   const heroIsVideo = Boolean(heroSrc && VIDEO_EXTENSIONS.test(heroSrc));
 
@@ -71,7 +96,7 @@ export function ProjectDetail({ project }: { project: Project }) {
   ].filter((s): s is { id: string; label: string } => Boolean(s));
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-6 py-16 pl-10 sm:pr-6 sm:pl-36 sm:py-20 lg:pl-44 xl:px-6">
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 pl-10 sm:px-6 sm:py-14 sm:pl-36 lg:pl-44">
       <SectionNav sections={navSections} />
 
       <RevealOnMount>
@@ -142,8 +167,8 @@ export function ProjectDetail({ project }: { project: Project }) {
             </StatusBadge>
           )}
         </div>
-        <h1 className="mt-3 font-serif text-3xl font-semibold text-foreground sm:text-4xl">{project.title}</h1>
-        <p className="mt-2 text-base text-foreground/80">{project.tagline}</p>
+        <h1 className="mt-3 font-serif text-2xl font-semibold text-accent sm:text-3xl">{project.title}</h1>
+        <p className="mt-2 font-sans text-sm leading-relaxed text-foreground/80">{project.tagline}</p>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           {project.media.video && (

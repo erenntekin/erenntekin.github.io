@@ -20,6 +20,24 @@ export function CvDownload({ options }: { options: CvOption[] }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  if (options.length === 0) return null;
+
+  // Single standardized CV: Direct link for zero-friction access
+  if (options.length === 1) {
+    const single = options[0];
+    return (
+      <a
+        href={single.file}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:text-foreground"
+      >
+        <span>Resume</span>
+        <span className="text-[10px] text-muted/80">↗</span>
+      </a>
+    );
+  }
+
   return (
     <div ref={rootRef} className="relative">
       <button

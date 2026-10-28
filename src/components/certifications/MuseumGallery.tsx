@@ -1,4 +1,4 @@
-import { Frame } from "./CertificateFrame";
+import { CertificateCard } from "./CertificateFrame";
 import { ExternalLinkIcon } from "@/components/icons/ExternalLinkIcon";
 import type { CertificateItem } from "@/lib/certificateData";
 
@@ -8,9 +8,9 @@ function ProfileLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="flex items-center gap-1.5 rounded-full border border-[var(--museum-gold)]/50 px-3 py-1.5 text-xs text-[var(--museum-gold)] transition-colors hover:border-[var(--museum-gold-bright)] hover:text-[var(--museum-gold-bright)]"
+      className="inline-flex items-center gap-1.5 rounded-sm border border-border/80 bg-surface/50 px-3 py-1.5 font-mono text-xs text-foreground transition-all hover:border-accent hover:bg-surface hover:text-accent"
     >
-      <ExternalLinkIcon className="h-3.5 w-3.5" />
+      <ExternalLinkIcon className="h-3 w-3 text-accent" />
       {label}
     </a>
   );
@@ -24,22 +24,36 @@ export function MuseumGallery({
 }: {
   items: CertificateItem[];
   title: string;
-  subtitle: string;
+  subtitle?: string;
   credlyProfileUrl?: string;
 }) {
   return (
-    <div className="museum-theme mx-auto w-full max-w-4xl px-6 py-16 sm:px-10 sm:py-20">
-      <h1 className="font-serif text-2xl font-semibold text-[var(--museum-gold-bright)] sm:text-3xl">{title}</h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#e8ddc8]">{subtitle}</p>
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      {/* Header Row: Title & Subtitle on Left, External Credentials on Right */}
+      <div className="border-b border-border/70 pb-6">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <h1 className="font-serif text-2xl font-semibold text-accent sm:text-3xl">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="mt-2 font-sans text-sm leading-relaxed text-foreground/80">
+                {subtitle}
+              </p>
+            )}
+          </div>
 
-      <div className="mt-3 flex flex-wrap gap-2">
-        {credlyProfileUrl && <ProfileLink href={credlyProfileUrl} label="Credly profile" />}
-        <ProfileLink href="https://www.kaggle.com/erennntkn" label="Kaggle profile" />
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            {credlyProfileUrl && <ProfileLink href={credlyProfileUrl} label="Credly profile" />}
+            <ProfileLink href="https://www.kaggle.com/erennntkn" label="Kaggle profile" />
+          </div>
+        </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
+      {/* Proportional Grid: Matches ProjectGallery Exactly */}
+      <div className="mt-8 grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
-          <Frame key={item.slug} item={item} />
+          <CertificateCard key={item.slug} item={item} />
         ))}
       </div>
     </div>

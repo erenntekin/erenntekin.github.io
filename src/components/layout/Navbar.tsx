@@ -67,12 +67,12 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative rounded-full px-3 py-1.5 text-sm transition-colors ${active ? "text-foreground" : "text-muted hover:text-foreground"}`}
+                className={`relative rounded-full px-3 py-1.5 text-sm transition-colors ${active ? "text-accent font-medium" : "text-muted hover:text-foreground"}`}
               >
                 {active && (
                   <motion.span
                     layoutId="nav-active-pill"
-                    className="absolute inset-0 rounded-full bg-surface-hover"
+                    className="absolute inset-0 rounded-full border border-accent/30 bg-accent/10"
                     transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   />
                 )}

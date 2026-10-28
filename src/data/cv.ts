@@ -3,8 +3,6 @@ export interface CvOption {
   file: string;
 }
 
-// Provisional entry for wiring up the download flow during development —
-// swap for the finalized domain-specific PDFs before the site goes live.
 export const cvOptions: CvOption[] = [
-  { label: "AI / Data", file: "/cv/CV_Eren_TEKIN_AI_DataScience.pdf" },
+  { label: "Resume", file: "/cv/CV_Eren_TEKIN.pdf" },
 ];
