@@ -5,19 +5,18 @@ import { Flag } from "@/components/icons/Flag";
 import { SectionLabel, SectionCard } from "@/components/ui/Section";
 
 const SKILL_GROUPS = [
-  { label: "AI / ML", items: ["NumPy", "Pandas", "scikit-learn", "PyTorch", "YOLO", "Claude & OpenAI APIs", "Garak"] },
   {
-    label: "Cybersecurity",
-    items: ["Linux", "Wireshark", "Nmap", "Burp Suite", "Metasploit", "OWASP ZAP", "Wazuh", "Hashcat"],
+    label: "Programming Languages",
+    items: ["Python", "SQL", "Java", "TypeScript", "Dart", "Shell"],
   },
-  { label: "Data & streaming", items: ["Kafka", "Spark", "Airflow", "Snowflake", "PostgreSQL", "MongoDB"] },
   {
-    label: "Cloud & infra",
-    items: ["AWS", "Azure", "Terraform", "Kubernetes", "Docker", "GitHub Actions", "Prometheus", "Grafana"],
+    label: "Frameworks & Libraries",
+    items: ["PyTorch", "scikit-learn", "Hugging Face", "OpenCV", "YOLO", "FastAPI", "Spring Boot", "React", "Flutter"],
   },
-  { label: "Mobile & backend", items: ["React", "React Native", "Flutter", "FastAPI", "Supabase"] },
-  { label: "Programming", items: ["Python", "SQL", "JavaScript", "TypeScript", "Java", "C", "HTML", "CSS", "Dart"] },
-  { label: "Tools", items: ["Git", "Power BI", "DBeaver"] },
+  {
+    label: "Tools & Platforms",
+    items: ["Kafka", "Spark", "OpenSearch", "PostgreSQL", "SQLite", "Docker", "Linux", "Git", "pytest"],
+  },
 ];
 
 const EDUCATION = [
@@ -41,6 +40,7 @@ const LANGUAGES = [
   { name: "French", level: "Native", flag: "FR" as const },
   { name: "Turkish", level: "Native", flag: "TR" as const },
   { name: "English", level: "TOEIC 885", flag: "GB" as const, certUrl: "/certifications/toeic" },
+  { name: "Japanese", level: "Elementary", flag: "JP" as const },
 ];
 
 const PILL_BASE =
@@ -97,7 +97,7 @@ function SkillsSection() {
 
 function LanguagesList() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {LANGUAGES.map((lang) => (
         <div
           key={lang.name}
