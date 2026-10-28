@@ -701,8 +701,8 @@ export const projects: Project[] = [
   {
     slug: "lucid",
     title: "LUCID",
-    tagline: "Runtime guardrails and firewall middleware for tool-calling AI agents.",
-    summary: "Intercepts unauthorized function calls, breaks recursive execution loops, and redacts leaked secrets.",
+    tagline: "A security firewall for AI agents that blocks prompt injections, stops recursive tool loops, and protects backend systems.",
+    summary: "Intercepts unauthorized function calls, breaks recursive execution loops, and redacts leaked secrets before they reach backend systems.",
     description: [
       "LUCID is a runtime application firewall and the defensive counterpart to MIRAGE.",
       "Sitting between the model and tools, it intercepts prompt injections, enforces authorization on critical functions, validates parameters with Pydantic, and trips a circuit breaker on runaway loops.",

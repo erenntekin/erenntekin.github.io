@@ -15,7 +15,7 @@ interface FeatureItem {
 const features: FeatureItem[] = [
   {
     id: "defense",
-    title: "Pre-LLM Input Sanitization",
+    title: "Prompt Injection Shield",
     description:
       "Intercepts adversarial prompt injections and homoglyph substitutions before inputs reach the model, returning safe refusal responses.",
     image: "/projects/lucid/1-mybelly-defense.png",
@@ -23,37 +23,52 @@ const features: FeatureItem[] = [
   },
   {
     id: "gating",
-    title: "Zero-Trust Tool Gating",
+    title: "Tool Gating and Approval",
     description:
-      "Blocks unauthorized function calls, validates parameter bounds, and enforces human approval on destructive actions like account deletion.",
+      "Blocks unauthorized function calls, validates parameter bounds with Pydantic, and requires human approval on destructive actions like account deletion.",
     image: "/projects/lucid/2-tool-gating.png",
     imageAlt: "Pre-execution tool gating and parameter constraint validation",
   },
   {
     id: "breaker",
-    title: "Sliding-Window Circuit Breaker",
+    title: "Circuit Breaker (Anti-Loop)",
     description:
-      "Enforces execution rate limits per turn and triggers automatic cooldowns to prevent recursive tool loops and API quota exhaustion.",
+      "Enforces rate limits per turn and triggers automatic cooldowns to prevent recursive tool loops and API quota exhaustion.",
     image: "/projects/lucid/3-circuit-breaker.png",
     imageAlt: "Circuit breaker rate limiting and recursive loop detection",
   },
   {
     id: "verification",
-    title: "Closed-Loop Proof of Defense",
+    title: "Proof of Defense (100/100)",
     description:
-      "Replays adversarial attack probes against the protected agent, confirming exploit neutralization across all tested threat vectors.",
+      "Replays all 19 MIRAGE attack probes against the protected agent, proving 100% exploit neutralization and moving resilience from Grade F to Grade A.",
     image: "/projects/lucid/4-verification-matrix.png",
     imageAlt: "Closed-loop verification matrix confirming full exploit neutralization",
   },
   {
     id: "tests",
-    title: "Automated Regression Suite",
+    title: "Regression Test Suite",
     description:
-      "Unit and integration tests verifying shield mechanics, rate-limit cooldowns, policy parsing, and closed-loop defense.",
+      "All 35 automated tests run in 0.39s with Pytest, verifying shield mechanics, rate-limit cooldowns, and closed-loop defense.",
     image: "/projects/lucid/5-pytest-suite.png",
     imageAlt: "Pytest test suite verifying shield and middleware mechanics",
   },
 ];
+
+function TitleWithAmpersand({ text }: { text: string }) {
+  const parts = text.split(" & ");
+  if (parts.length === 1) return <>{text}</>;
+  return (
+    <>
+      {parts.map((part, i) => (
+        <span key={i}>
+          {part}
+          {i < parts.length - 1 && <span className="font-sans font-normal text-current"> &amp; </span>}
+        </span>
+      ))}
+    </>
+  );
+}
 
 function Corner({ className }: { className: string }) {
   return <span className={`absolute h-2.5 w-2.5 border-accent/70 pointer-events-none ${className}`} />;
@@ -93,7 +108,7 @@ export function LucidFeatures() {
                     isActive ? "text-foreground" : "text-foreground/75"
                   }`}
                 >
-                  {feat.title}
+                  <TitleWithAmpersand text={feat.title} />
                 </p>
               </div>
             </button>
@@ -119,7 +134,7 @@ export function LucidFeatures() {
           >
             <div>
               <h3 className="font-serif text-lg font-semibold text-accent sm:text-xl">
-                0{selectedIndex + 1}. {current.title}
+                0{selectedIndex + 1}. <TitleWithAmpersand text={current.title} />
               </h3>
               <p className="mt-2 font-sans text-xs leading-relaxed text-foreground/80 sm:text-sm">
                 {current.description}
@@ -135,7 +150,7 @@ export function LucidFeatures() {
                 <img
                   src={current.image}
                   alt={current.imageAlt}
-                  className="max-h-56 sm:max-h-64 w-auto max-w-full rounded-sm border border-white/10 object-contain shadow-md transition-transform hover:scale-[1.01]"
+                  className="max-h-60 sm:max-h-72 w-auto max-w-full rounded-sm border border-white/10 object-contain shadow-md transition-transform hover:scale-[1.01]"
                 />
               </ZoomableImage>
               <p className="mt-2 text-center font-mono text-[11px] text-muted">

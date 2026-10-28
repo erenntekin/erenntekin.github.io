@@ -20,49 +20,48 @@ const STAGES: Stage[] = [
   { id: "overview", number: "01", label: "Overview · Stack", shortLabel: "Overview" },
   { id: "pipeline", number: "02", label: "Defense Pipeline", shortLabel: "Pipeline" },
   { id: "features", number: "03", label: "Features in Action", shortLabel: "Features" },
-  { id: "video", number: "04", label: "Demonstration", shortLabel: "Video" },
-  { id: "boundaries", number: "05", label: "Limits · Roadmap", shortLabel: "Roadmap" },
+  { id: "boundaries", number: "04", label: "Limits · Roadmap", shortLabel: "Roadmap" },
 ];
 
 const LIMITATIONS = [
   {
     number: "01",
-    title: "Schema-Bound Validation",
+    title: "Application-Boundary Scope",
     description:
-      "Strict parameter constraints reject unexpected inputs unless explicitly allowed in the policy schema.",
+      "Guardrails enforce safety at the execution boundary around tools. They intercept calls and outputs, without altering the model's internal weights.",
   },
   {
     number: "02",
-    title: "Operator Confirmation Hooks",
+    title: "Requires Policy Definition",
     description:
-      "Human-in-the-loop gating requires client-side asynchronous confirmation hooks to avoid blocking interactive flows.",
+      "Parameter bounds and tool gating rules depend on a declared policy schema, either generated automatically by MIRAGE or written by the operator.",
   },
   {
     number: "03",
-    title: "Application-Boundary Scope",
+    title: "Operator Confirmation Hooks",
     description:
-      "Guardrails enforce safety at the execution boundary around tools, without altering the model's underlying weights.",
+      "Human-in-the-loop gating requires asynchronous client-side confirmation hooks to avoid blocking interactive conversation flows.",
   },
 ];
 
 const ROADMAP = [
   {
     number: "01",
-    title: "Distributed Token Bucket",
+    title: "On-Device SLM Sentinel",
     description:
-      "Implement distributed rate limiting and state coordination for multi-instance deployments.",
+      "Integrate lightweight local models to evaluate semantic intent and detect prompt injections with near-zero latency.",
   },
   {
     number: "02",
-    title: "Schema Auto-Generation",
+    title: "Transparent Reverse Proxy",
     description:
-      "Automatically derive parameter constraints and type rules directly from OpenAPI specifications.",
+      "Package LUCID as an inline HTTP proxy compatible with any OpenAI-compatible SDK without code changes.",
   },
   {
     number: "03",
-    title: "Local Semantic Intent Filter",
+    title: "Distributed Rate Limiting",
     description:
-      "Integrate a lightweight local embedding model to detect ambiguous adversarial intentions with near-zero latency.",
+      "Coordinate circuit breaker counters across multi-instance clusters using Redis token buckets.",
   },
 ];
 
@@ -101,9 +100,18 @@ export function LucidDetail({ project }: { project: Project }) {
           <span>Back to projects</span>
         </Link>
 
-        <span className="font-mono text-[11px] text-muted">
-          Stage {currentStage.number} of 0{STAGES.length} · {currentStage.label}
-        </span>
+        <div className="flex items-center gap-4">
+          <span className="hidden font-mono text-[11px] text-muted sm:inline">
+            Stage {currentStage.number} of 0{STAGES.length} · {currentStage.label}
+          </span>
+          <Link
+            href="/projects/lucid/docs"
+            className="inline-flex items-center gap-1.5 rounded-sm border border-accent/40 bg-accent/10 px-3 py-1.5 font-sans text-xs font-medium text-accent transition-colors hover:bg-accent/20"
+          >
+            <span>Documentation</span>
+            <span>↗</span>
+          </Link>
+        </div>
       </div>
 
       {/* Modern Architectural Stage Navigation Bar */}
@@ -230,7 +238,7 @@ export function LucidDetail({ project }: { project: Project }) {
 
                     <div>
                       <dt className="font-mono text-[10px] uppercase tracking-wider text-muted">
-                        Frameworks
+                        Libraries
                       </dt>
                       <dd className="mt-1 flex flex-wrap gap-1.5">
                         <span className="rounded-sm border border-border/70 bg-surface/60 px-2 py-0.5 font-mono text-[11px] text-foreground">
@@ -273,7 +281,7 @@ export function LucidDetail({ project }: { project: Project }) {
                   Runtime Defense Pipeline
                 </h2>
                 <p className="mt-1.5 font-sans text-sm text-foreground/80">
-                  Four sequential checkpoints intercepting prompts, tool dispatches, and outputs.
+                  Four sequential checkpoints intercepting prompts, tool calls, and outputs.
                 </p>
               </div>
 
@@ -305,45 +313,8 @@ export function LucidDetail({ project }: { project: Project }) {
             </motion.div>
           )}
 
-          {/* STAGE 04: DEMONSTRATION */}
+          {/* STAGE 04: LIMITS & ROADMAP */}
           {activeStageIndex === 3 && (
-            <motion.div
-              key="stage-video"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-6"
-            >
-              <div>
-                <h2 className="font-serif text-xl font-semibold text-accent sm:text-2xl">
-                  Demonstration Video
-                </h2>
-                <p className="mt-1.5 font-sans text-sm text-foreground/80">
-                  {project.media.videoNote ??
-                    "Demonstration video showcasing zero-trust tool interception, human approval gating, and circuit breaker enforcement."}
-                </p>
-              </div>
-
-              <div className="mx-auto max-w-3xl overflow-hidden rounded-sm border border-white/10 bg-black shadow-xl">
-                <div className="aspect-video w-full">
-                  <video
-                    controls
-                    playsInline
-                    preload="auto"
-                    poster={project.media.videoPoster ?? "/projects/lucid/poster.jpg"}
-                    className="h-full w-full object-contain bg-black"
-                    src={project.media.video ?? "/projects/lucid/film.mp4"}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* STAGE 05: LIMITS & ROADMAP */}
-          {activeStageIndex === 4 && (
             <motion.div
               key="stage-boundaries"
               initial={{ opacity: 0, y: 6 }}
@@ -354,21 +325,16 @@ export function LucidDetail({ project }: { project: Project }) {
             >
               <div>
                 <h2 className="font-serif text-xl font-semibold text-accent sm:text-2xl">
-                  Trade-offs · Roadmap
+                  Limits · Roadmap
                 </h2>
                 <p className="mt-1.5 font-sans text-sm text-foreground/80">
                   Known constraints and planned improvements.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {/* Limitations */}
-                <div className="relative rounded-sm border border-border/80 bg-surface/30 p-5 sm:p-6 backdrop-blur-sm">
-                  <Corner className="top-0 left-0 border-t-2 border-l-2" />
-                  <Corner className="top-0 right-0 border-t-2 border-r-2" />
-                  <Corner className="bottom-0 left-0 border-b-2 border-l-2" />
-                  <Corner className="bottom-0 right-0 border-b-2 border-r-2" />
-
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                {/* Column 1: Limitations */}
+                <div className="space-y-3.5">
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-amber-400/90 shadow-[0_0_6px_rgba(251,191,36,0.6)]" />
                     <h3 className="font-sans text-xs font-semibold tracking-wider uppercase text-amber-400">
@@ -376,18 +342,26 @@ export function LucidDetail({ project }: { project: Project }) {
                     </h3>
                   </div>
 
-                  <div className="mt-5 space-y-4 divide-y divide-border/50">
+                  <div className="space-y-3">
                     {LIMITATIONS.map((item) => (
-                      <div key={item.number} className="pt-4 first:pt-0">
+                      <div
+                        key={item.number}
+                        className="relative rounded-sm border border-border/80 bg-surface/30 p-4 sm:p-5 backdrop-blur-sm transition-colors hover:border-amber-400/40"
+                      >
+                        <Corner className="top-0 left-0 border-t-2 border-l-2" />
+                        <Corner className="top-0 right-0 border-t-2 border-r-2" />
+                        <Corner className="bottom-0 left-0 border-b-2 border-l-2" />
+                        <Corner className="bottom-0 right-0 border-b-2 border-r-2" />
+
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-xs text-amber-400/80 font-medium">
+                          <span className="font-mono text-xs font-medium text-amber-400/80">
                             {item.number}.
                           </span>
                           <h4 className="font-sans text-sm font-semibold text-foreground">
                             {item.title}
                           </h4>
                         </div>
-                        <p className="mt-1 font-sans text-xs sm:text-[13px] leading-relaxed text-foreground/75">
+                        <p className="mt-1.5 font-sans text-xs leading-relaxed text-foreground/75 sm:text-[13px]">
                           {item.description}
                         </p>
                       </div>
@@ -395,13 +369,8 @@ export function LucidDetail({ project }: { project: Project }) {
                   </div>
                 </div>
 
-                {/* Roadmap */}
-                <div className="relative rounded-sm border border-border/80 bg-surface/30 p-5 sm:p-6 backdrop-blur-sm">
-                  <Corner className="top-0 left-0 border-t-2 border-l-2" />
-                  <Corner className="top-0 right-0 border-t-2 border-r-2" />
-                  <Corner className="bottom-0 left-0 border-b-2 border-l-2" />
-                  <Corner className="bottom-0 right-0 border-b-2 border-r-2" />
-
+                {/* Column 2: Roadmap */}
+                <div className="space-y-3.5">
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_var(--accent)]" />
                     <h3 className="font-sans text-xs font-semibold tracking-wider uppercase text-accent">
@@ -409,18 +378,26 @@ export function LucidDetail({ project }: { project: Project }) {
                     </h3>
                   </div>
 
-                  <div className="mt-5 space-y-4 divide-y divide-border/50">
+                  <div className="space-y-3">
                     {ROADMAP.map((item) => (
-                      <div key={item.number} className="pt-4 first:pt-0">
+                      <div
+                        key={item.number}
+                        className="relative rounded-sm border border-border/80 bg-surface/30 p-4 sm:p-5 backdrop-blur-sm transition-colors hover:border-accent/40"
+                      >
+                        <Corner className="top-0 left-0 border-t-2 border-l-2" />
+                        <Corner className="top-0 right-0 border-t-2 border-r-2" />
+                        <Corner className="bottom-0 left-0 border-b-2 border-l-2" />
+                        <Corner className="bottom-0 right-0 border-b-2 border-r-2" />
+
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-xs text-accent font-medium">
+                          <span className="font-mono text-xs font-medium text-accent">
                             {item.number}.
                           </span>
                           <h4 className="font-sans text-sm font-semibold text-foreground">
                             {item.title}
                           </h4>
                         </div>
-                        <p className="mt-1 font-sans text-xs sm:text-[13px] leading-relaxed text-foreground/75">
+                        <p className="mt-1.5 font-sans text-xs leading-relaxed text-foreground/75 sm:text-[13px]">
                           {item.description}
                         </p>
                       </div>
