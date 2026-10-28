@@ -10,8 +10,12 @@ const SKILL_GROUPS = [
     items: ["Python", "SQL", "Java", "TypeScript", "Dart", "Shell"],
   },
   {
-    label: "Frameworks & Libraries",
-    items: ["PyTorch", "scikit-learn", "Hugging Face", "OpenCV", "YOLO", "FastAPI", "Spring Boot", "React", "Flutter"],
+    label: "Frameworks",
+    items: ["PyTorch", "FastAPI", "Spring Boot", "React", "Flutter"],
+  },
+  {
+    label: "Libraries",
+    items: ["scikit-learn", "Hugging Face", "OpenCV", "YOLO"],
   },
   {
     label: "Tools & Platforms",
@@ -44,7 +48,7 @@ const LANGUAGES = [
 ];
 
 const PILL_BASE =
-  "rounded-sm border border-border/70 bg-surface/50 px-2 py-0.5 font-mono text-[10px] transition-colors hover:border-accent/60 hover:text-accent";
+  "rounded-sm border border-border/70 bg-surface/50 px-2.5 py-1 font-mono text-[11px] transition-colors hover:border-accent/60 hover:text-accent";
 const PILL = `${PILL_BASE} text-foreground/90`;
 const PILL_MUTED = `${PILL_BASE} text-muted`;
 
@@ -78,11 +82,13 @@ function EducationTimeline() {
 
 function SkillsSection() {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="space-y-6">
       {SKILL_GROUPS.map((group) => (
-        <div key={group.label} className="space-y-2">
-          <h3 className="font-mono text-xs font-medium text-accent">{group.label}</h3>
-          <div className="flex flex-wrap gap-1.5">
+        <div key={group.label} className="space-y-2.5">
+          <h3 className="font-mono text-xs font-medium uppercase tracking-wider text-accent">
+            {group.label}
+          </h3>
+          <div className="flex flex-wrap gap-2">
             {group.items.map((item) => (
               <span key={item} className={PILL}>
                 {item}
