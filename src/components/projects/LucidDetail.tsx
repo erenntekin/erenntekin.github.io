@@ -26,42 +26,30 @@ const STAGES: Stage[] = [
 const LIMITATIONS = [
   {
     number: "01",
-    title: "Application-Boundary Scope",
+    title: "Boundary Defense Only",
     description:
-      "Guardrails enforce safety at the execution boundary around tools. They intercept calls and outputs, without altering the model's internal weights.",
+      "LUCID wraps inputs, tool calls, and outputs. It never alters the model's internal weights.",
   },
   {
     number: "02",
-    title: "Requires Policy Definition",
+    title: "Requires a Declared Policy",
     description:
-      "Parameter bounds and tool gating rules depend on a declared policy schema, either generated automatically by MIRAGE or written by the operator.",
-  },
-  {
-    number: "03",
-    title: "Operator Confirmation Hooks",
-    description:
-      "Human-in-the-loop gating requires asynchronous client-side confirmation hooks to avoid blocking interactive conversation flows.",
+      "The firewall checks against an explicit policy file. It needs to know which tools exist and what parameters are allowed.",
   },
 ];
 
 const ROADMAP = [
   {
     number: "01",
-    title: "On-Device SLM Sentinel",
+    title: "HTTP Middleware Proxy",
     description:
-      "Integrate lightweight local models to evaluate semantic intent and detect prompt injections with near-zero latency.",
+      "Wrap any OpenAI-compatible API without changing application code, running LUCID as an inline proxy.",
   },
   {
     number: "02",
-    title: "Transparent Reverse Proxy",
+    title: "Local Sentinel Model",
     description:
-      "Package LUCID as an inline HTTP proxy compatible with any OpenAI-compatible SDK without code changes.",
-  },
-  {
-    number: "03",
-    title: "Distributed Rate Limiting",
-    description:
-      "Coordinate circuit breaker counters across multi-instance clusters using Redis token buckets.",
+      "Run a tiny on-device model to catch adversarial intent before making any remote API call.",
   },
 ];
 
